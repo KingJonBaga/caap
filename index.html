@@ -286,6 +286,20 @@
               onclick="selectLandingRole('admin')">Open administrator space <i
                 class="fa-solid fa-arrow-right"></i></button>
           </article>
+          <article class="landing-info-card">
+            <span class="landing-info-icon"><i class="fa-solid fa-user-nurse"></i></span>
+            <h3>For nurses</h3>
+            <p>Use the care-team workspace with nurse access to patient follow-ups and schedules.</p>
+            <button type="button" class="landing-role-link" data-login-role="nurse"
+              onclick="selectLandingRole('nurse')">Open nurse space <i class="fa-solid fa-arrow-right"></i></button>
+          </article>
+          <article class="landing-info-card">
+            <span class="landing-info-icon"><i class="fa-solid fa-hand-holding-heart"></i></span>
+            <h3>For caretakers</h3>
+            <p>See appointments and support tasks for the patient you look after. Clinical records stay with the care team.</p>
+            <button type="button" class="landing-role-link" data-login-role="caretaker"
+              onclick="selectLandingRole('caretaker')">Open caretaker space <i class="fa-solid fa-arrow-right"></i></button>
+          </article>
         </div>
         <p class="landing-prototype-note">This is an academic prototype with sample data. It is not a medical record
           system and does not provide medical advice.</p>
@@ -1195,8 +1209,123 @@
   </div>
 
 
+  <div id="page-caretaker" class="page app-page">
+    <div class="page-breadcrumb">Caretaker Workspace</div>
+    <header class="app-bar">
+      <a href="#" class="app-brand" onclick="showPage('login');return false;">
+        <div class="app-brand-icon"><i class="fa-solid fa-heart"></i></div>
+        <div class="app-brand-text">
+          <span class="app-brand-name">MHMS</span>
+          <span class="app-brand-sub">CARETAKER</span>
+        </div>
+      </a>
+      <div class="app-bar-right">
+        <span class="provider-space-badge">CARETAKER</span>
+        <div class="user-chip">
+          <div class="user-avatar">DC</div>
+          <div class="user-info">
+            <span class="user-name">Daniel Cruz</span>
+            <span class="user-meta">Caretaker</span>
+          </div>
+          <button class="logout-btn" onclick="showPage('login')" aria-label="Sign out"><i
+              class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="app-body provider-body">
+      <div class="dash-header">
+        <p class="dash-date">MONDAY, 12 OCTOBER 2026 · SAMPLE CARETAKER WORKSPACE</p>
+        <h1>Supporting Maria Santos</h1>
+        <p class="dash-sub">Appointments, reminders and support tasks for the patient you look after. Clinical notes and health readings are shared only with the care team.</p>
+      </div>
+
+      <div class="stats-row">
+        <article class="admin-metric">
+          <p class="admin-metric-label">NEXT VISIT</p>
+          <p class="admin-metric-value">19 Oct</p>
+          <p class="admin-metric-meta">Prenatal check-up, 9:00 AM</p>
+        </article>
+        <article class="admin-metric">
+          <p class="admin-metric-label">SUPPORT TASKS DONE</p>
+          <p class="admin-metric-value"><span id="caretakerTasksDone">0</span> of 3</p>
+          <p class="admin-metric-meta">Updated as you go</p>
+        </article>
+        <article class="admin-metric">
+          <p class="admin-metric-label">UNREAD MESSAGES</p>
+          <p class="admin-metric-value">1</p>
+          <p class="admin-metric-meta">From Nurse Lena Park</p>
+        </article>
+      </div>
+
+      <div class="provider-grid">
+        <section class="provider-card">
+          <div class="provider-card-heading">
+            <div>
+              <h2>Upcoming appointments</h2>
+              <p class="card-sub">Sample schedule</p>
+            </div>
+          </div>
+          <div class="provider-appointment">
+            <div class="provider-time">Mon 19 Oct</div>
+            <div class="provider-visit"><strong>Prenatal check-up · 9:00 AM</strong><span>Dr. Aisha Rahman · Bayview Women's Health, Room 4</span></div>
+            <span class="status-badge status-confirmed">Confirmed</span>
+          </div>
+          <div class="provider-appointment">
+            <div class="provider-time">Thu 22 Oct</div>
+            <div class="provider-visit"><strong>Antenatal class · 2:00 PM</strong><span>Community Room, Bayview Women's Health</span></div>
+            <span class="status-badge status-confirmed">Confirmed</span>
+          </div>
+        </section>
+
+        <section class="provider-card">
+          <div class="provider-card-heading">
+            <div>
+              <h2>Support tasks</h2>
+              <p class="card-sub">Things you can help with</p>
+            </div>
+          </div>
+          <ul>
+            <li><label><input type="checkbox" onchange="updateCaretakerTasks()"> Remind Maria about the 19 Oct appointment</label></li>
+            <li><label><input type="checkbox" onchange="updateCaretakerTasks()"> Arrange transport to the clinic</label></li>
+            <li><label><input type="checkbox" onchange="updateCaretakerTasks()"> Check in with Maria after the visit</label></li>
+          </ul>
+        </section>
+
+        <section class="provider-card">
+          <div class="provider-card-heading">
+            <div>
+              <h2>Messages from the care team</h2>
+              <p class="card-sub">Sample messages</p>
+            </div>
+          </div>
+          <div class="provider-alert-item">
+            <span><i class="fa-regular fa-message"></i></span>
+            <div><strong>Nurse Lena Park · 9:40 AM</strong><p>Please remind Maria to bring her appointment card to the 19 Oct visit. Thank you for helping her get there.</p></div>
+          </div>
+        </section>
+
+        <section class="provider-card">
+          <div class="provider-card-heading">
+            <div>
+              <h2>Helpful tips</h2>
+              <p class="card-sub">For caretakers</p>
+            </div>
+          </div>
+          <ul>
+            <li>Confirm transport the day before each visit.</li>
+            <li>Save the clinic's number so you can call with questions about appointments.</li>
+            <li>If Maria reports urgent symptoms, encourage her to contact her clinic or emergency services right away.</li>
+          </ul>
+        </section>
+      </div>
+
+      <p class="landing-prototype-note">Caretaker access is limited to appointments, reminders and support tasks. This is a sample workspace and does not store changes.</p>
+    </div>
+  </div>
+
   <div id="page-provider" class="page app-page">
-    <div class="page-breadcrumb">Care Provider Workspace</div>
+    <div class="page-breadcrumb" id="providerBreadcrumb">Care Provider Workspace</div>
     <header class="app-bar">
       <a href="#" class="app-brand" onclick="showPage('login');return false;">
         <div class="app-brand-icon"><i class="fa-solid fa-heart"></i></div>
@@ -1214,7 +1343,7 @@
           onclick="showProviderPanel('appointments', this)"><i class="fa-regular fa-calendar"></i> Schedule</button>
       </nav>
       <div class="app-bar-right">
-        <span class="provider-space-badge">CARE TEAM</span>
+        <span class="provider-space-badge" id="providerSpaceBadge">CARE TEAM</span>
         <div class="provider-notification-wrap" id="providerNotificationWrap">
           <button class="notif-btn provider-notification-trigger" id="providerNotificationTrigger" type="button"
             aria-label="Notifications, 3 unread" aria-expanded="false" aria-controls="providerNotifications"
@@ -1252,10 +1381,10 @@
           </section>
         </div>
         <div class="user-chip">
-          <div class="user-avatar">AR</div>
+          <div class="user-avatar" id="providerAvatar">AR</div>
           <div class="user-info">
-            <span class="user-name">Dr. Aisha Rahman</span>
-            <span class="user-meta">Care provider</span>
+            <span class="user-name" id="providerName">Dr. Aisha Rahman</span>
+            <span class="user-meta" id="providerMeta">Care provider</span>
           </div>
           <button class="logout-btn" onclick="showPage('login')" aria-label="Sign out"><i
               class="fa-solid fa-arrow-right-from-bracket"></i></button>
@@ -1267,7 +1396,7 @@
       <section class="provider-panel active" id="provider-overview">
         <div class="dash-header">
           <p class="dash-date">MONDAY, 12 OCTOBER 2026 · SAMPLE CARE TEAM WORKSPACE</p>
-          <h1>Good morning, Dr. Rahman</h1>
+          <h1 id="providerGreeting">Good morning, Dr. Rahman</h1>
           <p class="dash-sub">A clear view of your care team workload and patient follow-ups.</p>
         </div>
         <div class="stats-row provider-stats">
@@ -1679,7 +1808,7 @@
           <div class="dash-header">
             <p class="dash-date">ADMIN SPACE</p>
             <h1>Network overview for Bayview Maternal Health Network.</h1>
-            <p class="dash-sub">Account activity, clinic capacity, and record review status across every service in the network.</p>
+            <p class="dash-sub">Account activity, service capacity, and system status across the network. Clinical work stays with the care team.</p>
           </div>
           <div class="admin-heading-actions">
             <button class="admin-button admin-button-light" type="button" onclick="downloadDemoReport()"><i class="fa-regular fa-floppy-disk"></i> Export report</button>
@@ -1700,12 +1829,12 @@
           <article class="admin-metric">
             <p class="admin-metric-label">APPOINTMENTS THIS WEEK</p>
             <p class="admin-metric-value">312</p>
-            <p class="admin-metric-meta">94% confirmed · <button type="button" onclick="showAdminPanel('appointments')">View schedule</button></p>
+            <p class="admin-metric-meta">94% booked visits confirmed by the care team</p>
           </article>
           <article class="admin-metric admin-metric-alert">
-            <p class="admin-metric-label">RECORDS AWAITING REVIEW</p>
-            <p class="admin-metric-value">17</p>
-            <p class="admin-metric-meta">6 older than 48h</p>
+            <p class="admin-metric-label">ACCOUNTS AWAITING ACTIVATION</p>
+            <p class="admin-metric-value">1</p>
+            <p class="admin-metric-meta">1 new sign-up today</p>
           </article>
         </div>
         <div class="admin-overview-grid">
@@ -1735,10 +1864,10 @@
           </section>
           <div class="admin-overview-side">
             <section class="admin-queue-card">
-              <p class="admin-side-eyebrow">RECORDS QUEUE</p>
-              <h2>17 records awaiting review</h2>
-              <p>Six have been waiting longer than 48 hours. Two belong to the antenatal clinic.</p>
-              <button type="button" onclick="showAdminToast('The review queue is a sample-only dashboard item and is not connected to a live record system.')">Open review queue <i class="fa-solid fa-arrow-right"></i></button>
+              <p class="admin-side-eyebrow">ACCOUNT QUEUE</p>
+              <h2>1 account awaiting activation</h2>
+              <p>Sofia Marchetti (PT-1052) signed up today. Activation is an administrative step.</p>
+              <button type="button" onclick="showAdminPanel('accounts')">Open accounts <i class="fa-solid fa-arrow-right"></i></button>
             </section>
             <section class="admin-card admin-system-card">
               <header class="admin-card-heading"><h2>System status</h2></header>
@@ -1759,7 +1888,7 @@
           <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><strong>New patient account created</strong><p>Sofia Marchetti · PT-1052</p></div><time>Today, 09:12</time></div>
           <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><strong>Record access log exported</strong><p>Iris Chen · audit report</p></div><time>Today, 08:40</time></div>
           <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><strong>Care provider assigned</strong><p>Dr. Adaeze Okafor → Priya Raman</p></div><time>Yesterday, 16:25</time></div>
-          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><strong>Appointment batch confirmed</strong><p>24 appointments confirmed for next week</p></div><time>Yesterday, 11:05</time></div>
+          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><div><strong>Account status updated</strong><p>Hannah Cole moved to Active</p></div><time>Yesterday, 11:05</time></div>
         </section>
       </section>
 
@@ -1782,12 +1911,14 @@
             <button type="button" class="active" data-account-filter="all" aria-pressed="true" onclick="setAccountRoleFilter('all', this)">All roles</button>
             <button type="button" data-account-filter="patient" aria-pressed="false" onclick="setAccountRoleFilter('patient', this)">Patient</button>
             <button type="button" data-account-filter="provider" aria-pressed="false" onclick="setAccountRoleFilter('provider', this)">Care provider</button>
+            <button type="button" data-account-filter="nurse" aria-pressed="false" onclick="setAccountRoleFilter('nurse', this)">Nurse</button>
+            <button type="button" data-account-filter="caretaker" aria-pressed="false" onclick="setAccountRoleFilter('caretaker', this)">Caretaker</button>
             <button type="button" data-account-filter="admin" aria-pressed="false" onclick="setAccountRoleFilter('admin', this)">Administrator</button>
           </div>
         </div>
         <section class="admin-card accounts-card">
           <header class="admin-card-heading accounts-card-heading">
-            <div><h2>All accounts</h2><p id="accountCount" aria-live="polite">7 of 7 accounts shown</p></div>
+            <div><h2>All accounts</h2><p id="accountCount" aria-live="polite">8 of 8 accounts shown</p></div>
           </header>
           <div class="accounts-table-wrap">
             <table class="accounts-table">
@@ -1819,9 +1950,9 @@
                   <td><span class="account-status active">Active</span></td>
                   <td><div class="account-actions"><button class="account-view-button" type="button" aria-label="View Dr. Adaeze Okafor account" onclick="viewAccount(this)"><i class="fa-regular fa-eye"></i></button><button class="account-state-button" type="button" onclick="toggleAccount(this)">Suspend</button></div></td>
                 </tr>
-                <tr data-role="provider" data-account-id="ST-1021">
+                <tr data-role="nurse" data-account-id="ST-1021">
                   <td><div class="account-identity"><span class="account-avatar">NL</span><div><strong>Nurse Lena Park</strong><span>l.park@bayviewhealth.org</span></div></div></td>
-                  <td>Care provider</td><td>02 Sep 2025</td>
+                  <td>Nurse</td><td>02 Sep 2025</td>
                   <td><span class="account-status active">Active</span></td>
                   <td><div class="account-actions"><button class="account-view-button" type="button" aria-label="View Nurse Lena Park account" onclick="viewAccount(this)"><i class="fa-regular fa-eye"></i></button><button class="account-state-button" type="button" onclick="toggleAccount(this)">Suspend</button></div></td>
                 </tr>
@@ -1842,6 +1973,12 @@
                   <td>Patient</td><td>02 Oct 2026</td>
                   <td><span class="account-status active">Active</span></td>
                   <td><div class="account-actions"><button class="account-view-button" type="button" aria-label="View Hannah Cole account" onclick="viewAccount(this)"><i class="fa-regular fa-eye"></i></button><button class="account-state-button" type="button" onclick="toggleAccount(this)">Suspend</button></div></td>
+                </tr>
+                <tr data-role="caretaker" data-account-id="CT-1009">
+                  <td><div class="account-identity"><span class="account-avatar">DC</span><div><strong>Daniel Cruz</strong><span>d.cruz@example.com</span></div></div></td>
+                  <td>Caretaker</td><td>15 Oct 2026</td>
+                  <td><span class="account-status active">Active</span></td>
+                  <td><div class="account-actions"><button class="account-view-button" type="button" aria-label="View Daniel Cruz account" onclick="viewAccount(this)"><i class="fa-regular fa-eye"></i></button><button class="account-state-button" type="button" onclick="toggleAccount(this)">Suspend</button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -1864,44 +2001,12 @@
         </dialog>
       </section>
 
-      <section class="admin-panel" id="admin-appointments">
-        <div class="dash-header">
-          <p class="dash-date">SYSTEM ADMINISTRATION · SAMPLE DATA</p>
-          <h1>Appointment oversight</h1>
-          <p class="dash-sub">Review example appointments. Confirmation actions are temporary and do not book visits.
-          </p>
-        </div>
-        <section class="provider-card">
-          <div class="provider-card-heading">
-            <div>
-              <h2>Sample appointments</h2>
-              <p class="card-sub">Example schedule · Women's Health Clinic</p>
-            </div><span class="status-badge status-confirmed">3 sample visits</span>
-          </div>
-          <div class="provider-appointment">
-            <div class="provider-time">9:00 AM</div>
-            <div class="provider-visit"><strong>Maria Santos</strong><span>Dr. Aisha Rahman · Prenatal check-up</span>
-            </div><span class="status-badge status-confirmed">Confirmed</span>
-          </div>
-          <div class="provider-appointment">
-            <div class="provider-time">10:30 AM</div>
-            <div class="provider-visit"><strong>Leah Cruz</strong><span>Dr. Aisha Rahman · Blood pressure
-                follow-up</span></div><button class="small-action" onclick="confirmAdminAppointment(this)">Confirm
-              appointment</button>
-          </div>
-          <div class="provider-appointment">
-            <div class="provider-time">1:00 PM</div>
-            <div class="provider-visit"><strong>Janelle Reyes</strong><span>Dr. Aisha Rahman · Postpartum review</span>
-            </div><span class="status-badge status-confirmed">Confirmed</span>
-          </div>
-        </section>
-      </section>
       <section class="admin-panel" id="admin-audit">
         <div class="admin-account-heading">
           <div class="dash-header">
             <p class="dash-date">AUDIT LOG</p>
             <h1>Activity and access history</h1>
-            <p class="dash-sub">A tamper-evident trail of account changes, record access, and appointment operations.</p>
+            <p class="dash-sub">A tamper-evident trail of account changes and record access.</p>
           </div>
           <button class="admin-button admin-button-light" type="button" onclick="exportAuditLog()"><i class="fa-solid fa-download"></i> Export log</button>
         </div>
@@ -1909,7 +2014,6 @@
           <button type="button" class="active" data-audit-filter="all" aria-pressed="true" onclick="setAuditFilter('all', this)">All events</button>
           <button type="button" data-audit-filter="accounts" aria-pressed="false" onclick="setAuditFilter('accounts', this)">Accounts</button>
           <button type="button" data-audit-filter="records" aria-pressed="false" onclick="setAuditFilter('records', this)">Records</button>
-          <button type="button" data-audit-filter="appointments" aria-pressed="false" onclick="setAuditFilter('appointments', this)">Appointments</button>
         </div>
         <div class="audit-layout">
           <section class="admin-card audit-stream-card">
@@ -1929,9 +2033,9 @@
                 <span class="audit-timeline-marker"></span>
                 <div><h3>Care provider assigned <span class="audit-category">ACCOUNTS</span></h3><p>Dr. Adaeze Okafor → Priya Raman</p><time>Yesterday, 16:25</time></div>
               </article>
-              <article class="audit-event" data-category="appointments">
+              <article class="audit-event" data-category="accounts">
                 <span class="audit-timeline-marker"></span>
-                <div><h3>Appointment batch confirmed <span class="audit-category">APPOINTMENTS</span></h3><p>24 appointments confirmed for next week</p><time>Yesterday, 11:05</time></div>
+                <div><h3>Account status updated <span class="audit-category">ACCOUNTS</span></h3><p>Hannah Cole moved to Active</p><time>Yesterday, 11:05</time></div>
               </article>
               <article class="audit-event" data-category="accounts">
                 <span class="audit-timeline-marker"></span>
@@ -2082,6 +2186,8 @@
       'nina.flores@example.com': 'patient',
       'a.rahman@mhms.example': 'provider',
       'e.reyes@mhms.example': 'provider',
+      'l.park@mhms.example': 'nurse',
+      'd.cruz@mhms.example': 'caretaker',
       'admin@example.com': 'admin'
     };
 
@@ -2091,6 +2197,8 @@
       const roleDetails = {
         patient: { icon: 'fa-regular fa-heart', label: 'PATIENT SPACE' },
         provider: { icon: 'fa-solid fa-user-doctor', label: 'CARE TEAM SPACE' },
+        nurse: { icon: 'fa-solid fa-user-nurse', label: 'NURSE SPACE' },
+        caretaker: { icon: 'fa-solid fa-hand-holding-heart', label: 'CARETAKER SPACE' },
         admin: { icon: 'fa-solid fa-user-shield', label: 'ADMINISTRATOR SPACE' }
       };
       const selected = roleDetails[role];
@@ -2111,6 +2219,26 @@
         }
         setLoginRole(role);
       }
+    }
+
+    function updateCaretakerTasks() {
+      const boxes = document.querySelectorAll('#page-caretaker .provider-card input[type="checkbox"]');
+      document.getElementById('caretakerTasksDone').textContent = [...boxes].filter(box => box.checked).length;
+    }
+
+    function applyStaffIdentity(role) {
+      const identities = {
+        provider: { initials: 'AR', name: 'Dr. Aisha Rahman', meta: 'Care provider', badge: 'CARE TEAM', crumb: 'Care Provider Workspace', greeting: 'Good morning, Dr. Rahman' },
+        nurse: { initials: 'NL', name: 'Nurse Lena Park', meta: 'Nurse', badge: 'NURSE', crumb: 'Nurse Workspace', greeting: 'Good morning, Lena' }
+      };
+      const id = identities[role];
+      if (!id) return;
+      document.getElementById('providerAvatar').textContent = id.initials;
+      document.getElementById('providerName').textContent = id.name;
+      document.getElementById('providerMeta').textContent = id.meta;
+      document.getElementById('providerSpaceBadge').textContent = id.badge;
+      document.getElementById('providerBreadcrumb').textContent = id.crumb;
+      document.getElementById('providerGreeting').textContent = id.greeting;
     }
 
     function handleLogin(e) {
@@ -2150,11 +2278,12 @@
       setTimeout(() => {
         btn.innerHTML = "Let's get you signed in <i class='fa-solid fa-arrow-right'></i>";
         btn.disabled = false;
-        const destination = { patient: 'dashboard', provider: 'provider', admin: 'admin' };
+        const destination = { patient: 'dashboard', provider: 'provider', nurse: 'provider', caretaker: 'caretaker', admin: 'admin' };
         const page = destination[loginRole];
         if (!page) {
           throw new Error('No workspace is configured for role: ' + loginRole);
         }
+        applyStaffIdentity(loginRole);
         showPage(page);
       }, 900);
     }
@@ -2187,19 +2316,6 @@
       toast.classList.add('visible');
       window.clearTimeout(showAdminToast.timeout);
       showAdminToast.timeout = window.setTimeout(() => toast.classList.remove('visible'), 2600);
-    }
-
-    function confirmAdminAppointment(button) {
-      const row = button.closest('.provider-appointment');
-      const badge = document.createElement('span');
-      badge.className = 'status-badge status-confirmed';
-      badge.textContent = 'Confirmed';
-      button.replaceWith(badge);
-
-      const pending = document.getElementById('adminPendingAppointments');
-      const count = Number((pending.textContent.match(/\d+/) || ['0'])[0]);
-      pending.textContent = Math.max(0, count - 1) + ' need confirmation';
-      showAdminToast('Sample appointment for ' + row.querySelector('.provider-visit strong').textContent + ' marked confirmed temporarily. No visit is booked or notification sent.');
     }
 
     let accountRoleFilter = 'all';
@@ -2235,8 +2351,8 @@
       document.getElementById('accountDetailName').textContent = identity.querySelector('strong').textContent;
       document.getElementById('accountDetailId').textContent = row.dataset.accountId;
       document.getElementById('accountDetailEmail').textContent = identity.querySelector('div span').textContent;
-      document.getElementById('accountDetailRole').textContent = row.dataset.role === 'admin' ? 'Administrator' :
-        row.dataset.role === 'provider' ? 'Care provider' : 'Patient';
+      const roleLabels = { admin: 'Administrator', provider: 'Care provider', nurse: 'Nurse', caretaker: 'Caretaker', patient: 'Patient' };
+      document.getElementById('accountDetailRole').textContent = roleLabels[row.dataset.role] || 'Patient';
       document.getElementById('accountDetailJoined').textContent = row.cells[2].textContent;
       document.getElementById('accountDetailStatus').textContent = status.textContent;
       document.getElementById('accountDetailDialog').showModal();
