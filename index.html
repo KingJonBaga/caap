@@ -2547,8 +2547,18 @@
       document.getElementById('providerVisitCount').textContent = providerAppointments.length;
     }
 
+    function sortProviderAppointments(list) {
+      const dayIndex = appointment => providerDays.findIndex(day => day.id === appointment.day);
+      const minutes = time => {
+        const match = time.match(/(\d+):(\d+)\s*(AM|PM)/);
+        return (Number(match[1]) % 12 + (match[3] === 'PM' ? 12 : 0)) * 60 + Number(match[2]);
+      };
+      return [...list].sort((a, b) => dayIndex(a) - dayIndex(b) || minutes(a.time) - minutes(b.time));
+    }
+
     function renderProviderTable(list, emptyMessage) {
       if (!list.length) return '<p class="provider-empty-day">' + (emptyMessage || 'No sample visits.') + '</p>';
+      list = sortProviderAppointments(list);
       return '<table class="provider-schedule-table"><thead><tr><th scope="col">Day</th><th scope="col">Time</th><th scope="col">Patient</th><th scope="col">Visit</th><th scope="col">Room</th><th scope="col">Move</th></tr></thead><tbody>' +
         list.map(renderProviderRow).join('') + '</tbody></table>';
     }
