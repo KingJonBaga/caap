@@ -40,8 +40,8 @@
     .provider-schedule-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
     .provider-schedule-table th, .provider-schedule-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e6ebe8; vertical-align: middle; }
     .provider-schedule-table th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #5b6b63; background: #f4f6f4; }
-    .provider-schedule-table tr.selected td { background: #cdeedd; color: #123b2d; }
-    .provider-schedule-table tr.selected td:first-child { box-shadow: inset 4px 0 0 #1f6f54; font-weight: 600; }
+    .provider-schedule-table tr.priority td { background: #cdeedd; color: #123b2d; }
+    .provider-schedule-table tr.priority td:first-child { box-shadow: inset 4px 0 0 #1f6f54; font-weight: 600; }
     .provider-schedule-table tr:last-child td { border-bottom: 0; }
     .provider-table-move { position: relative; width: 70px; }
   </style>
@@ -2512,7 +2512,7 @@
     }
 
     const providerDays = [
-      { id: 'mon', short: 'Mon', date: '12 Oct', label: 'Monday' },
+      { id: 'mon', short: 'Mon', date: '12 Oct', label: 'Monday', priority: true },
       { id: 'tue', short: 'Tue', date: '13 Oct', label: 'Tuesday' },
       { id: 'wed', short: 'Wed', date: '14 Oct', label: 'Wednesday' },
       { id: 'thu', short: 'Thu', date: '15 Oct', label: 'Thursday' },
@@ -2568,7 +2568,7 @@
       const moveOptions = providerDays.filter(target => target.id !== appointment.day).map(target =>
         '<button type="button" onclick="moveProviderAppointment(' + providerAppointments.indexOf(appointment) + ', \'' + target.id + '\')">' + target.label + ', ' + target.date + '</button>'
       ).join('');
-      return '<tr class="' + (appointment.day === providerSelectedDay ? 'selected' : '') + '"><td>' + day.short + ', ' + day.date + '</td><td>' + appointment.time + '</td><td><strong>' + appointment.name + '</strong></td><td>' + appointment.visit + '</td><td>' + appointment.room + '</td><td class="provider-table-move"><button type="button" class="provider-move-button" aria-label="Move ' + appointment.name + ' appointment" onclick="toggleProviderMoveMenu(this)"><i class="fa-solid fa-arrow-right-arrow-left"></i></button><div class="provider-move-menu" hidden><strong>Move to</strong>' + moveOptions + '</div></td></tr>';
+      return '<tr class="' + (day.priority ? 'priority' : '') + '"><td>' + day.short + ', ' + day.date + '</td><td>' + appointment.time + '</td><td><strong>' + appointment.name + '</strong></td><td>' + appointment.visit + '</td><td>' + appointment.room + '</td><td class="provider-table-move"><button type="button" class="provider-move-button" aria-label="Move ' + appointment.name + ' appointment" onclick="toggleProviderMoveMenu(this)"><i class="fa-solid fa-arrow-right-arrow-left"></i></button><div class="provider-move-menu" hidden><strong>Move to</strong>' + moveOptions + '</div></td></tr>';
     }
 
     function selectProviderDay(dayId) {
