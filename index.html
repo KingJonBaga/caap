@@ -434,7 +434,9 @@
         <div class="ln-footer-col">
           <p class="ln-footer-col-title">Care Spaces</p>
           <a href="#" onclick="showPage('dashboard');return false;">Patient dashboard</a>
-          <a href="#" onclick="showPage('provider');return false;">Care-team workspace</a>
+          <a href="#" onclick="applyStaffIdentity('provider');showPage('provider');return false;">Doctor workspace</a>
+          <a href="#" onclick="applyStaffIdentity('nurse');showPage('provider');return false;">Nurse workspace</a>
+          <a href="#" onclick="showPage('caretaker');return false;">Caretaker workspace</a>
           <a href="#" onclick="showPage('admin');return false;">Administration</a>
         </div>
         <div class="ln-footer-col">
