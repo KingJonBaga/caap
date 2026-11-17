@@ -35,6 +35,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .provider-table-wrap { overflow-x: auto; border: 1px solid #dfe5e1; border-radius: 12px; background: #fff; margin-top: 14px; }
+    .provider-schedule-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+    .provider-schedule-table th, .provider-schedule-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e6ebe8; vertical-align: middle; }
+    .provider-schedule-table th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #5b6b63; background: #f4f6f4; }
+    .provider-schedule-table tr.selected td { background: #eef6f2; }
+    .provider-schedule-table tr:last-child td { border-bottom: 0; }
+    .provider-table-move { position: relative; width: 70px; }
+  </style>
 </head>
 
 <body>
@@ -1640,8 +1649,8 @@
           <div class="provider-schedule-heading">
             <div><h2>Week of October 12–16</h2><p>Women's Health Clinic · Dr. Aisha Rahman</p></div>
             <div class="provider-view-toggle" role="group" aria-label="Schedule view">
-              <button type="button" class="active" id="providerWeekViewButton" onclick="setProviderScheduleView('week', this)">Week board</button>
-              <button type="button" id="providerDayViewButton" onclick="setProviderScheduleView('day', this)">Day list</button>
+              <button type="button" class="active" id="providerWeekViewButton" onclick="setProviderScheduleView('week', this)">Week table</button>
+              <button type="button" id="providerDayViewButton" onclick="setProviderScheduleView('day', this)">Day table</button>
             </div>
           </div>
           <div class="provider-day-selectors" id="providerDaySelectors" aria-label="Select a day"></div>
@@ -1651,7 +1660,7 @@
             <article><span>Room use</span><strong id="providerRoomUse">2 of 4 rooms</strong></article>
             <p>Sample scheduling only. Moving an appointment updates this page temporarily and does not notify a clinic.</p>
           </div>
-          <div class="provider-week-board" id="providerWeekBoard"></div>
+          <div class="provider-table-wrap" id="providerWeekBoard"></div>
           <div class="provider-day-list" id="providerDayList" hidden></div>
         </section>
       </section>
@@ -2526,26 +2535,29 @@
       document.getElementById('providerDaySelectors').innerHTML = providerDays.map(day =>
         '<button type="button" class="' + (day.id === providerSelectedDay ? 'active' : '') + '" aria-pressed="' + (day.id === providerSelectedDay) + '" onclick="selectProviderDay(\'' + day.id + '\')"><strong>' + day.short + '</strong><span>' + day.date + '</span><small>' + dayCounts[day.id] + (dayCounts[day.id] === 1 ? ' visit' : ' visits') + '</small></button>'
       ).join('');
-      document.getElementById('providerWeekBoard').innerHTML = providerDays.map(day => {
-        const items = providerAppointments.filter(appointment => appointment.day === day.id);
-        return '<section class="provider-week-column ' + (day.id === providerSelectedDay ? 'selected' : '') + '"><header><strong>' + day.short + '</strong><span>' + day.date + '</span><b>' + items.length + '</b></header>' +
-          (items.length ? items.map((appointment, index) => renderProviderAppointment(appointment, day, index)).join('') : '<p class="provider-empty-day">No sample visits</p>') + '</section>';
-      }).join('');
+      document.getElementById('providerWeekBoard').innerHTML = renderProviderTable(providerAppointments);
       const selectedDay = providerDays.find(day => day.id === providerSelectedDay);
       const selectedAppointments = providerAppointments.filter(appointment => appointment.day === providerSelectedDay);
       document.getElementById('providerDayList').innerHTML = '<div class="provider-day-list-heading"><h3>' + selectedDay.label + ', ' + selectedDay.date + '</h3><span>' + selectedAppointments.length + ' sample visits</span></div>' +
-        (selectedAppointments.length ? selectedAppointments.map((appointment, index) => renderProviderAppointment(appointment, selectedDay, index)).join('') : '<p class="provider-empty-day">No sample visits scheduled for this day.</p>');
+        '<div class="provider-table-wrap">' + renderProviderTable(selectedAppointments, 'No sample visits scheduled for this day.') + '</div>';
       document.getElementById('providerDayVisitCount').textContent = selectedAppointments.length + (selectedAppointments.length === 1 ? ' visit' : ' visits');
       document.getElementById('providerWeekVisitCount').textContent = providerAppointments.length + (providerAppointments.length === 1 ? ' visit' : ' visits');
       document.getElementById('providerRoomUse').textContent = new Set(selectedAppointments.map(appointment => appointment.room)).size + ' of 4 rooms';
       document.getElementById('providerVisitCount').textContent = providerAppointments.length;
     }
 
-    function renderProviderAppointment(appointment, day, index) {
+    function renderProviderTable(list, emptyMessage) {
+      if (!list.length) return '<p class="provider-empty-day">' + (emptyMessage || 'No sample visits.') + '</p>';
+      return '<table class="provider-schedule-table"><thead><tr><th scope="col">Day</th><th scope="col">Time</th><th scope="col">Patient</th><th scope="col">Visit</th><th scope="col">Room</th><th scope="col">Move</th></tr></thead><tbody>' +
+        list.map(renderProviderRow).join('') + '</tbody></table>';
+    }
+
+    function renderProviderRow(appointment) {
+      const day = providerDays.find(item => item.id === appointment.day);
       const moveOptions = providerDays.filter(target => target.id !== appointment.day).map(target =>
         '<button type="button" onclick="moveProviderAppointment(' + providerAppointments.indexOf(appointment) + ', \'' + target.id + '\')">' + target.label + ', ' + target.date + '</button>'
       ).join('');
-      return '<article class="provider-schedule-appointment"><div class="provider-schedule-time">' + appointment.time + '</div><div class="provider-schedule-visit"><strong>' + appointment.name + '</strong><span>' + appointment.visit + '</span><small><i class="fa-solid fa-location-dot"></i> ' + appointment.room + '</small></div><button type="button" class="provider-move-button" aria-label="Move ' + appointment.name + ' appointment" onclick="toggleProviderMoveMenu(this)"><i class="fa-solid fa-arrow-right-arrow-left"></i></button><div class="provider-move-menu" hidden><strong>Move to</strong>' + moveOptions + '</div></article>';
+      return '<tr class="' + (appointment.day === providerSelectedDay ? 'selected' : '') + '"><td>' + day.short + ', ' + day.date + '</td><td>' + appointment.time + '</td><td><strong>' + appointment.name + '</strong></td><td>' + appointment.visit + '</td><td>' + appointment.room + '</td><td class="provider-table-move"><button type="button" class="provider-move-button" aria-label="Move ' + appointment.name + ' appointment" onclick="toggleProviderMoveMenu(this)"><i class="fa-solid fa-arrow-right-arrow-left"></i></button><div class="provider-move-menu" hidden><strong>Move to</strong>' + moveOptions + '</div></td></tr>';
     }
 
     function selectProviderDay(dayId) {
