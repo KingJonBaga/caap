@@ -1,0 +1,142 @@
+/* Whole-app polish: page entrances, card hover, consistent buttons, focus rings and
+   reduced-motion support. Loaded last, after the page-specific styles. */
+
+:root {
+  --polish-ease: cubic-bezier(.2, .7, .2, 1);
+  --polish-lift-shadow: 0 10px 26px rgba(15, 23, 42, .10);
+}
+
+@keyframes polishRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes polishPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* ── Page entrance: each top-level block rises in turn ───────── */
+
+.page.active > * {
+  animation: polishRise .5s var(--polish-ease) backwards;
+}
+.page.active > :nth-child(2) { animation-delay: .05s; }
+.page.active > :nth-child(3) { animation-delay: .10s; }
+.page.active > :nth-child(4) { animation-delay: .15s; }
+
+/* ── Cards: a gentle lift on pointer devices ─────────────────── */
+
+.pov-card,
+.pov-stat-card,
+.appointment-card,
+.admin-card,
+.vital-card,
+.patient-stat-card,
+.past-appointment-card,
+.medical-history-card,
+.cl2-card,
+.profile-section-card,
+.pregnancy-detail-card,
+.provider-card,
+.postpartum-side-card,
+.appointment-side-card,
+.landing-info-card,
+.scan-card,
+.help-card,
+.patient-panel,
+.records-panel {
+  transition: transform .22s var(--polish-ease), box-shadow .22s var(--polish-ease), border-color .22s;
+}
+
+@media (hover: hover) {
+  .pov-card:hover,
+  .pov-stat-card:hover,
+  .appointment-card:hover,
+  .admin-card:hover,
+  .vital-card:hover,
+  .patient-stat-card:hover,
+  .past-appointment-card:hover,
+  .medical-history-card:hover,
+  .cl2-card:hover,
+  .profile-section-card:hover,
+  .pregnancy-detail-card:hover,
+  .provider-card:hover,
+  .postpartum-side-card:hover,
+  .appointment-side-card:hover,
+  .landing-info-card:hover,
+  .scan-card:hover,
+  .help-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--polish-lift-shadow);
+  }
+}
+
+/* ── Buttons: same feel everywhere ───────────────────────────── */
+
+button,
+a.pov-btn-primary,
+.pov-btn-primary,
+.pov-btn-outline,
+.pov-text-btn,
+.cl2-open-btn,
+.cl2-bookmark-btn,
+.notif-btn,
+.records-tab,
+.profile-tab,
+.appointment-tab,
+.sch-view-btn {
+  transition: background-color .18s, color .18s, border-color .18s, box-shadow .18s, transform .14s var(--polish-ease);
+}
+
+button:active,
+.pov-btn-primary:active,
+.pov-btn-outline:active {
+  transform: scale(.98);
+}
+
+@media (hover: hover) {
+  .pov-btn-primary:hover {
+    box-shadow: 0 6px 16px rgba(15, 23, 42, .16);
+  }
+}
+
+/* The notification badge gives a small pulse when it appears. */
+.notif-btn .notif-dot:not([hidden]) {
+  animation: polishPulse 1.8s ease-in-out infinite;
+}
+
+/* ── Tables and lists ─────────────────────────────────────────── */
+
+.audit-row,
+.pov-clinic-row,
+.patient-table tbody tr {
+  transition: background-color .15s;
+}
+
+@media (hover: hover) {
+  .patient-table tbody tr:hover,
+  .pov-clinic-row:hover {
+    background-color: rgba(15, 23, 42, .03);
+  }
+}
+
+/* ── Focus rings for keyboard users ──────────────────────────── */
+
+:focus-visible {
+  outline: 3px solid rgba(25, 118, 255, .45);
+  outline-offset: 2px;
+}
+
+/* ── Reduced motion: keep the layout, drop the movement ──────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
