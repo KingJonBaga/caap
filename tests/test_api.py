@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+STAFF_PASSWORD = "test-only-staff-pass"  # used for the test database only
 sys.path.insert(0, str(ROOT / "server"))
 
 from app import create_app  # noqa: E402
@@ -50,14 +51,14 @@ class ApiTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.log_lines = []
-        cls.db = open_database(":memory:")
+        cls.db = open_database(":memory:", shared_password=STAFF_PASSWORD)
         cls.app = create_app(cls.db, log=cls.log_lines.append)
         cls.client = Client(cls.app, cls.log_lines)
         cls.tokens = {
-            "caretaker": cls.client.sign_in("d.cruz@mhms.example", "staff2026"),
-            "nurse": cls.client.sign_in("l.park@mhms.example", "staff2026"),
-            "provider": cls.client.sign_in("a.rahman@mhms.example", "staff2026"),
-            "admin": cls.client.sign_in("admin@example.com", "staff2026"),
+            "caretaker": cls.client.sign_in("d.cruz@mhms.example", STAFF_PASSWORD),
+            "nurse": cls.client.sign_in("l.park@mhms.example", STAFF_PASSWORD),
+            "provider": cls.client.sign_in("a.rahman@mhms.example", STAFF_PASSWORD),
+            "admin": cls.client.sign_in("admin@example.com", STAFF_PASSWORD),
         }
 
     def req(self, method, path, **kwargs):
@@ -70,14 +71,14 @@ class ApiTests(unittest.TestCase):
     # ── Sign-in and sessions ────────────────────────────────
 
     def test_seeded_accounts_sign_in_with_their_roles(self):
-        res = self.req("POST", "/api/login", body={"email": "d.cruz@mhms.example", "password": "staff2026"})
+        res = self.req("POST", "/api/login", body={"email": "d.cruz@mhms.example", "password": STAFF_PASSWORD})
         self.assertEqual(res.data["user"]["role"], "caretaker")
         self.assertGreaterEqual(len(res.data["token"]), 32)
         self.assertNotIn("password_hash", res.data["user"], "password hash must never be sent")
 
     def test_wrong_password_and_unknown_email_are_rejected_the_same_way(self):
         wrong = self.req("POST", "/api/login", body={"email": "l.park@mhms.example", "password": "nope-nope"})
-        unknown = self.req("POST", "/api/login", body={"email": "nobody@example.com", "password": "staff2026"})
+        unknown = self.req("POST", "/api/login", body={"email": "nobody@example.com", "password": STAFF_PASSWORD})
         self.assertEqual(wrong.status, 401)
         self.assertEqual(unknown.status, 401)
         self.assertEqual(wrong.data["error"], unknown.data["error"])
@@ -87,7 +88,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.req("GET", "/api/caretaker", token="not-a-real-token").status, 401)
 
     def test_logout_ends_the_session(self):
-        token = self.client.sign_in("admin@example.com", "staff2026")
+        token = self.client.sign_in("admin@example.com", STAFF_PASSWORD)
         self.assertEqual(self.req("GET", "/api/me", token=token).data["user"]["role"], "admin")
         self.req("DELETE", "/api/session", token=token)
         self.assertEqual(self.req("GET", "/api/caretaker", token=token).status, 401)

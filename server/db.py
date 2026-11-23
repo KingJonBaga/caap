@@ -13,6 +13,7 @@ import notes
 
 HERE = Path(__file__).resolve().parent
 DEFAULT_DB_PATH = HERE.parent / "data" / "caap.db"
+FIRST_RUN_LOGINS_PATH = HERE.parent / "data" / "first-run-logins.txt"
 SEED_PATH = HERE / "seed-patients.json"
 
 # Maps the front-end field names to database column names.
@@ -35,8 +36,9 @@ FIELD_COLUMNS = {
 EDITABLE_FIELDS = ["status", "flag", "note"]
 
 
-def open_database(file=None):
+def open_database(file=None, shared_password=None):
     file = file or os.environ.get("CAAP_DB") or str(DEFAULT_DB_PATH)
+    logins_file = None if file == ":memory:" else str(FIRST_RUN_LOGINS_PATH)
     if file != ":memory:":
         Path(file).parent.mkdir(parents=True, exist_ok=True)
     db = open_connection(file)
@@ -62,7 +64,7 @@ def open_database(file=None):
         """
     )
     seed_if_empty(db)
-    users.setup_users(db)
+    users.setup_users(db, shared_password=shared_password, logins_file=logins_file)
     users.setup_password_resets(db)
     sessions.setup_sessions(db)
     audit.setup_audit(db)

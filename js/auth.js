@@ -48,8 +48,6 @@ function clearPatientDemoCredentials() {
   const password = document.getElementById('password');
   if (email.value.trim().toLowerCase() === 'maria.santos@example.com') {
     email.value = '';
-  }
-  if (password.value === 'patient2026') {
     password.value = '';
   }
   email.classList.remove('error');

@@ -41,7 +41,10 @@ def verify_password(password, stored):
     return hmac.compare_digest(actual, expected_bytes)
 
 
-def setup_users(db):
+def setup_users(db, shared_password=None, logins_file=None):
+    """Creates the starting accounts when the database is empty.
+    With shared_password (used by tests only) every starting account gets that password.
+    Otherwise each account gets a random password, written to logins_file for the owner to read."""
     db.execute(
         """
         CREATE TABLE IF NOT EXISTS users (
@@ -60,12 +63,22 @@ def setup_users(db):
     if query_one(db, "SELECT COUNT(*) AS count FROM users")["count"] > 0:
         return
     seed = json.loads(SEED_PATH.read_text(encoding="utf-8"))
+    generated = []
     with transaction(db):
         for user in seed:
+            password = shared_password or secrets.token_urlsafe(9)
+            if not shared_password:
+                generated.append((user["email"], password))
             db.execute(
                 "INSERT INTO users (email, name, role, password_hash) VALUES (?, ?, ?, ?)",
-                (user["email"], user["name"], user["role"], hash_password(user["password"])),
+                (user["email"], user["name"], user["role"], hash_password(password)),
             )
+    if generated and logins_file:
+        lines = ["First-run sign-in details. Keep this file private; it is not part of the code.", ""]
+        lines += [f"{email}  {password}" for email, password in generated]
+        Path(logins_file).parent.mkdir(parents=True, exist_ok=True)
+        Path(logins_file).write_text("\n".join(lines) + "\n", encoding="utf-8")
+        print(f"First run: sign-in details for the starting accounts are in {logins_file}")
 
 
 def authenticate_user(db, email, password):
