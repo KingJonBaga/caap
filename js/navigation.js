@@ -3,15 +3,36 @@
  * Page routing, tab switching, section scrolling, and landing navigation.
  */
 
+// Glides the page to a height. Done in code so the movement is smooth in every browser,
+// and it is instant for people who have asked their computer to reduce motion.
+function glideTo(top) {
+  const start = window.scrollY;
+  const distance = top - start;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || Math.abs(distance) < 2) {
+    window.scrollTo(0, top);
+    return;
+  }
+  const duration = Math.min(1000, 450 + Math.abs(distance) * 0.2);
+  const startTime = performance.now();
+  function step(now) {
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in and out
+    window.scrollTo(0, start + distance * eased);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function scrollToSection(name) {
   const target = document.getElementById(name);
   if (!target) return;
   if (name === 'home') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    glideTo(0);
   } else {
     const navHeight = document.querySelector('.ln-nav').offsetHeight;
     const top = target.getBoundingClientRect().top + window.scrollY - navHeight;
-    window.scrollTo({ top, behavior: 'smooth' });
+    glideTo(top);
   }
   document.querySelectorAll('.ln-nav-links a').forEach(link => {
     link.removeAttribute('aria-current');
