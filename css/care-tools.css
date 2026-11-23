@@ -1,0 +1,107 @@
+.care-form-card {
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 0 32px 14px;
+}
+
+.care-form-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f1a14;
+  margin: 0 0 12px;
+}
+
+.care-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.care-form-grid label,
+.care-message-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.care-form-grid input,
+.care-form-grid select,
+.care-message-form select,
+.care-message-form textarea {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px 10px;
+  border: 1px solid #d4cfc8;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f1a14;
+}
+
+.care-message-form textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.care-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.care-form-error {
+  color: #b91c1c;
+  font-size: 12px;
+  min-height: 16px;
+  margin: 8px 0 0;
+}
+
+.care-message-card {
+  margin-bottom: 14px;
+}
+
+.care-message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.care-message-form .pov-btn-primary {
+  align-self: flex-start;
+}
+
+/* Admin: invite form and account table messages */
+.invite-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.invite-field input,
+.invite-field select {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 9px 10px;
+  border: 1px solid #d4cfc8;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f1a14;
+}
+
+.accounts-empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  padding: 24px 12px;
+}

@@ -1,0 +1,414 @@
+﻿#provider-patients {
+  background: #f0ede8;
+  min-height: 100%;
+  padding-bottom: 48px;
+}
+
+
+.cl2-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 32px 0;
+  flex-wrap: wrap;
+}
+
+.cl2-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  color: #c0614d;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.cl2-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f1a14;
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+
+.cl2-sub {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.cl2-link-text {
+  color: #1a3c34;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cl2-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+  background: #fff;
+  border: 1.5px solid #d8d2cb;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s, box-shadow .15s;
+  flex-shrink: 0;
+  margin-top: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.cl2-export-btn:hover {
+  border-color: #1a3c34;
+}
+
+/* Toolbar */
+.cl2-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 32px 0;
+}
+
+.cl2-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 999px;
+  padding: 9px 16px;
+  width: 280px;
+  color: #9ca3af;
+  transition: border-color .15s, box-shadow .15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .07), 0 1px 2px rgba(0, 0, 0, .04);
+}
+
+.cl2-search-wrap:focus-within {
+  border-color: #1a3c34;
+  color: #374151;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .10);
+}
+
+.cl2-search-wrap i {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.cl2-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #374151;
+  width: 100%;
+  font-family: var(--font);
+}
+
+.cl2-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.cl2-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .07), 0 1px 2px rgba(0, 0, 0, .04);
+}
+
+.cl2-filter {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.cl2-filter:hover {
+  background: #f0ede8;
+  color: #0f1a14;
+}
+
+.cl2-filter.active {
+  background: #fff;
+  color: #0f1a14;
+  font-weight: 700;
+  border: 2px solid #0f1a14;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+}
+
+/* Card grid — 3 columns */
+.cl2-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 16px 32px 0;
+}
+
+/* Individual card */
+.cl2-card {
+  background: #fff;
+  border: 1px solid #e8e3dc;
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .05), 0 1px 2px rgba(0, 0, 0, .04);
+  transition: box-shadow .15s;
+}
+
+.cl2-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .09);
+}
+
+.cl2-card[hidden] {
+  display: none;
+}
+
+/* Card top row */
+.cl2-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cl2-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cl2-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cl2-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f1a14;
+  margin-bottom: 2px;
+}
+
+.cl2-id {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* Risk badges */
+.cl2-risk {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.cl2-risk--low {
+  background: #d0f0e3;
+  color: #0d6b40;
+}
+
+.cl2-risk--elevated {
+  background: #fde0d8;
+  color: #c0614d;
+}
+
+.cl2-risk--postpartum {
+  background: #fef0c0;
+  color: #92400e;
+}
+
+/* Metrics 2×2 grid */
+.cl2-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  padding-top: 2px;
+}
+
+.cl2-metrics>div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cl2-metrics span {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.cl2-metrics strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f1a14;
+}
+
+.cl2-visit-time {
+  color: #1a3c34;
+  font-weight: 700;
+}
+
+.cl2-bp-warn {
+  color: #c0614d;
+}
+
+/* Tags */
+.cl2-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.cl2-tags span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #374151;
+  background: #f0ede8;
+  border-radius: 999px;
+  padding: 2px 10px;
+  line-height: 1.6;
+}
+
+/* Card footer */
+.cl2-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 2px;
+}
+
+.cl2-open-btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #1a3c34;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+  text-align: center;
+  letter-spacing: .01em;
+}
+
+.cl2-open-btn:hover {
+  background: #0f2920;
+}
+
+.cl2-bookmark-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid #e2ddd7;
+  background: #fff;
+  color: #c0bab2;
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color .15s, color .15s;
+}
+
+.cl2-bookmark-btn:hover {
+  border-color: #1a3c34;
+  color: #1a3c34;
+}
+
+/* Caseload notes */
+.cl2-notes-card {
+  margin: 16px 32px 0;
+  background: #fff;
+  border: 1px solid #e8e3dc;
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+}
+
+.cl2-notes-head {
+  margin-bottom: 12px;
+}
+
+.cl2-notes-head h2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f1a14;
+  margin-bottom: 2px;
+}
+
+.cl2-notes-head p {
+  font-size: 11.5px;
+  color: #9ca3af;
+}
+
+.cl2-notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cl2-notes-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f0ede8;
+  font-size: 12.5px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.cl2-notes-list li:last-child {
+  border-bottom: none;
+}
+
+.cl2-notes-list li i {
+  color: #1a3c34;
+  font-size: 11px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.cl2-notes-list li strong {
+  color: #1a3c34;
+  font-weight: 700;
+}
+
+/* Responsive */

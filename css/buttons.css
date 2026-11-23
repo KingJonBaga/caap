@@ -1,0 +1,113 @@
+﻿.ln-forgot {
+  font-size: 10px;
+  color: var(--txt-muted);
+  transition: color .18s;
+}
+
+.ln-forgot:hover {
+  color: var(--blue);
+}
+
+.ln-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 11px 15px;
+  background: var(--green-btn);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--r-full);
+  margin-top: 2px;
+  gap: 8px;
+  transition: background .18s, transform .14s;
+}
+
+.ln-submit:hover {
+  background: var(--green-btn-h);
+  transform: translateY(-1px);
+}
+
+.ln-submit:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ln-submit i {
+  font-size: 14px;
+}
+
+.ln-register {
+  font-size: 10px;
+  color: var(--txt-muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.ln-register a {
+  color: var(--txt-link);
+  font-weight: 600;
+}
+
+.ln-register a:hover {
+  text-decoration: underline;
+}
+
+.login-role-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 5px;
+  color: var(--txt-muted);
+  font-size: 9px;
+}
+
+.ln-footer .login-role-links {
+  justify-content: flex-start;
+  gap: 6px;
+  margin: 0;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.login-role-links button {
+  padding: 2px 0;
+  color: var(--txt-link);
+  font-size: inherit;
+}
+
+.login-role-links button:hover,
+.login-role-links button.selected {
+  text-decoration: underline;
+}
+
+.login-role-links .patient-login-link {
+  flex-basis: 100%;
+}
+
+.ln-footer .patient-login-link {
+  flex-basis: auto;
+}
+
+.ln-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: #fafafa;
+  font-size: 9px;
+  color: var(--txt-muted);
+  margin-top: 8px;
+}
+
+.ln-privacy i {
+  font-size: 11px;
+  color: var(--txt-light);
+}

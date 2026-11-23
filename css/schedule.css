@@ -1,0 +1,603 @@
+.provider-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dfe5e1;
+  border-radius: 12px;
+  background: #fff;
+  margin-top: 14px;
+}
+
+.provider-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 560px;
+}
+
+.provider-schedule-table th,
+.provider-schedule-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e6ebe8;
+  vertical-align: middle;
+}
+
+.provider-schedule-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #5b6b63;
+  background: #f4f6f4;
+}
+
+.provider-schedule-table tr.priority td {
+  background: #cdeedd;
+  color: #123b2d;
+}
+
+.provider-schedule-table tr.priority td:first-child {
+  box-shadow: inset 4px 0 0 #1f6f54;
+  font-weight: 600;
+}
+
+.provider-schedule-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.provider-table-move {
+  position: relative;
+  width: 70px;
+}
+
+
+
+#provider-appointments {
+  background: #f0ede8;
+  min-height: 100%;
+  padding-bottom: 40px;
+}
+
+.sch-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 32px 0;
+  flex-wrap: wrap;
+}
+
+.sch-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  color: #c0614d;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.sch-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f1a14;
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+
+.sch-sub {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+  max-width: 540px;
+}
+
+.sch-link-text {
+  color: #1a3c34;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sch-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* View toggle */
+.sch-view-toggle {
+  display: flex;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 999px;
+  padding: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+}
+
+.sch-view-btn {
+  padding: 6px 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.sch-view-btn.active {
+  background: #fff;
+  color: #0f1a14;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+}
+
+/* Add appointment button */
+.sch-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #1a3c34;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+
+.sch-add-btn:hover {
+  background: #0f2920;
+}
+
+/* Week wrap */
+.sch-week-wrap {
+  margin: 16px 32px 0;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.sch-week-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid #f0ede8;
+}
+
+.sch-week-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f1a14;
+  flex-shrink: 0;
+}
+
+.sch-week-hint {
+  font-size: 11.5px;
+  color: #9ca3af;
+  flex: 1;
+}
+
+.sch-drag-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* Week grid — 5 columns */
+.sch-week-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  min-height: 480px;
+  overflow-x: auto;
+  align-items: start;
+}
+
+/* Day column */
+.sch-day-col {
+  border-right: 1px solid #f0ede8;
+  min-width: 160px;
+  padding-bottom: 12px;
+}
+
+.sch-day-col:last-child {
+  border-right: none;
+}
+
+.sch-day-col--today .sch-day-col-head {
+  background: #f7faf9;
+}
+
+.sch-day-col--today .sch-day-short {
+  color: #1a3c34;
+  font-weight: 800;
+}
+
+.sch-day-col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 6px;
+}
+
+.sch-day-col-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.sch-day-short {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.sch-day-date {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f1a14;
+  line-height: 1.1;
+}
+
+.sch-day-count {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f1a14;
+  background: #f0ede8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sch-day-col--today .sch-day-count {
+  background: #1a3c34;
+  color: #fff;
+}
+
+.sch-day-col--warn .sch-day-count {
+  background: #fde68a;
+  color: #92400e;
+}
+
+/* Capacity bar */
+.sch-day-bar {
+  height: 3px;
+  background: #f0ede8;
+  margin: 0 14px 2px;
+  border-radius: 2px;
+}
+
+.sch-day-bar-fill {
+  height: 100%;
+  background: #1a3c34;
+  border-radius: 2px;
+  transition: width .3s;
+}
+
+.sch-day-bar-fill--warn {
+  background: #f59e0b;
+}
+
+.sch-day-slots {
+  font-size: 10.5px;
+  color: #9ca3af;
+  padding: 0 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sch-day-view-btn {
+  font-size: 10.5px;
+  color: #1a3c34;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Appointment list inside a column */
+.sch-appt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d4cfc8 transparent;
+}
+
+.sch-appt-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sch-appt-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sch-appt-list::-webkit-scrollbar-thumb {
+  background: #d4cfc8;
+  border-radius: 4px;
+}
+
+/* Appointment card */
+.sch-appt-card {
+  background: #fff;
+  border: 1px solid #e8e3dc;
+  border-radius: 10px;
+  padding: 12px 14px 10px;
+  cursor: default;
+  transition: box-shadow .15s;
+  position: relative;
+}
+
+.sch-appt-card:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .09);
+}
+
+.sch-appt-card--done {
+  background: #f7faf9;
+  border-color: #c8dfd9;
+}
+
+.sch-appt-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.sch-appt-time {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.sch-appt-move-wrap {
+  position: relative;
+}
+
+.sch-appt-move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  color: #9ca3af;
+  font-size: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+
+.sch-appt-move-btn:hover {
+  background: #f0ede8;
+  color: #374151;
+}
+
+.sch-appt-move-menu {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+  padding: 6px;
+  z-index: 50;
+  min-width: 150px;
+}
+
+.sch-appt-move-menu strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 2px 6px 6px;
+}
+
+.sch-appt-move-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  color: #374151;
+  border-radius: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.sch-appt-move-menu button:hover {
+  background: #f0ede8;
+  color: #0f1a14;
+}
+
+.sch-appt-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a3c34;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.sch-appt-visit {
+  font-size: 11.5px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-bottom: 7px;
+}
+
+.sch-appt-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sch-appt-room {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #374151;
+  background: #f0ede8;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.sch-appt-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+}
+
+.sch-appt-badge--done {
+  background: #d0f0e3;
+  color: #0d6b40;
+}
+
+/* Day list view */
+.sch-day-wrap {
+  margin: 16px 32px 0;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.sch-day-selectors {
+  display: flex;
+  gap: 6px;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid #f0ede8;
+  flex-wrap: wrap;
+  overflow-x: auto;
+}
+
+.sch-day-sel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: #fff;
+  border: 1.5px solid #e2ddd7;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s;
+  flex-shrink: 0;
+}
+
+.sch-day-sel-btn strong {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f1a14;
+}
+
+.sch-day-sel-btn span {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.sch-day-sel-btn small {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.sch-day-sel-btn.active {
+  border-color: #0f1a14;
+  background: #fff;
+  box-shadow: 0 0 0 1px #0f1a14;
+  color: #0f1a14;
+}
+
+.sch-day-sel-btn:hover:not(.active) {
+  border-color: #1a3c34;
+}
+
+.sch-day-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 18px 24px 0;
+}
+
+.sch-day-heading h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f1a14;
+}
+
+.sch-day-heading span {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.sch-day-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 0 24px 20px;
+}
+
+.sch-empty {
+  font-size: 13px;
+  color: #9ca3af;
+  padding: 20px 0;
+}
+
+/* Legend */
+.sch-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 32px 0;
+  font-size: 11.5px;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+
+.sch-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.sch-legend-dot--scheduled {
+  background: #1a3c34;
+}
+
+.sch-legend-dot--completed {
+  background: #0d6b40;
+}
+
+.sch-legend-note {
+  color: #92400e;
+  font-style: italic;
+}

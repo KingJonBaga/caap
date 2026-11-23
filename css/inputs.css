@@ -1,0 +1,290 @@
+﻿/* inputs.css
+ * Login form, input fields, password wrap, checkbox, error states,
+ * register link, privacy note, demo login block.
+ */
+
+.ln-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ln-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ln-field label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--txt-body);
+}
+
+.ln-field input,
+.ln-field select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1.5px solid var(--border-field);
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  color: var(--txt-head);
+  background: var(--white);
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.ln-field input::placeholder {
+  color: var(--txt-light);
+}
+
+.ln-field input:focus,
+.ln-field select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(25, 118, 255, .13);
+  outline: none;
+}
+
+.ln-field input.error {
+  border-color: #ef4444;
+}
+
+.ln-pw-wrap {
+  position: relative;
+}
+
+.ln-pw-wrap input {
+  padding-right: 44px;
+}
+
+.ln-pw-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--txt-muted);
+  font-size: 16px;
+  padding: 4px;
+  transition: color .18s;
+}
+
+.ln-pw-toggle:hover {
+  color: var(--blue);
+}
+
+.ln-error {
+  font-size: 10px;
+  color: #ef4444;
+  min-height: 0;
+  line-height: 1;
+}
+
+.ln-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -2px;
+}
+
+.ln-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--txt-body);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ln-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.ln-check-box {
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid var(--border-field);
+  border-radius: var(--r-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .18s, border-color .18s;
+}
+
+.ln-checkbox input:checked~.ln-check-box {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.ln-checkbox input:checked~.ln-check-box::after {
+  content: "";
+  width: 8px;
+  height: 4.5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.ln-forgot {
+  font-size: 10px;
+  color: var(--txt-muted);
+  transition: color .18s;
+}
+
+.ln-forgot:hover {
+  color: var(--blue);
+}
+
+.ln-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 11px 15px;
+  background: var(--green-btn);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--r-full);
+  margin-top: 2px;
+  gap: 8px;
+  transition: background .18s, transform .14s;
+}
+
+.ln-submit:hover {
+  background: var(--green-btn-h);
+  transform: translateY(-1px);
+}
+
+.ln-submit:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ln-submit i {
+  font-size: 14px;
+}
+
+.ln-register {
+  font-size: 10px;
+  color: var(--txt-muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.ln-register a {
+  color: var(--txt-link);
+  font-weight: 600;
+}
+
+.ln-register a:hover {
+  text-decoration: underline;
+}
+
+.login-role-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 5px;
+  color: var(--txt-muted);
+  font-size: 9px;
+}
+
+.ln-footer .login-role-links {
+  justify-content: flex-start;
+  gap: 6px;
+  margin: 0;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.login-role-links button {
+  padding: 2px 0;
+  color: var(--txt-link);
+  font-size: inherit;
+}
+
+.login-role-links button:hover,
+.login-role-links button.selected {
+  text-decoration: underline;
+}
+
+.login-role-links .patient-login-link {
+  flex-basis: 100%;
+}
+
+.ln-footer .patient-login-link {
+  flex-basis: auto;
+}
+
+.ln-privacy {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: #fafafa;
+  font-size: 9px;
+  color: var(--txt-muted);
+  margin-top: 8px;
+}
+
+.ln-privacy i {
+  font-size: 11px;
+  color: var(--txt-light);
+}
+
+.ln-help {
+  background: var(--help-bg);
+  border-radius: var(--r-md);
+  padding: 16px 17px;
+  margin-top: 10px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.ln-help-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--txt-head);
+  margin-bottom: 2px;
+}
+
+.ln-help-sub {
+  margin: auto 0;
+  font-size: 9px;
+  color: var(--txt-muted);
+  line-height: 1.45;
+}
+
+.ln-demo-login {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid #d8eee8;
+  border-radius: var(--r-md);
+  background: #edf9f6;
+}
+
+.ln-demo-login-title {
+  margin-bottom: 5px;
+  color: #173f38;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.ln-demo-login-copy {
+  color: #526d68;
+  font-size: 9px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

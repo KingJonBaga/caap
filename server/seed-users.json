@@ -1,0 +1,44 @@
+[
+  {
+    "email": "maria.santos@example.com",
+    "name": "Maria Santos",
+    "role": "patient",
+    "password": "patient2026"
+  },
+  {
+    "email": "nina.flores@example.com",
+    "name": "Nina Flores",
+    "role": "patient",
+    "password": "patient2026"
+  },
+  {
+    "email": "a.rahman@mhms.example",
+    "name": "Dr. A. Rahman",
+    "role": "provider",
+    "password": "staff2026"
+  },
+  {
+    "email": "e.reyes@mhms.example",
+    "name": "Dr. E. Reyes",
+    "role": "provider",
+    "password": "staff2026"
+  },
+  {
+    "email": "l.park@mhms.example",
+    "name": "Nurse L. Park",
+    "role": "nurse",
+    "password": "staff2026"
+  },
+  {
+    "email": "d.cruz@mhms.example",
+    "name": "D. Cruz",
+    "role": "caretaker",
+    "password": "staff2026"
+  },
+  {
+    "email": "admin@example.com",
+    "name": "Administrator",
+    "role": "admin",
+    "password": "staff2026"
+  }
+]

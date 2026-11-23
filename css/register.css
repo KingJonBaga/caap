@@ -1,0 +1,33 @@
+.register-page {
+  background: #f7f5f2;
+  min-height: 100vh;
+}
+
+.register-main {
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 56px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 18px;
+  padding: 32px 30px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
+  box-sizing: border-box;
+}
+
+.register-card .ln-welcome {
+  margin-top: 12px;
+}
+
+.register-card .ln-form {
+  margin-top: 18px;
+}
+
+.register-card .ln-error:empty {
+  display: none;
+}

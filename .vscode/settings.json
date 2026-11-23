@@ -1,0 +1,14 @@
+{
+  "css.lint.unknownProperties": "ignore",
+  "css.lint.validProperties": [
+    "--page-bg", "--blue", "--teal", "--pink-blob", "--pink-badge-bg",
+    "--pink-badge-txt", "--green-btn", "--green-btn-h", "--help-bg",
+    "--blue-mid", "--blue-light", "--teal-light", "--pink-mid", "--pink-txt",
+    "--white", "--bg-app", "--bg-field", "--bg-card", "--bg-tip",
+    "--border", "--border-field", "--txt-head", "--txt-body", "--txt-muted",
+    "--txt-light", "--txt-link", "--r-xs", "--r-sm", "--r-md", "--r-lg",
+    "--r-xl", "--r-2xl", "--r-full", "--sh-sm", "--sh-md", "--sh-lg", "--font"
+  ],
+  "css.validate": true,
+  "css.customData": []
+}
