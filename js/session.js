@@ -5,6 +5,7 @@
  */
 (function () {
   const TOKEN_KEY = 'nurturaToken';
+  const SERVER_ORIGIN = 'http://localhost:3000';
   const PUBLIC_API = ['/api/login', '/api/register', '/api/password-reset', '/api/password-reset/confirm'];
   const originalFetch = window.fetch.bind(window);
 
@@ -28,6 +29,10 @@
   window.caapSession = { getToken, setToken };
 
   window.fetch = function (input, init = {}) {
+    // Opened straight from a file, /api/... would point at the file system, so send it to the server.
+    if (window.location.protocol === 'file:' && typeof input === 'string' && input.startsWith('/api/')) {
+      input = SERVER_ORIGIN + input;
+    }
     const url = typeof input === 'string' ? input : input.url;
     const path = new URL(url, window.location.href).pathname;
     const token = getToken();

@@ -1,0 +1,245 @@
+/* Sign-in, register and password-reset polish: larger type, roomier fields,
+   clearer focus rings and gentle motion. Loaded last so it refines the earlier styles. */
+
+:root {
+  --auth-ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@keyframes authRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes authFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes authShake {
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* ── Sign-in ───────────────────────────────────────────── */
+
+#page-login .ln-right {
+  padding: 32px 30px;
+  border: 1px solid #e6e1da;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .08);
+  animation: authRise .6s var(--auth-ease) both;
+}
+
+#page-login .ln-patient-badge {
+  font-size: 10px;
+  padding: 5px 11px;
+  margin-bottom: 16px;
+}
+
+#page-login .ln-welcome {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+#page-login .ln-welcome-sub {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+#page-login .ln-form {
+  gap: 16px;
+}
+
+#page-login .ln-form > * {
+  animation: authRise .5s var(--auth-ease) both;
+}
+#page-login .ln-form > :nth-child(2) { animation-delay: .06s; }
+#page-login .ln-form > :nth-child(3) { animation-delay: .12s; }
+#page-login .ln-form > :nth-child(4) { animation-delay: .18s; }
+#page-login .ln-form > :nth-child(5) { animation-delay: .24s; }
+
+/* ── Fields (sign-in, register, reset) ─────────────────── */
+
+#page-login .ln-field,
+.register-page .ln-field {
+  gap: 7px;
+}
+
+#page-login .ln-field label,
+.register-page .ln-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+#page-login .ln-field input,
+.register-page .ln-field input {
+  min-height: 46px;
+  padding: 11px 14px;
+  font-size: 14px;
+  border-radius: 12px;
+  border-width: 1.5px;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+
+#page-login .ln-field input:hover,
+.register-page .ln-field input:hover {
+  border-color: #b9b2a9;
+}
+
+#page-login .ln-field input:focus,
+.register-page .ln-field input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(25, 118, 255, .14);
+  background: #fff;
+}
+
+#page-login .ln-field input.error,
+.register-page .ln-field input.error {
+  border-color: #dc2626;
+  animation: authShake .35s ease;
+}
+
+#page-login .ln-error,
+.register-page .ln-error {
+  font-size: 12px;
+  line-height: 1.4;
+  animation: authFade .25s ease both;
+}
+
+#page-login .ln-pw-toggle,
+.register-page .ln-pw-toggle {
+  padding: 8px;
+}
+
+/* ── Buttons and links ─────────────────────────────────── */
+
+#page-login .ln-submit,
+.register-page .ln-submit {
+  min-height: 48px;
+  padding: 13px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, .14);
+  transition: background .18s, transform .14s var(--auth-ease), box-shadow .18s;
+}
+
+#page-login .ln-submit:hover,
+.register-page .ln-submit:hover {
+  box-shadow: 0 10px 22px rgba(15, 23, 42, .18);
+}
+
+#page-login .ln-submit:active,
+.register-page .ln-submit:active {
+  transform: translateY(0) scale(.985);
+}
+
+#page-login .ln-submit i,
+.register-page .ln-submit i {
+  font-size: 15px;
+  transition: transform .2s var(--auth-ease);
+}
+
+#page-login .ln-submit:hover i,
+.register-page .ln-submit:hover i {
+  transform: translateX(3px);
+}
+
+#page-login .ln-forgot,
+#page-login .ln-register,
+.register-page .ln-register {
+  font-size: 12px;
+}
+
+#page-login .ln-register a,
+.register-page .ln-register a {
+  text-underline-offset: 3px;
+}
+
+#page-login a:focus-visible,
+#page-login button:focus-visible,
+.register-page a:focus-visible,
+.register-page button:focus-visible {
+  outline: 3px solid rgba(25, 118, 255, .45);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── Register and reset pages ──────────────────────────── */
+
+.register-page {
+  background: linear-gradient(180deg, #f7f5f2 0%, #efeae4 100%);
+}
+
+.register-card {
+  padding: 38px 36px;
+  border: 1px solid #e6e1da;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, .08);
+  animation: authRise .6s var(--auth-ease) both;
+}
+
+.register-card .ln-welcome {
+  font-size: 30px;
+}
+
+.register-card .ln-welcome-sub {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.register-card .ln-form {
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.register-card .ln-form > * {
+  animation: authRise .5s var(--auth-ease) both;
+}
+.register-card .ln-form > :nth-child(2) { animation-delay: .06s; }
+.register-card .ln-form > :nth-child(3) { animation-delay: .12s; }
+.register-card .ln-form > :nth-child(4) { animation-delay: .18s; }
+.register-card .ln-form > :nth-child(5) { animation-delay: .24s; }
+
+#resetStepCode:not([hidden]) {
+  animation: authRise .45s var(--auth-ease) both;
+}
+
+/* ── Small phones ──────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  #page-login .ln-right {
+    padding: 26px 22px;
+    border-radius: 18px;
+  }
+
+  #page-login .ln-welcome {
+    font-size: 26px;
+  }
+
+  .register-card {
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+
+  .register-card .ln-welcome {
+    font-size: 26px;
+  }
+}
+
+/* ── Reduced motion: no movement, content simply appears ── */
+
+@media (prefers-reduced-motion: reduce) {
+  #page-login *,
+  #page-login *::before,
+  #page-login *::after,
+  .register-page *,
+  .register-page *::before,
+  .register-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
