@@ -27,7 +27,7 @@
   border: 1px solid #e6e1da;
   border-radius: 20px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, .08);
-  animation: authRise .6s var(--auth-ease) both;
+  animation: authRise .9s var(--auth-ease) both;
 }
 
 #page-login .ln-patient-badge {
@@ -52,12 +52,12 @@
 }
 
 #page-login .ln-form > * {
-  animation: authRise .5s var(--auth-ease) both;
+  animation: authRise .75s var(--auth-ease) both;
 }
-#page-login .ln-form > :nth-child(2) { animation-delay: .06s; }
-#page-login .ln-form > :nth-child(3) { animation-delay: .12s; }
-#page-login .ln-form > :nth-child(4) { animation-delay: .18s; }
-#page-login .ln-form > :nth-child(5) { animation-delay: .24s; }
+#page-login .ln-form > :nth-child(2) { animation-delay: .12s; }
+#page-login .ln-form > :nth-child(3) { animation-delay: .24s; }
+#page-login .ln-form > :nth-child(4) { animation-delay: .36s; }
+#page-login .ln-form > :nth-child(5) { animation-delay: .48s; }
 
 /* ── Fields (sign-in, register, reset) ─────────────────── */
 
@@ -80,7 +80,7 @@
   font-size: 14px;
   border-radius: 12px;
   border-width: 1.5px;
-  transition: border-color .18s, box-shadow .18s, background .18s;
+  transition: border-color .3s, box-shadow .3s, background .3s;
 }
 
 #page-login .ln-field input:hover,
@@ -105,7 +105,7 @@
 .register-page .ln-error {
   font-size: 12px;
   line-height: 1.4;
-  animation: authFade .25s ease both;
+  animation: authFade .4s ease both;
 }
 
 #page-login .ln-pw-toggle,
@@ -178,7 +178,7 @@
   border: 1px solid #e6e1da;
   border-radius: 20px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, .08);
-  animation: authRise .6s var(--auth-ease) both;
+  animation: authRise .9s var(--auth-ease) both;
 }
 
 .register-card .ln-welcome {
@@ -197,15 +197,15 @@
 }
 
 .register-card .ln-form > * {
-  animation: authRise .5s var(--auth-ease) both;
+  animation: authRise .75s var(--auth-ease) both;
 }
-.register-card .ln-form > :nth-child(2) { animation-delay: .06s; }
-.register-card .ln-form > :nth-child(3) { animation-delay: .12s; }
-.register-card .ln-form > :nth-child(4) { animation-delay: .18s; }
-.register-card .ln-form > :nth-child(5) { animation-delay: .24s; }
+.register-card .ln-form > :nth-child(2) { animation-delay: .12s; }
+.register-card .ln-form > :nth-child(3) { animation-delay: .24s; }
+.register-card .ln-form > :nth-child(4) { animation-delay: .36s; }
+.register-card .ln-form > :nth-child(5) { animation-delay: .48s; }
 
 #resetStepCode:not([hidden]) {
-  animation: authRise .45s var(--auth-ease) both;
+  animation: authRise .7s var(--auth-ease) both;
 }
 
 /* ── Small phones ──────────────────────────────────────── */

@@ -7,7 +7,7 @@
 }
 
 @keyframes polishRise {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 
@@ -19,11 +19,11 @@
 /* ── Page entrance: each top-level block rises in turn ───────── */
 
 .page.active > * {
-  animation: polishRise .5s var(--polish-ease) backwards;
+  animation: polishRise .8s var(--polish-ease) backwards;
 }
-.page.active > :nth-child(2) { animation-delay: .05s; }
-.page.active > :nth-child(3) { animation-delay: .10s; }
-.page.active > :nth-child(4) { animation-delay: .15s; }
+.page.active > :nth-child(2) { animation-delay: .10s; }
+.page.active > :nth-child(3) { animation-delay: .20s; }
+.page.active > :nth-child(4) { animation-delay: .30s; }
 
 /* ── Cards: a gentle lift on pointer devices ─────────────────── */
 
@@ -46,7 +46,7 @@
 .help-card,
 .patient-panel,
 .records-panel {
-  transition: transform .22s var(--polish-ease), box-shadow .22s var(--polish-ease), border-color .22s;
+  transition: transform .35s var(--polish-ease), box-shadow .35s var(--polish-ease), border-color .35s;
 }
 
 @media (hover: hover) {
@@ -86,7 +86,7 @@ a.pov-btn-primary,
 .profile-tab,
 .appointment-tab,
 .sch-view-btn {
-  transition: background-color .18s, color .18s, border-color .18s, box-shadow .18s, transform .14s var(--polish-ease);
+  transition: background-color .25s, color .25s, border-color .25s, box-shadow .25s, transform .2s var(--polish-ease);
 }
 
 button:active,

@@ -6280,6 +6280,7 @@ html.admin-dashboard-active::-webkit-scrollbar-thumb:hover {
 #page-records .prenatal-timeline {
   margin: 0 19px;
   padding: 13px 0 14px 20px;
+  list-style: none;
 }
 
 #page-records .prenatal-timeline>li {
@@ -6287,9 +6288,7 @@ html.admin-dashboard-active::-webkit-scrollbar-thumb:hover {
 }
 
 #page-records .timeline-dot {
-  width: 15px;
-  height: 15px;
-  left: -23px;
+  display: none;
 }
 
 #page-records .timeline-entry h3,
