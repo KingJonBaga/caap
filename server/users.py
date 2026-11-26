@@ -13,7 +13,12 @@ from common import account_id, query_all, query_one, sql_time, text, transaction
 
 SEED_PATH = Path(__file__).resolve().parent / "seed-users.json"
 KEY_LENGTH = 64
-ROLES = ["patient", "provider", "nurse", "caretaker", "admin"]
+ROLES = [
+    # Legacy roles (kept for backward-compat; migrate with migrate_roles.py)
+    "patient", "provider", "nurse", "caretaker", "admin",
+    # BHW-RHU roles (Phase 1)
+    "mother", "bhw", "midwife", "physician", "rhu_admin", "sysadmin",
+]
 EMAIL_RE = re.compile(r"[^\s@]+@[^\s@]+\.[^\s@]+")
 ACCOUNT_COLUMNS = "id, email, name, role, status, created_at"
 
@@ -51,7 +56,10 @@ def setup_users(db, shared_password=None, logins_file=None):
           id            INTEGER PRIMARY KEY AUTOINCREMENT,
           email         TEXT NOT NULL UNIQUE COLLATE NOCASE,
           name          TEXT NOT NULL,
-          role          TEXT NOT NULL CHECK (role IN ('patient','provider','nurse','caretaker','admin')),
+          role          TEXT NOT NULL CHECK (role IN (
+                          'patient','provider','nurse','caretaker','admin',
+                          'mother','bhw','midwife','physician','rhu_admin','sysadmin'
+                        )),
           password_hash TEXT NOT NULL,
           created_at    TEXT NOT NULL DEFAULT (datetime('now'))
         )
@@ -143,10 +151,13 @@ def set_account_status(db, account_row_id, status):
 
 
 def register_patient(db, data):
-    """Creates a patient account. Returns {"user": ...} or {"status", "error"}."""
+    """Creates a mother/patient account. Returns {"user": ...} or {"status", "error"}."""
     clean_name = text(data.get("name"))
     clean_email = text(data.get("email")).lower()
     clean_password = str(data.get("password") or "")
+    role = data.get("role", "mother")
+    if role not in ("mother", "patient"):   # self-registration only for these two
+        role = "mother"
     if not clean_name or len(clean_name) > 100:
         return {"status": 400, "error": "Please enter your full name."}
     if not EMAIL_RE.fullmatch(clean_email):
@@ -155,14 +166,14 @@ def register_patient(db, data):
         return {"status": 400, "error": "Password must be at least 8 characters."}
     try:
         cursor = db.execute(
-            "INSERT INTO users (email, name, role, password_hash) VALUES (?, ?, 'patient', ?)",
-            (clean_email, clean_name, hash_password(clean_password)),
+            "INSERT INTO users (email, name, role, password_hash) VALUES (?, ?, ?, ?)",
+            (clean_email, clean_name, role, hash_password(clean_password)),
         )
     except sqlite3.IntegrityError as error:
         if "UNIQUE" in str(error):
             return {"status": 409, "error": "An account with this email already exists. Try signing in."}
         raise
-    return {"user": {"id": cursor.lastrowid, "email": clean_email, "name": clean_name, "role": "patient"}}
+    return {"user": {"id": cursor.lastrowid, "email": clean_email, "name": clean_name, "role": role}}
 
 
 # ── Password reset ─────────────────────────────────────────

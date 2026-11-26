@@ -158,7 +158,7 @@ function renderSchDay() {
   const appts = providerAppointments
     .filter(a => a.day === providerSelectedDay)
     .sort((a, b) => schMinutes(a.time) - schMinutes(b.time));
-  wrap.innerHTML = `<div class="sch-day-heading"><h3>${day.label}, ${day.date}</h3><span>${appts.length} sample visit${appts.length !== 1 ? 's' : ''}</span></div>
+  wrap.innerHTML = `<div class="sch-day-heading"><h3>${day.label}, ${day.date}</h3><span>${appts.length} visit${appts.length !== 1 ? 's' : ''}</span></div>
     <div class="sch-day-cards-grid">${appts.map(a => renderSchCard(a)).join('') || '<p class="sch-empty">No visits scheduled for this day.</p>'}</div>`;
 }
 
@@ -251,7 +251,7 @@ function openProviderSummary(button) {
 
 function openProviderSummaryById(patientId) {
   const summary = providerPatientSummaries[patientId];
-  if (!summary) throw new Error('Sample patient summary not found: ' + patientId);
+  if (!summary) throw new Error('Patient summary not found: ' + patientId);
   document.getElementById('providerSummaryName').textContent = summary.name;
   document.getElementById('providerSummaryId').textContent = summary.displayId || patientId;
   document.getElementById('providerSummaryStage').textContent = summary.stage;
@@ -285,7 +285,7 @@ function openProviderFullRecord() {
   const patientId = this.dataset.patientId;
   const patientElement = document.querySelector('#providerCaseloadGrid [data-patient-id="' + patientId + '"]') ||
     document.querySelector('#provider-patients #patientRows [data-patient-id="' + patientId + '"]');
-  if (!patientElement) throw new Error('Sample patient record entry not found: ' + patientId);
+  if (!patientElement) throw new Error('Patient record entry not found: ' + patientId);
   document.getElementById('providerSummaryDialog').close();
   showProviderPanel('patients');
   openProviderRecord(patientElement);
@@ -342,10 +342,10 @@ function exportProviderCaseload() {
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'mhms-demo-caseload.csv';
+  link.download = 'nurtura-caseload.csv';
   link.click();
   URL.revokeObjectURL(url);
-  showToast('Caseload list exported. It contains illustrative sample data only.');
+  showToast('Caseload list exported.');
 }
 
 /* ── Patient record detail ─────────────────────────── */
@@ -355,7 +355,7 @@ function openProviderRecord(button) {
   const patientId = patient && patient.dataset.patientId;
   const record = providerPatientSummaries[patientId];
   if (!record) {
-    throw new Error('Sample patient record not found: ' + patientId);
+    throw new Error('Patient record not found: ' + patientId);
   }
   document.getElementById('providerRecordName').textContent = record.name;
   document.getElementById('providerRecordId').textContent = record.displayId || patientId;
@@ -390,7 +390,7 @@ function reviewPatient(button) {
   button.classList.add('is-complete');
   const count = document.getElementById('followupCount');
   if (count && Number(count.textContent) > 0) count.textContent = Number(count.textContent) - 1;
-  showToast(name + "'s sample update marked as reviewed temporarily; this change is not saved.");
+  showToast(name + "'s update marked as reviewed on this page only. The change is not saved.");
 }
 
 function filterPatients(query) {

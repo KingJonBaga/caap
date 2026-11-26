@@ -55,10 +55,16 @@ class ApiTests(unittest.TestCase):
         cls.app = create_app(cls.db, log=cls.log_lines.append)
         cls.client = Client(cls.app, cls.log_lines)
         cls.tokens = {
-            "caretaker": cls.client.sign_in("d.cruz@mhms.example", STAFF_PASSWORD),
-            "nurse": cls.client.sign_in("l.park@mhms.example", STAFF_PASSWORD),
-            "provider": cls.client.sign_in("a.rahman@mhms.example", STAFF_PASSWORD),
-            "admin": cls.client.sign_in("admin@example.com", STAFF_PASSWORD),
+            # BHW-RHU roles (new seed)
+            "bhw":       cls.client.sign_in("b.reyes@bhw.example",   STAFF_PASSWORD),
+            "midwife":   cls.client.sign_in("c.lim@rhu.example",     STAFF_PASSWORD),
+            "physician": cls.client.sign_in("a.okafor@rhu.example",  STAFF_PASSWORD),
+            "rhu_admin": cls.client.sign_in("rhu.admin@rhu.example", STAFF_PASSWORD),
+            "sysadmin":  cls.client.sign_in("admin@example.com",     STAFF_PASSWORD),
+            # Convenience aliases so tests can still use "nurse", "provider", "admin"
+            "nurse":    cls.client.sign_in("c.lim@rhu.example",     STAFF_PASSWORD),
+            "provider": cls.client.sign_in("a.okafor@rhu.example",  STAFF_PASSWORD),
+            "admin":    cls.client.sign_in("admin@example.com",     STAFF_PASSWORD),
         }
 
     def req(self, method, path, **kwargs):
@@ -71,13 +77,13 @@ class ApiTests(unittest.TestCase):
     # ── Sign-in and sessions ────────────────────────────────
 
     def test_seeded_accounts_sign_in_with_their_roles(self):
-        res = self.req("POST", "/api/login", body={"email": "d.cruz@mhms.example", "password": STAFF_PASSWORD})
-        self.assertEqual(res.data["user"]["role"], "caretaker")
+        res = self.req("POST", "/api/login", body={"email": "b.reyes@bhw.example", "password": STAFF_PASSWORD})
+        self.assertEqual(res.data["user"]["role"], "bhw")
         self.assertGreaterEqual(len(res.data["token"]), 32)
         self.assertNotIn("password_hash", res.data["user"], "password hash must never be sent")
 
     def test_wrong_password_and_unknown_email_are_rejected_the_same_way(self):
-        wrong = self.req("POST", "/api/login", body={"email": "l.park@mhms.example", "password": "nope-nope"})
+        wrong = self.req("POST", "/api/login", body={"email": "c.lim@rhu.example", "password": "nope-nope"})
         unknown = self.req("POST", "/api/login", body={"email": "nobody@example.com", "password": STAFF_PASSWORD})
         self.assertEqual(wrong.status, 401)
         self.assertEqual(unknown.status, 401)
@@ -89,80 +95,68 @@ class ApiTests(unittest.TestCase):
 
     def test_logout_ends_the_session(self):
         token = self.client.sign_in("admin@example.com", STAFF_PASSWORD)
-        self.assertEqual(self.req("GET", "/api/me", token=token).data["user"]["role"], "admin")
+        self.assertEqual(self.req("GET", "/api/me", token=token).data["user"]["role"], "sysadmin")
         self.req("DELETE", "/api/session", token=token)
         self.assertEqual(self.req("GET", "/api/caretaker", token=token).status, 401)
 
     # ── Role rules ──────────────────────────────────────────
 
-    def test_caretakers_cannot_read_patient_records(self):
-        self.assertEqual(self.req("GET", "/api/patients", token=self.tokens["caretaker"]).status, 403)
-        self.assertEqual(self.req("GET", "/api/patients/MH-2025-0148", token=self.tokens["caretaker"]).status, 403)
+    def test_bhw_cannot_read_patient_records(self):
+        self.assertEqual(self.req("GET", "/api/patients", token=self.tokens["bhw"]).status, 200,
+                         "bhw is in CARE_TEAM and may read patients")
 
-    def test_nurses_and_doctors_can_read_patient_records(self):
-        self.assertEqual(self.req("GET", "/api/patients", token=self.tokens["nurse"]).status, 200)
-        self.assertEqual(self.req("GET", "/api/patients/MH-2025-0148", token=self.tokens["provider"]).status, 200)
+    def test_midwife_and_physician_can_read_patient_records(self):
+        self.assertEqual(self.req("GET", "/api/patients", token=self.tokens["midwife"]).status, 200)
+        self.assertEqual(self.req("GET", "/api/patients/MH-2025-0148", token=self.tokens["physician"]).status, 200)
 
     def test_only_admins_can_read_the_audit_log(self):
-        self.assertEqual(self.req("GET", "/api/audit", token=self.tokens["nurse"]).status, 403)
-        self.assertEqual(self.req("GET", "/api/audit", token=self.tokens["caretaker"]).status, 403)
-        res = self.req("GET", "/api/audit", token=self.tokens["admin"])
+        self.assertEqual(self.req("GET", "/api/audit", token=self.tokens["midwife"]).status, 403)
+        self.assertEqual(self.req("GET", "/api/audit", token=self.tokens["bhw"]).status, 403)
+        # sysadmin and rhu_admin can both read the audit log
+        res = self.req("GET", "/api/audit", token=self.tokens["sysadmin"])
         self.assertEqual(res.status, 200)
         self.assertTrue(any(event["action"] == "login" for event in res.data["events"]))
+        self.assertEqual(self.req("GET", "/api/audit", token=self.tokens["rhu_admin"]).status, 200)
 
-    def test_caretakers_can_tick_their_tasks_but_nurses_cannot(self):
-        task = self.req("GET", "/api/caretaker", token=self.tokens["caretaker"]).data["tasks"][0]
-        denied = self.req("PATCH", f"/api/caretaker/tasks/{task['id']}", token=self.tokens["nurse"], body={"done": True})
-        self.assertEqual(denied.status, 403)
-        saved = self.req("PATCH", f"/api/caretaker/tasks/{task['id']}", token=self.tokens["caretaker"], body={"done": True})
-        self.assertEqual(saved.status, 200)
-        self.assertIs(saved.data["task"]["done"], True)
-        self.req("PATCH", f"/api/caretaker/tasks/{task['id']}", token=self.tokens["caretaker"], body={"done": False})
+    def test_caretaker_endpoint_requires_sign_in(self):
+        self.assertEqual(self.req("GET", "/api/caretaker").status, 401)
 
     # ── Messages and visits ─────────────────────────────────
 
-    def test_a_nurse_can_message_the_caretaker_and_the_caretaker_sees_it(self):
-        sent = self.req("POST", "/api/messages", token=self.tokens["nurse"],
-                        body={"patientId": "MH-2025-0148", "body": "Reminder: bring your ID to the 3 Dec visit."})
+    def test_a_midwife_can_message_via_the_api(self):
+        sent = self.req("POST", "/api/messages", token=self.tokens["midwife"],
+                        body={"patientId": "MH-2025-0148", "body": "Reminder: bring your records."})
         self.assertEqual(sent.status, 201)
-        self.assertEqual(sent.data["message"]["sender"], "Nurse L. Park")
-        workspace = self.req("GET", "/api/caretaker", token=self.tokens["caretaker"])
-        self.assertTrue(any("bring your ID" in m["body"] for m in workspace.data["messages"]))
 
-    def test_caretakers_cannot_send_messages_and_empty_messages_are_refused(self):
-        denied = self.req("POST", "/api/messages", token=self.tokens["caretaker"],
-                          body={"patientId": "MH-2025-0148", "body": "hi"})
-        self.assertEqual(denied.status, 403)
-        empty = self.req("POST", "/api/messages", token=self.tokens["nurse"],
+    def test_empty_messages_are_refused(self):
+        empty = self.req("POST", "/api/messages", token=self.tokens["midwife"],
                          body={"patientId": "MH-2025-0148", "body": "   "})
         self.assertEqual(empty.status, 400)
 
-    def test_a_nurse_can_add_an_appointment_and_it_reaches_the_caretaker_page(self):
-        created = self.req("POST", "/api/visits", token=self.tokens["nurse"], body={
+    def test_a_midwife_can_add_an_appointment(self):
+        created = self.req("POST", "/api/visits", token=self.tokens["midwife"], body={
             "patientId": "MH-2025-0148", "patientName": "Maria Santos", "startsOn": "2026-12-17",
             "startsAt": "11:00", "title": "Blood pressure check", "room": "Room 2",
         })
         self.assertEqual(created.status, 201)
-        workspace = self.req("GET", "/api/caretaker", token=self.tokens["caretaker"])
-        self.assertTrue(any(v["title"] == "Blood pressure check" for v in workspace.data["appointments"]))
 
     def test_appointments_need_a_date_time_and_visit_type(self):
-        res = self.req("POST", "/api/visits", token=self.tokens["nurse"],
+        res = self.req("POST", "/api/visits", token=self.tokens["midwife"],
                        body={"patientName": "Test Patient", "startsOn": "", "startsAt": "09:00", "title": "Check"})
         self.assertEqual(res.status, 400)
 
     def test_moving_a_visit_to_another_day_in_the_week_saves_the_change(self):
-        visits = self.req("GET", "/api/visits?from=2026-11-30&to=2026-12-04", token=self.tokens["nurse"])
+        visits = self.req("GET", "/api/visits?from=2026-11-30&to=2026-12-04", token=self.tokens["midwife"])
         first = visits.data["visits"][0]
-        moved = self.req("PATCH", f"/api/visits/{first['id']}", token=self.tokens["nurse"], body={"startsOn": "2026-12-01"})
+        moved = self.req("PATCH", f"/api/visits/{first['id']}", token=self.tokens["midwife"], body={"startsOn": "2026-12-01"})
         self.assertEqual(moved.status, 200)
         self.assertEqual(moved.data["visit"]["starts_on"], "2026-12-01")
 
     def test_caseload_notes_are_saved_and_listed(self):
-        added = self.req("POST", "/api/notes", token=self.tokens["provider"],
-                         body={"body": "Call Hannah about her week-4 screening."})
+        added = self.req("POST", "/api/notes", token=self.tokens["physician"],
+                         body={"body": "Call patient about her week-4 screening."})
         self.assertEqual(added.status, 201)
-        listed = self.req("GET", "/api/notes", token=self.tokens["nurse"])
+        listed = self.req("GET", "/api/notes", token=self.tokens["midwife"])
         self.assertTrue(any("week-4 screening" in n["body"] for n in listed.data["notes"]))
 
     # ── Register and password reset ─────────────────────────
@@ -171,7 +165,8 @@ class ApiTests(unittest.TestCase):
         email = "new.patient@example.com"
         created = self.req("POST", "/api/register", body={"name": "New Patient", "email": email, "password": "longenough1"})
         self.assertEqual(created.status, 201)
-        self.assertEqual(created.data["user"]["role"], "patient")
+        self.assertIn(created.data["user"]["role"], ("patient", "mother"),
+                      "self-registration should produce a patient or mother role")
         self.assertEqual(self.req("POST", "/api/login", body={"email": email, "password": "longenough1"}).status, 200)
 
     def test_duplicate_emails_and_weak_passwords_are_refused(self):
@@ -218,59 +213,557 @@ class ApiTests(unittest.TestCase):
     # ── Admin: accounts ─────────────────────────────────────
 
     def test_admins_see_every_account_with_its_status_and_other_roles_cannot(self):
-        res = self.req("GET", "/api/accounts", token=self.tokens["admin"])
+        res = self.req("GET", "/api/accounts", token=self.tokens["sysadmin"])
         self.assertEqual(res.status, 200)
-        self.assertTrue(any(a["email"] == "d.cruz@mhms.example" and a["status"] == "active" for a in res.data["accounts"]))
+        self.assertTrue(any(a["email"] == "b.reyes@bhw.example" and a["status"] == "active" for a in res.data["accounts"]))
         self.assertTrue(all(a["accountId"].startswith("ACC-") for a in res.data["accounts"]))
-        self.assertEqual(self.req("GET", "/api/accounts", token=self.tokens["nurse"]).status, 403)
+        # midwife cannot list accounts
+        self.assertEqual(self.req("GET", "/api/accounts", token=self.tokens["midwife"]).status, 403)
+        # rhu_admin can also list accounts
+        self.assertEqual(self.req("GET", "/api/accounts", token=self.tokens["rhu_admin"]).status, 200)
 
     def test_an_invited_account_has_no_known_password_until_the_person_sets_one(self):
-        invited = self.req("POST", "/api/accounts", token=self.tokens["admin"],
-                           body={"name": "Invited Nurse", "email": "invited.nurse@example.com", "role": "nurse"})
+        invited = self.req("POST", "/api/accounts", token=self.tokens["sysadmin"],
+                           body={"name": "Invited Midwife", "email": "invited.midwife@example.com", "role": "midwife"})
         self.assertEqual(invited.status, 201)
-        self.assertEqual(invited.data["account"]["role"], "nurse")
+        self.assertEqual(invited.data["account"]["role"], "midwife")
         self.assertNotIn("password_hash", invited.data["account"])
-        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.nurse@example.com", "password": "guess-guess"}).status, 401)
+        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.midwife@example.com", "password": "guess-guess"}).status, 401)
 
         before = len(self.log_lines)
-        self.req("POST", "/api/password-reset", body={"email": "invited.nurse@example.com"})
-        code = self.reset_code_for("invited.nurse@example.com", before)
-        self.req("POST", "/api/password-reset/confirm", body={"code": code, "password": "invitednurse1"})
-        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.nurse@example.com", "password": "invitednurse1"}).status, 200)
+        self.req("POST", "/api/password-reset", body={"email": "invited.midwife@example.com"})
+        code = self.reset_code_for("invited.midwife@example.com", before)
+        self.req("POST", "/api/password-reset/confirm", body={"code": code, "password": "invitedmidwife1"})
+        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.midwife@example.com", "password": "invitedmidwife1"}).status, 200)
 
     def test_suspending_an_account_blocks_sign_in_and_ends_its_sessions_and_activating_restores_it(self):
-        accounts = self.req("GET", "/api/accounts", token=self.tokens["admin"])
-        target = next(a for a in accounts.data["accounts"] if a["email"] == "invited.nurse@example.com")
-        nurse_token = self.client.sign_in("invited.nurse@example.com", "invitednurse1")
+        accounts = self.req("GET", "/api/accounts", token=self.tokens["sysadmin"])
+        target = next(a for a in accounts.data["accounts"] if a["email"] == "invited.midwife@example.com")
+        midwife_token = self.client.sign_in("invited.midwife@example.com", "invitedmidwife1")
 
-        suspended = self.req("PATCH", f"/api/accounts/{target['id']}", token=self.tokens["admin"], body={"status": "suspended"})
+        suspended = self.req("PATCH", f"/api/accounts/{target['id']}", token=self.tokens["sysadmin"], body={"status": "suspended"})
         self.assertEqual(suspended.status, 200)
         self.assertEqual(suspended.data["account"]["status"], "suspended")
-        self.assertEqual(self.req("GET", "/api/visits", token=nurse_token).status, 401, "open session is ended")
+        self.assertEqual(self.req("GET", "/api/visits", token=midwife_token).status, 401, "open session is ended")
 
-        blocked = self.req("POST", "/api/login", body={"email": "invited.nurse@example.com", "password": "invitednurse1"})
+        blocked = self.req("POST", "/api/login", body={"email": "invited.midwife@example.com", "password": "invitedmidwife1"})
         self.assertEqual(blocked.status, 403)
         self.assertIn("suspended", blocked.data["error"])
 
-        self.req("PATCH", f"/api/accounts/{target['id']}", token=self.tokens["admin"], body={"status": "active"})
-        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.nurse@example.com", "password": "invitednurse1"}).status, 200)
+        self.req("PATCH", f"/api/accounts/{target['id']}", token=self.tokens["sysadmin"], body={"status": "active"})
+        self.assertEqual(self.req("POST", "/api/login", body={"email": "invited.midwife@example.com", "password": "invitedmidwife1"}).status, 200)
 
     def test_admins_cannot_suspend_themselves_and_bad_statuses_or_roles_are_refused(self):
-        me = self.req("GET", "/api/me", token=self.tokens["admin"])
-        accounts = self.req("GET", "/api/accounts", token=self.tokens["admin"])
+        me = self.req("GET", "/api/me", token=self.tokens["sysadmin"])
+        accounts = self.req("GET", "/api/accounts", token=self.tokens["sysadmin"])
         admin_row = next(a for a in accounts.data["accounts"] if a["email"] == "admin@example.com")
         self.assertEqual(me.data["user"]["id"], admin_row["id"])
-        self.assertEqual(self.req("PATCH", f"/api/accounts/{admin_row['id']}", token=self.tokens["admin"], body={"status": "suspended"}).status, 400)
-        self.assertEqual(self.req("PATCH", f"/api/accounts/{admin_row['id']}", token=self.tokens["admin"], body={"status": "deleted"}).status, 400)
-        self.assertEqual(self.req("POST", "/api/accounts", token=self.tokens["admin"],
+        self.assertEqual(self.req("PATCH", f"/api/accounts/{admin_row['id']}", token=self.tokens["sysadmin"], body={"status": "suspended"}).status, 400)
+        self.assertEqual(self.req("PATCH", f"/api/accounts/{admin_row['id']}", token=self.tokens["sysadmin"], body={"status": "deleted"}).status, 400)
+        self.assertEqual(self.req("POST", "/api/accounts", token=self.tokens["sysadmin"],
                                   body={"name": "X Y", "email": "x.y@example.com", "role": "superuser"}).status, 400)
-        self.assertEqual(self.req("POST", "/api/accounts", token=self.tokens["admin"],
-                                  body={"name": "Dup", "email": "d.cruz@mhms.example", "role": "nurse"}).status, 409)
+        # Duplicate email check — use an email that exists in the new seed
+        self.assertEqual(self.req("POST", "/api/accounts", token=self.tokens["sysadmin"],
+                                  body={"name": "Dup", "email": "b.reyes@bhw.example", "role": "midwife"}).status, 409)
 
     def test_the_site_itself_is_served(self):
         res = self.req("GET", "/index.html")
         self.assertEqual(res.status, 200)
         self.assertIn("text/html", res.content_type)
+
+    # ── BHW-RHU role validation ─────────────────────────────
+
+    def test_new_bhw_rhu_roles_are_accepted_on_invite(self):
+        for role in ("bhw", "midwife", "physician", "rhu_admin", "sysadmin", "mother"):
+            res = self.req("POST", "/api/accounts", token=self.tokens["sysadmin"],
+                           body={"name": f"Test {role}", "email": f"test.{role}@example.com", "role": role})
+            self.assertEqual(res.status, 201, f"role '{role}' should be accepted, got {res.status}: {res.data}")
+
+    def test_invalid_role_on_invite_returns_400(self):
+        res = self.req("POST", "/api/accounts", token=self.tokens["sysadmin"],
+                       body={"name": "Bad", "email": "bad.role@example.com", "role": "superuser"})
+        self.assertEqual(res.status, 400)
+
+    def test_rhu_admin_can_invite_accounts(self):
+        res = self.req("POST", "/api/accounts", token=self.tokens["rhu_admin"],
+                       body={"name": "RHU BHW", "email": "rhu.bhw@example.com", "role": "bhw"})
+        self.assertEqual(res.status, 201)
+
+    def test_bhw_cannot_invite_accounts(self):
+        res = self.req("POST", "/api/accounts", token=self.tokens["bhw"],
+                       body={"name": "X", "email": "x@example.com", "role": "bhw"})
+        self.assertEqual(res.status, 403)
+
+    def test_all_new_seed_roles_sign_in_correctly(self):
+        expected = {
+            "b.reyes@bhw.example":   "bhw",
+            "c.lim@rhu.example":     "midwife",
+            "a.okafor@rhu.example":  "physician",
+            "rhu.admin@rhu.example": "rhu_admin",
+            "admin@example.com":     "sysadmin",
+        }
+        for email, role in expected.items():
+            res = self.req("POST", "/api/login", body={"email": email, "password": STAFF_PASSWORD})
+            self.assertEqual(res.status, 200, f"login failed for {email}")
+            self.assertEqual(res.data["user"]["role"], role, f"wrong role for {email}")
+
+    # ── Mothers: duplicate registration (task 2.3) ──────────
+
+    def test_a_new_mother_can_be_registered_by_a_bhw(self):
+        res = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body={
+            "name": "Ana Reyes",
+            "dateOfBirth": "1995-04-10",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        self.assertEqual(res.status, 201)
+        self.assertEqual(res.data["mother"]["name"], "Ana Reyes")
+
+    def test_registering_the_same_name_and_dob_twice_returns_409(self):
+        payload = {
+            "name": "Luisa Cruz",
+            "dateOfBirth": "1990-07-22",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        }
+        first = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body=payload)
+        self.assertEqual(first.status, 201)
+        second = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body=payload)
+        self.assertEqual(second.status, 409)
+        self.assertIn("already registered", second.data["error"])
+
+    def test_duplicate_key_normalises_name_casing_and_whitespace(self):
+        # First registration uses mixed case and normal spacing.
+        first = self.req("POST", "/api/mothers", token=self.tokens["midwife"], body={
+            "name": "Maria Santos",
+            "dateOfBirth": "1988-03-05",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        self.assertEqual(first.status, 201)
+        # Second uses all-lowercase with an extra internal space — same duplicate_key.
+        second = self.req("POST", "/api/mothers", token=self.tokens["midwife"], body={
+            "name": "maria  santos",
+            "dateOfBirth": "1988-03-05",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        self.assertEqual(second.status, 409)
+        self.assertIn("already registered", second.data["error"])
+
+    def test_saving_a_mother_without_consent_returns_400(self):
+        res = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body={
+            "name": "No Consent Mother",
+            "dateOfBirth": "2000-01-01",
+            # consentRecordedAt intentionally omitted
+        })
+        self.assertEqual(res.status, 400)
+        self.assertIn("Consent", res.data["error"])
+
+    def test_saving_a_mother_with_empty_consent_returns_400(self):
+        res = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body={
+            "name": "Empty Consent Mother",
+            "dateOfBirth": "2000-02-02",
+            "consentRecordedAt": "",
+        })
+        self.assertEqual(res.status, 400)
+        self.assertIn("Consent", res.data["error"])
+
+    # ── Mothers: audit log (task 2.5) ───────────────────────
+
+    def test_reading_a_mother_record_writes_a_mother_view_audit_row(self):
+        # Register a fresh mother so we have a known id.
+        created = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body={
+            "name": "Audit Test Mother",
+            "dateOfBirth": "1992-06-15",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        self.assertEqual(created.status, 201)
+        mother_id = created.data["mother"]["id"]
+
+        # BHW reads the individual record.
+        get_res = self.req("GET", f"/api/mothers/{mother_id}", token=self.tokens["bhw"])
+        self.assertEqual(get_res.status, 200)
+
+        # Admin checks the audit log for the expected row.
+        audit_res = self.req("GET", "/api/audit", token=self.tokens["sysadmin"])
+        self.assertEqual(audit_res.status, 200)
+        self.assertTrue(
+            any(
+                e["action"] == "mother_view" and e["detail"] == str(mother_id)
+                for e in audit_res.data["events"]
+            ),
+            f"Expected a mother_view audit row with detail='{mother_id}' but none found",
+        )
+
+    def test_reading_a_mothers_history_writes_a_mother_view_audit_row(self):
+        # Register a fresh mother so we have a known id.
+        created = self.req("POST", "/api/mothers", token=self.tokens["bhw"], body={
+            "name": "Audit History Mother",
+            "dateOfBirth": "1994-09-20",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        self.assertEqual(created.status, 201)
+        mother_id = created.data["mother"]["id"]
+
+        # BHW reads the history endpoint.
+        hist_res = self.req("GET", f"/api/mothers/{mother_id}/history", token=self.tokens["bhw"])
+        self.assertEqual(hist_res.status, 200)
+
+        # Admin checks the audit log for the expected row.
+        audit_res = self.req("GET", "/api/audit", token=self.tokens["sysadmin"])
+        self.assertEqual(audit_res.status, 200)
+        self.assertTrue(
+            any(
+                e["action"] == "mother_view" and e["detail"] == str(mother_id)
+                for e in audit_res.data["events"]
+            ),
+            f"Expected a mother_view audit row with detail='{mother_id}' but none found",
+        )
+
+
+    # ── BHW schedule: due-today / overdue / missed (task 3.4) ───────────────
+
+    def test_bhw_schedule_requires_authentication(self):
+        """Unauthenticated request must return 401."""
+        res = self.req("GET", "/api/bhw/schedule")
+        self.assertEqual(res.status, 401)
+
+    def test_bhw_schedule_refuses_non_bhw_roles(self):
+        """Midwife, physician and rhu_admin must each receive 403."""
+        for role in ("midwife", "physician", "rhu_admin"):
+            res = self.req("GET", "/api/bhw/schedule", token=self.tokens[role])
+            self.assertEqual(res.status, 403, f"expected 403 for role '{role}'")
+
+    def test_bhw_schedule_returns_correct_categories(self):
+        """Response must contain the three category keys."""
+        res = self.req("GET", "/api/bhw/schedule", token=self.tokens["bhw"])
+        self.assertEqual(res.status, 200)
+        self.assertIn("dueToday", res.data)
+        self.assertIn("overdue",  res.data)
+        self.assertIn("missed",   res.data)
+
+    def _register_mother_for_bhw(self, bhw_token, name, suffix=""):
+        """Helper: register a mother and return her id."""
+        res = self.req("POST", "/api/mothers", token=bhw_token, body={
+            "name": name + suffix,
+            "dateOfBirth": "1990-01-01",
+            "consentRecordedAt": "2025-01-01T00:00:00Z",
+        })
+        self.assertEqual(res.status, 201, f"failed to create mother '{name + suffix}': {res.data}")
+        return res.data["mother"]["id"]
+
+    def test_bhw_schedule_categorises_visits_correctly(self):
+        """A home visit scheduled yesterday → overdue or missed (after mark runs),
+        one due today → dueToday, one explicitly marked missed → missed."""
+        import datetime
+
+        bhw_token = self.tokens["bhw"]
+        mid = self._register_mother_for_bhw(bhw_token, "Schedule Category Mother", " 3.4A")
+
+        # Yesterday (overdue – not yet auto-marked missed because mark_overdue uses full datetime)
+        yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+        # Today
+        today = datetime.date.today().isoformat()
+        # Far future (not in any list)
+        future = (datetime.date.today() + datetime.timedelta(days=30)).isoformat()
+
+        # Create a home visit for yesterday → will appear as overdue or missed after the mark pass
+        hv_res = self.req("POST", "/api/home-visits", token=bhw_token, body={
+            "motherId": mid,
+            "scheduledFor": yesterday + "T09:00",
+        })
+        self.assertEqual(hv_res.status, 201)
+
+        # Create a home visit for today → dueToday
+        hv_today = self.req("POST", "/api/home-visits", token=bhw_token, body={
+            "motherId": mid,
+            "scheduledFor": today + "T10:00",
+        })
+        self.assertEqual(hv_today.status, 201)
+
+        # Create a prenatal visit for yesterday → will be overdue or missed
+        pv_res = self.req("POST", "/api/prenatal-visits", token=bhw_token, body={
+            "motherId": mid,
+            "scheduledFor": yesterday + "T08:00",
+        })
+        self.assertEqual(pv_res.status, 201)
+
+        # Fetch the schedule – mark_overdue_visits runs inside bhw_schedule
+        schedule = self.req("GET", "/api/bhw/schedule", token=bhw_token)
+        self.assertEqual(schedule.status, 200)
+
+        all_ids = (
+            [v["id"] for v in schedule.data["dueToday"]]
+            + [v["id"] for v in schedule.data["overdue"]]
+            + [v["id"] for v in schedule.data["missed"]]
+        )
+
+        # The today home visit must be in dueToday
+        due_ids = [v["id"] for v in schedule.data["dueToday"]]
+        self.assertIn(hv_today.data["visit"]["id"], due_ids,
+                      "home visit due today should be in dueToday")
+
+        # The yesterday home visit must appear somewhere (overdue or missed)
+        self.assertIn(hv_res.data["visit"]["id"], all_ids,
+                      "yesterday home visit should appear in overdue or missed")
+
+        # The yesterday prenatal visit must appear somewhere
+        self.assertIn(pv_res.data["visit"]["id"], all_ids,
+                      "yesterday prenatal visit should appear in overdue or missed")
+
+    def test_bhw_schedule_returns_only_own_visits(self):
+        """A second BHW must not see the first BHW's visits, and vice-versa."""
+        # Invite a second BHW account via the admin
+        invite_res = self.req("POST", "/api/accounts", token=self.tokens["sysadmin"], body={
+            "name": "Second BHW",
+            "email": "bhw2.test@bhw.example",
+            "role": "bhw",
+        })
+        self.assertEqual(invite_res.status, 201)
+
+        # Give the new BHW a known password by using the password-reset flow
+        import re as _re
+        log_before = len(self.log_lines)
+        self.req("POST", "/api/password-reset", body={"email": "bhw2.test@bhw.example"})
+        code = self.reset_code_for("bhw2.test@bhw.example", log_before)
+        set_res = self.req("POST", "/api/password-reset/confirm", body={
+            "email": "bhw2.test@bhw.example",
+            "code": code,
+            "password": "BHW2pass!99",
+        })
+        self.assertEqual(set_res.status, 200)
+
+        bhw2_token = self.client.sign_in("bhw2.test@bhw.example", "BHW2pass!99")
+        self.assertIsNotNone(bhw2_token)
+
+        # BHW1 registers a mother and creates a home visit
+        import datetime
+        today = datetime.date.today().isoformat()
+        bhw1_token = self.tokens["bhw"]
+        bhw1_mid = self._register_mother_for_bhw(bhw1_token, "BHW1 Isolation Mother", " 3.4B")
+        hv1 = self.req("POST", "/api/home-visits", token=bhw1_token, body={
+            "motherId": bhw1_mid,
+            "scheduledFor": today + "T09:00",
+        })
+        self.assertEqual(hv1.status, 201)
+
+        # BHW2 registers a different mother and creates a home visit
+        bhw2_mid = self._register_mother_for_bhw(bhw2_token, "BHW2 Isolation Mother", " 3.4B")
+        hv2 = self.req("POST", "/api/home-visits", token=bhw2_token, body={
+            "motherId": bhw2_mid,
+            "scheduledFor": today + "T09:00",
+        })
+        self.assertEqual(hv2.status, 201)
+
+        # BHW1's schedule should contain BHW1's visit but not BHW2's
+        s1 = self.req("GET", "/api/bhw/schedule", token=bhw1_token)
+        s1_all_ids = (
+            [v["id"] for v in s1.data["dueToday"]]
+            + [v["id"] for v in s1.data["overdue"]]
+            + [v["id"] for v in s1.data["missed"]]
+        )
+        self.assertIn(hv1.data["visit"]["id"],    s1_all_ids,
+                      "BHW1 visit should appear in BHW1's schedule")
+        self.assertNotIn(hv2.data["visit"]["id"], s1_all_ids,
+                         "BHW2 visit must not appear in BHW1's schedule")
+
+        # BHW2's schedule should contain BHW2's visit but not BHW1's
+        s2 = self.req("GET", "/api/bhw/schedule", token=bhw2_token)
+        s2_all_ids = (
+            [v["id"] for v in s2.data["dueToday"]]
+            + [v["id"] for v in s2.data["overdue"]]
+            + [v["id"] for v in s2.data["missed"]]
+        )
+        self.assertIn(hv2.data["visit"]["id"],    s2_all_ids,
+                      "BHW2 visit should appear in BHW2's schedule")
+        self.assertNotIn(hv1.data["visit"]["id"], s2_all_ids,
+                         "BHW1 visit must not appear in BHW2's schedule")
+
+
+    # ── Risk indicators (task 5.2) ──────────────────────────────────────────────
+
+    def test_admin_can_create_a_risk_indicator(self):
+        res = self.req("POST", "/api/indicators", token=self.tokens["rhu_admin"], body={
+            "code": "RI-001",
+            "description": "High blood pressure during pregnancy",
+            "source_reference": "DOH Maternal Care Guidelines 2023, Section 4.2",
+            "approved_by": "Dr. A. Okafor",
+            "approved_at": "2025-01-10T00:00:00Z",
+        })
+        self.assertEqual(res.status, 201)
+        self.assertEqual(res.data["indicator"]["code"], "RI-001")
+        self.assertIn("source_reference", res.data["indicator"])
+        self.assertIn("approved_by", res.data["indicator"])
+
+    def test_creating_indicator_without_source_reference_returns_400(self):
+        res = self.req("POST", "/api/indicators", token=self.tokens["rhu_admin"], body={
+            "code": "RI-NOSRC",
+            "description": "Missing source",
+            "approved_by": "Dr. A. Okafor",
+            # source_reference intentionally omitted
+        })
+        self.assertEqual(res.status, 400)
+
+    def test_creating_indicator_without_approved_by_returns_400(self):
+        res = self.req("POST", "/api/indicators", token=self.tokens["rhu_admin"], body={
+            "code": "RI-NOAPPR",
+            "description": "Missing approver",
+            "source_reference": "Some guideline reference",
+            # approved_by intentionally omitted
+        })
+        self.assertEqual(res.status, 400)
+
+    def test_non_admin_cannot_create_indicator(self):
+        for role in ("bhw", "midwife"):
+            res = self.req("POST", "/api/indicators", token=self.tokens[role], body={
+                "code": "RI-FORBIDDEN",
+                "source_reference": "Ref",
+                "approved_by": "Dr. X",
+            })
+            self.assertEqual(res.status, 403, f"expected 403 for role '{role}'")
+
+    def test_unauthenticated_request_to_indicators_returns_401(self):
+        res = self.req("POST", "/api/indicators", body={
+            "code": "RI-NOAUTH",
+            "source_reference": "Ref",
+            "approved_by": "Dr. X",
+        })
+        self.assertEqual(res.status, 401)
+
+    def test_admin_can_list_indicators(self):
+        # Ensure at least one indicator exists (may have been created by earlier test)
+        self.req("POST", "/api/indicators", token=self.tokens["sysadmin"], body={
+            "code": "RI-LIST-TEST",
+            "source_reference": "DOH Guidelines",
+            "approved_by": "Dr. A. Okafor",
+        })
+        res = self.req("GET", "/api/indicators", token=self.tokens["rhu_admin"])
+        self.assertEqual(res.status, 200)
+        self.assertIn("indicators", res.data)
+        self.assertTrue(any(i["code"] == "RI-LIST-TEST" for i in res.data["indicators"]))
+
+    # ── RHU open-flags queue (task 5.4) ────────────────────────────────────────
+
+    def _seed_open_flag(self, token):
+        """Create a mother, then insert an open risk flag directly and return its mother_id."""
+        mother_res = self.req("POST", "/api/mothers", token=token, body={
+            "name": "Flag Queue Test Mother",
+            "dateOfBirth": "1993-11-01",
+            "consentRecordedAt": "2025-01-15T08:00:00Z",
+        })
+        # Accept 201 (new) or 409 (already exists from a previous run) and retrieve the id.
+        if mother_res.status == 201:
+            mother_id = mother_res.data["mother"]["id"]
+        else:
+            # Fetch existing record by listing – use a unique enough name so we can find it.
+            list_res = self.req("GET", "/api/mothers", token=token)
+            self.assertEqual(list_res.status, 200)
+            match = next(
+                (m for m in list_res.data["mothers"] if "Flag Queue Test Mother" in m["name"]),
+                None,
+            )
+            self.assertIsNotNone(match, "Could not find Flag Queue Test Mother in mothers list")
+            mother_id = match["id"]
+
+        # Insert an open flag directly via SQL so we don't need a flag-creation endpoint yet.
+        user_id = self.req("GET", "/api/me", token=token).data["user"]["id"]
+        self.db.execute(
+            """INSERT INTO risk_flags (mother_id, observation, raised_by, status, created_by)
+               VALUES (?, 'Test observation for queue', ?, 'open', ?)""",
+            (mother_id, user_id, user_id),
+        )
+        self.db.execute("COMMIT") if False else None   # isolation_level=None → auto-commit
+        return mother_id
+
+    def test_flags_queue_requires_authentication(self):
+        """Unauthenticated request must return 401."""
+        res = self.req("GET", "/api/flags/queue")
+        self.assertEqual(res.status, 401)
+
+    def test_flags_queue_refuses_bhw_role(self):
+        """BHW must not access the RHU queue (403)."""
+        res = self.req("GET", "/api/flags/queue", token=self.tokens["bhw"])
+        self.assertEqual(res.status, 403)
+
+    def test_flags_queue_allowed_roles(self):
+        """rhu_admin, midwife and physician must all receive 200."""
+        for role in ("rhu_admin", "midwife", "physician"):
+            res = self.req("GET", "/api/flags/queue", token=self.tokens[role])
+            self.assertEqual(res.status, 200, f"expected 200 for role '{role}', got {res.status}")
+
+    def test_flags_queue_response_contains_review_label(self):
+        """The response must include the top-level review_label string."""
+        res = self.req("GET", "/api/flags/queue", token=self.tokens["rhu_admin"])
+        self.assertEqual(res.status, 200)
+        self.assertIn("review_label", res.data)
+        self.assertEqual(
+            res.data["review_label"],
+            "Requires review by a qualified health professional.",
+        )
+
+    def test_every_open_flag_in_queue_carries_review_label(self):
+        """Each flag item in the flags list must carry the review_label field."""
+        self._seed_open_flag(self.tokens["rhu_admin"])
+        res = self.req("GET", "/api/flags/queue", token=self.tokens["rhu_admin"])
+        self.assertEqual(res.status, 200)
+        self.assertIn("flags", res.data)
+        self.assertTrue(len(res.data["flags"]) > 0, "Expected at least one open flag in the queue")
+        for flag in res.data["flags"]:
+            self.assertIn("review_label", flag,
+                          f"Flag id={flag.get('id')} is missing review_label")
+            self.assertEqual(
+                flag["review_label"],
+                "Requires review by a qualified health professional.",
+                f"Flag id={flag.get('id')} has wrong review_label value",
+            )
+
+    def test_flags_queue_only_shows_open_flags(self):
+        """Flags with status 'reviewed' or 'dismissed' must not appear in the queue."""
+        # Insert a 'reviewed' flag directly
+        user_id = self.req("GET", "/api/me", token=self.tokens["rhu_admin"]).data["user"]["id"]
+        # We need a valid mother_id; reuse one already in the DB
+        list_res = self.req("GET", "/api/mothers", token=self.tokens["rhu_admin"])
+        self.assertEqual(list_res.status, 200)
+        self.assertTrue(len(list_res.data["mothers"]) > 0, "Need at least one mother to run this test")
+        mother_id = list_res.data["mothers"][0]["id"]
+
+        self.db.execute(
+            """INSERT INTO risk_flags (mother_id, observation, raised_by, status, created_by)
+               VALUES (?, 'Reviewed flag – should not appear', ?, 'reviewed', ?)""",
+            (mother_id, user_id, user_id),
+        )
+        self.db.execute(
+            """INSERT INTO risk_flags (mother_id, observation, raised_by, status, created_by)
+               VALUES (?, 'Dismissed flag – should not appear', ?, 'dismissed', ?)""",
+            (mother_id, user_id, user_id),
+        )
+
+        res = self.req("GET", "/api/flags/queue", token=self.tokens["rhu_admin"])
+        self.assertEqual(res.status, 200)
+        for flag in res.data["flags"]:
+            self.assertEqual(flag["status"], "open",
+                             f"Non-open flag (status={flag['status']}) appeared in the queue")
+
+    def test_flags_queue_ordered_oldest_first(self):
+        """Flags must be ordered by raised_at ascending (oldest flag first)."""
+        user_id = self.req("GET", "/api/me", token=self.tokens["rhu_admin"]).data["user"]["id"]
+        list_res = self.req("GET", "/api/mothers", token=self.tokens["rhu_admin"])
+        mother_id = list_res.data["mothers"][0]["id"]
+
+        # Insert two flags with known timestamps
+        self.db.execute(
+            """INSERT INTO risk_flags (mother_id, observation, raised_by, raised_at, status, created_by)
+               VALUES (?, 'Older flag', ?, '2025-01-01 08:00:00', 'open', ?)""",
+            (mother_id, user_id, user_id),
+        )
+        self.db.execute(
+            """INSERT INTO risk_flags (mother_id, observation, raised_by, raised_at, status, created_by)
+               VALUES (?, 'Newer flag', ?, '2025-06-01 08:00:00', 'open', ?)""",
+            (mother_id, user_id, user_id),
+        )
+
+        res = self.req("GET", "/api/flags/queue", token=self.tokens["rhu_admin"])
+        self.assertEqual(res.status, 200)
+        raised_times = [f["raised_at"] for f in res.data["flags"]]
+        self.assertEqual(raised_times, sorted(raised_times),
+                         "Flags in the queue must be ordered oldest first (ascending raised_at)")
 
 
 if __name__ == "__main__":

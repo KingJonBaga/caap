@@ -1,0 +1,525 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "2.1 Create `mothers`, `pregnancy_history` tables in a new `server/mothers.py`, with the": [
+      {
+        "executionId": "31903cd8-53d0-4b52-a56c-db950603fe4b",
+        "chatSessionId": "sess_f9b0ad7b-a261-4394-88f0-96e229e64bd3",
+        "timestamp": 1795671124904
+      },
+      {
+        "executionId": "31903cd8-53d0-4b52-a56c-db950603fe4b",
+        "chatSessionId": "sess_f9b0ad7b-a261-4394-88f0-96e229e64bd3",
+        "timestamp": 1795671186290
+      }
+    ],
+    "2.2 Add `POST /api/mothers` and `GET /api/mothers` (BHW: assigned mothers only; midwife and": [
+      {
+        "executionId": "f73289bd-031e-43d4-9063-a63ad484f256",
+        "chatSessionId": "sess_86b50e2b-c824-4d8c-b7c7-93141fd59826",
+        "timestamp": 1795671325864
+      },
+      {
+        "executionId": "f73289bd-031e-43d4-9063-a63ad484f256",
+        "chatSessionId": "sess_86b50e2b-c824-4d8c-b7c7-93141fd59826",
+        "timestamp": 1795671538341
+      }
+    ],
+    "2.3 Prevent duplicate registrations using `duplicate_key` (hash of normalised name and": [
+      {
+        "executionId": "74e430f4-15ff-46c5-a358-789d1c833fd3",
+        "chatSessionId": "sess_e765c24a-9ba7-4b8f-80d5-7096c4a92eda",
+        "timestamp": 1795671741606
+      },
+      {
+        "executionId": "74e430f4-15ff-46c5-a358-789d1c833fd3",
+        "chatSessionId": "sess_e765c24a-9ba7-4b8f-80d5-7096c4a92eda",
+        "timestamp": 1795671923739
+      }
+    ],
+    "2.4 Record consent (`consent_recorded_at`) before a mother can be saved. Test that saving": [
+      {
+        "executionId": "8248a478-d7d0-440e-879b-6abbe06cbe59",
+        "chatSessionId": "sess_00347a82-ed64-47e1-98ba-6928404814ca",
+        "timestamp": 1795671963317
+      },
+      {
+        "executionId": "8248a478-d7d0-440e-879b-6abbe06cbe59",
+        "chatSessionId": "sess_00347a82-ed64-47e1-98ba-6928404814ca",
+        "timestamp": 1795672000476
+      }
+    ],
+    "2.5 Audit every read of a mother's record (`audit.record_audit`). Test the audit row exists.": [
+      {
+        "executionId": "39d57992-b8db-4bfa-a9a8-10863ffdad8c",
+        "chatSessionId": "sess_828c9b99-3720-4b01-9df3-3751f19dffc2",
+        "timestamp": 1795672094097
+      },
+      {
+        "executionId": "39d57992-b8db-4bfa-a9a8-10863ffdad8c",
+        "chatSessionId": "sess_828c9b99-3720-4b01-9df3-3751f19dffc2",
+        "timestamp": 1795672153105
+      }
+    ],
+    "3.1 Create `prenatal_visits`, `postnatal_visits`, `home_visits` tables.": [
+      {
+        "executionId": "bae3d4ea-369b-4479-8be1-964720b9732e",
+        "chatSessionId": "sess_d1b049e0-9190-4d0b-95af-2dd9c52412a7",
+        "timestamp": 1795672175370
+      },
+      {
+        "executionId": "bae3d4ea-369b-4479-8be1-964720b9732e",
+        "chatSessionId": "sess_d1b049e0-9190-4d0b-95af-2dd9c52412a7",
+        "timestamp": 1795672266746
+      }
+    ],
+    "3.2 Add scheduling and status update endpoints. Status values are limited to the set in": [
+      {
+        "executionId": "6d2cfd8d-423d-4ba8-abae-a1c79cac81a3",
+        "chatSessionId": "sess_0fcc9af2-2937-4084-958e-c51d9500b9cf",
+        "timestamp": 1795672363221
+      },
+      {
+        "executionId": "6d2cfd8d-423d-4ba8-abae-a1c79cac81a3",
+        "chatSessionId": "sess_0fcc9af2-2937-4084-958e-c51d9500b9cf",
+        "timestamp": 1795672548169
+      }
+    ],
+    "3.3 Mark visits past their time and not completed as `missed` when a dashboard loads.": [
+      {
+        "executionId": "6dc60892-9183-47f7-afee-dbc2b0998904",
+        "chatSessionId": "sess_31a2ce8b-8aef-47e2-a51a-3b6da594fcdd",
+        "timestamp": 1795672607121
+      },
+      {
+        "executionId": "6dc60892-9183-47f7-afee-dbc2b0998904",
+        "chatSessionId": "sess_31a2ce8b-8aef-47e2-a51a-3b6da594fcdd",
+        "timestamp": 1795672721135
+      }
+    ],
+    "3.4 Add the BHW \"due today / overdue / missed\" list endpoint. Test it returns only the": [
+      {
+        "executionId": "88828cb5-0ff8-4316-856f-536ce7f1a94f",
+        "chatSessionId": "sess_0ccfc232-ffcf-456c-8fa0-f7d24984b35d",
+        "timestamp": 1795672749882
+      },
+      {
+        "executionId": "88828cb5-0ff8-4316-856f-536ce7f1a94f",
+        "chatSessionId": "sess_0ccfc232-ffcf-456c-8fa0-f7d24984b35d",
+        "timestamp": 1795672973216
+      }
+    ],
+    "4.1 Create the `checklists` table. Only checklists with `approved_by` can be used.": [
+      {
+        "executionId": "7b0676ad-0c1d-4fbd-8ee7-4310efce0f5f",
+        "chatSessionId": "sess_509f684c-f7ad-485a-bac7-054f6b21db34",
+        "timestamp": 1795673012362
+      },
+      {
+        "executionId": "7b0676ad-0c1d-4fbd-8ee7-4310efce0f5f",
+        "chatSessionId": "sess_509f684c-f7ad-485a-bac7-054f6b21db34",
+        "timestamp": 1795673171339
+      }
+    ],
+    "4.2 Add an endpoint that returns the approved checklist for a visit. Test an unapproved": [
+      {
+        "executionId": "c023549f-d7c9-461d-b358-294a6ad6b7a5",
+        "chatSessionId": "sess_30e36159-c168-4c8b-b9fb-512a80616fc1",
+        "timestamp": 1795673262299
+      },
+      {
+        "executionId": "c023549f-d7c9-461d-b358-294a6ad6b7a5",
+        "chatSessionId": "sess_30e36159-c168-4c8b-b9fb-512a80616fc1",
+        "timestamp": 1795673381276
+      }
+    ],
+    "4.3 Store checklist answers as JSON. Do not calculate scores or thresholds in code.": [
+      {
+        "executionId": "28f85af2-0592-4ab3-beec-1a2173c802ab",
+        "chatSessionId": "sess_e9b8bc43-90e3-4427-b43c-78a6c7425b45",
+        "timestamp": 1795673615892
+      }
+    ],
+    "5.1 Create `risk_indicators` (empty) and `risk_flags` tables.": [
+      {
+        "executionId": "613fb8a8-8794-43d8-8141-a7feada9dfd5",
+        "chatSessionId": "sess_349ae172-e0f3-48f4-a1ae-f63b53f217b0",
+        "timestamp": 1795673688977
+      },
+      {
+        "executionId": "613fb8a8-8794-43d8-8141-a7feada9dfd5",
+        "chatSessionId": "sess_349ae172-e0f3-48f4-a1ae-f63b53f217b0",
+        "timestamp": 1795673796058
+      }
+    ],
+    "5.2 Add an admin endpoint to enter an indicator. It requires `source_reference` and": [
+      {
+        "executionId": "98826578-347a-4173-9caa-1bca08df8c07",
+        "chatSessionId": "sess_9dba2abc-d8c9-4b30-918d-7c0695447ae9",
+        "timestamp": 1795673869389
+      },
+      {
+        "executionId": "98826578-347a-4173-9caa-1bca08df8c07",
+        "chatSessionId": "sess_9dba2abc-d8c9-4b30-918d-7c0695447ae9",
+        "timestamp": 1795674336362
+      }
+    ],
+    "0.3 Confirm the referral and follow-up time limits from the local protocol.": [
+      {
+        "executionId": "75252e9d-a23d-4291-87eb-13fa8fef94f7",
+        "chatSessionId": "sess_f9967ec8-6553-4080-96a9-fdfbbe9b5c5e",
+        "timestamp": 1795678447770
+      }
+    ],
+    "5.3 When a BHW or midwife records an observation, match it to active indicators and create": [
+      {
+        "executionId": "c3723dac-da52-4039-9f5a-49dfc31d4648",
+        "chatSessionId": "sess_04cbda2a-19f6-42c7-a4a4-d4e934107fd5",
+        "timestamp": 1795678818169
+      },
+      {
+        "executionId": "c3723dac-da52-4039-9f5a-49dfc31d4648",
+        "chatSessionId": "sess_04cbda2a-19f6-42c7-a4a4-d4e934107fd5",
+        "timestamp": 1795678889138
+      }
+    ],
+    "5.4 Show every open flag in the RHU queue with the label \"Requires review by a qualified": [
+      {
+        "executionId": "5716c98c-9209-4be4-b4e4-fec0fe705871",
+        "chatSessionId": "sess_2609db6b-5f27-4d32-ae97-03f8f126087f",
+        "timestamp": 1795678933000
+      },
+      {
+        "executionId": "5716c98c-9209-4be4-b4e4-fec0fe705871",
+        "chatSessionId": "sess_2609db6b-5f27-4d32-ae97-03f8f126087f",
+        "timestamp": 1795679050634
+      }
+    ],
+    "6.1 Create `referrals` and `referral_events` tables. `referral_events` is append-only.": [
+      {
+        "executionId": "287f1836-17bb-4ebe-901b-789016e1dd5c",
+        "chatSessionId": "sess_53fb41de-ebbc-442e-b280-d8d8c7531d92",
+        "timestamp": 1795680313943
+      },
+      {
+        "executionId": "287f1836-17bb-4ebe-901b-789016e1dd5c",
+        "chatSessionId": "sess_53fb41de-ebbc-442e-b280-d8d8c7531d92",
+        "timestamp": 1795680454022
+      }
+    ],
+    "6.2 Add create and status-change endpoints. Enforce the order": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474602
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680494301
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680860818
+      }
+    ],
+    "6.3 Refuse closing a referral without an outcome note. Test it.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474688
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680864753
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680918089
+      }
+    ],
+    "6.4 Show overdue referrals (not acknowledged within the protocol limit) on the RHU dashboard.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474753
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680922032
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680977765
+      }
+    ],
+    "6.5 Keep a mother with an open referral on the follow-up list until the referral is closed.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474814
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680980756
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681026559
+      }
+    ],
+    "7.1 Create the `reminders` table. Add an `in_app` channel.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474881
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681030500
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681495615
+      }
+    ],
+    "7.2 Create a reminder when a visit is scheduled.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680474943
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681498664
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681606900
+      }
+    ],
+    "7.3 Add an SMS adapter interface. Do not connect a gateway until the partner confirms one": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475002
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795681610509
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795682047348
+      }
+    ],
+    "8.1 Add a service worker that caches the app shell and opens offline.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475064
+      },
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795682054004
+      }
+    ],
+    "8.2 Store pending BHW changes in IndexedDB with a client-generated UUID (`client_id`).": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475125
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795682935866
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795683642662
+      }
+    ],
+    "8.3 Add a `sync` endpoint that accepts an outbox in order. Use `sync_outbox` to make": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475190
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795683648641
+      }
+    ],
+    "8.4 Implement the conflict rule from design.md section 5. Test that two different flags for": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475251
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795684156265
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795684336833
+      }
+    ],
+    "8.5 Show pending count, last sync time and failed items with reasons in the BHW screen.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475325
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795684343188
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795684928458
+      }
+    ],
+    "8.6 Clear the local store on sign-out. Test by signing out and checking the store is empty.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475416
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795684938647
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795685468866
+      }
+    ],
+    "8.7 Test offline editing on a phone-sized screen with network disabled, then reconnect.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475472
+      },
+      {
+        "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
+        "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
+        "timestamp": 1795685480104
+      }
+    ],
+    "9.1 Replace the sample numbers on the BHW and RHU pages with queries from the database.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475535
+      }
+    ],
+    "9.2 Add the monthly aggregated report. Test that names and contact details are absent.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475592
+      }
+    ],
+    "9.3 Apply the minimum group size (default 5): smaller groups show as \"<5\". Test it.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475650
+      }
+    ],
+    "9.4 Log each report export in `audit_log`.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475709
+      }
+    ],
+    "10.1 Create `education_items`. Only items with `approved_by` are visible to mothers.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475772
+      }
+    ],
+    "10.2 Show the materials for the mother's current stage. Test an unapproved item is hidden.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475834
+      }
+    ],
+    "11.1 Write the consent text, privacy notice and retention rules with the partner, then add": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475897
+      }
+    ],
+    "11.2 Confirm the repository contains no real patient data and no real passwords": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680475952
+      }
+    ],
+    "11.3 Review every new route for its role check. Test each route with a wrong role (`403`)": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680476015
+      }
+    ],
+    "11.4 Update the README and the in-app help for each role.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680476068
+      }
+    ],
+    "12.1 Run a supervised trial with dummy data at the partner site (or an agreed test set).": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680476132
+      }
+    ],
+    "12.2 Record problems and fix them before any real patient data is entered.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680476190
+      }
+    ],
+    "12.3 Document results and open issues in this file.": [
+      {
+        "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
+        "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
+        "timestamp": 1795680476251
+      }
+    ]
+  }
+}

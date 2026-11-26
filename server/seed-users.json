@@ -2,36 +2,36 @@
   {
     "email": "maria.santos@example.com",
     "name": "Maria Santos",
-    "role": "patient"
+    "role": "mother"
   },
   {
     "email": "nina.flores@example.com",
     "name": "Nina Flores",
-    "role": "patient"
+    "role": "mother"
   },
   {
-    "email": "a.rahman@mhms.example",
-    "name": "Dr. A. Rahman",
-    "role": "provider"
+    "email": "b.reyes@bhw.example",
+    "name": "Brenda Reyes",
+    "role": "bhw"
   },
   {
-    "email": "e.reyes@mhms.example",
-    "name": "Dr. E. Reyes",
-    "role": "provider"
+    "email": "c.lim@rhu.example",
+    "name": "Corazon Lim",
+    "role": "midwife"
   },
   {
-    "email": "l.park@mhms.example",
-    "name": "Nurse L. Park",
-    "role": "nurse"
+    "email": "a.okafor@rhu.example",
+    "name": "Dr. Adaeze Okafor",
+    "role": "physician"
   },
   {
-    "email": "d.cruz@mhms.example",
-    "name": "D. Cruz",
-    "role": "caretaker"
+    "email": "rhu.admin@rhu.example",
+    "name": "RHU Administrator",
+    "role": "rhu_admin"
   },
   {
     "email": "admin@example.com",
-    "name": "Administrator",
-    "role": "admin"
+    "name": "System Administrator",
+    "role": "sysadmin"
   }
 ]

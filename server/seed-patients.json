@@ -24,8 +24,8 @@
     "appointment": "Monday · 10:30 AM · Blood pressure follow-up",
     "status": "Needs review",
     "flag": "Blood pressure follow-up",
-    "note": "Sample check-in submitted for care-team review.",
-    "history": "No additional history shown in this sample"
+    "note": "Check-in submitted for care-team review.",
+    "history": "No additional history recorded"
   },
   "MH-2025-0109": {
     "name": "Janelle Reyes",
@@ -38,8 +38,8 @@
     "appointment": "Monday · 1:00 PM · Postpartum review",
     "status": "Needs review",
     "flag": "Postpartum follow-up",
-    "note": "Sample postpartum questionnaire received.",
-    "history": "No additional history shown in this sample"
+    "note": "Postpartum questionnaire received.",
+    "history": "No additional history recorded"
   },
   "PT-1038": {
     "name": "Amara Bello",
@@ -53,7 +53,7 @@
     "status": "Needs review",
     "flag": "Blood pressure watch",
     "note": "Repeat BP check in one week. Monitor for headache and visual changes.",
-    "history": "Sample record · no additional history shown"
+    "history": "No additional history recorded"
   },
   "PT-1029": {
     "name": "Priya Raman",
@@ -67,7 +67,7 @@
     "status": "Up to date",
     "flag": "",
     "note": "Routine prenatal check-in reviewed. Discuss questions and concerns at the next visit.",
-    "history": "Sample record · no additional history shown"
+    "history": "No additional history recorded"
   },
   "PT-1046": {
     "name": "Hannah Cole",
@@ -81,7 +81,7 @@
     "status": "Needs review",
     "flag": "Postpartum follow-up",
     "note": "Postpartum follow-up requested. Discuss feeding support and recovery at the next visit.",
-    "history": "Sample record · no additional history shown"
+    "history": "No additional history recorded"
   },
   "PT-1052": {
     "name": "Sofia Marchetti",
@@ -95,7 +95,7 @@
     "status": "Up to date",
     "flag": "",
     "note": "Wellness check-in reviewed. Discuss birth preferences at the next visit.",
-    "history": "Sample record · no additional history shown"
+    "history": "No additional history recorded"
   },
   "PT-1041": {
     "name": "Maya Thompson",
@@ -109,6 +109,6 @@
     "status": "Up to date",
     "flag": "",
     "note": "",
-    "history": "Sample record · no additional history shown"
+    "history": "No additional history recorded"
   }
 }

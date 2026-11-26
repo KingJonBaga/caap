@@ -246,8 +246,8 @@
 
           <div class="ln-field">
             <label for="email">Email address</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email"
-              value="maria.santos@example.com" oninput="syncLoginRoleFromEmail()">
+            <input type="email" id="email" name="email" placeholder="Your email address" autocomplete="email"
+              oninput="syncLoginRoleFromEmail()">
             <span class="ln-error" id="emailError"></span>
           </div>
 
@@ -295,7 +295,7 @@
       <div class="landing-section-inner">
         <p class="landing-eyebrow">ABOUT NURTURA</p>
         <h2>Maternal care, connected through every step.</h2>
-        <p class="landing-section-intro">NURTURA is a maternal health management prototype designed to help patients and
+        <p class="landing-section-intro">NURTURA is a maternal health management system designed to help patients and
           care teams keep important parts of care organized in one place.</p>
         <div class="landing-feature-grid">
           <article class="landing-info-card">
@@ -340,7 +340,7 @@
         <p class="landing-eyebrow">OUR COMMUNITY</p>
         <h2>Different roles. One circle of care.</h2>
         <p class="landing-section-intro">Maternal care works best when people can stay informed and connected. Each role
-          has a dedicated area in the prototype.</p>
+          has a dedicated area in the system.</p>
         <div class="landing-feature-grid">
           <article class="landing-info-card">
             <span class="landing-info-icon"><i class="fa-regular fa-heart"></i></span>
@@ -360,7 +360,7 @@
           <article class="landing-info-card">
             <span class="landing-info-icon"><i class="fa-solid fa-user-shield"></i></span>
             <h3>For administrators</h3>
-            <p>Use the administration workspace to review sample accounts and prototype reports.</p>
+            <p>Use the administration workspace to review accounts and reports.</p>
             <button type="button" class="landing-role-link" data-login-role="admin"
               onclick="selectLandingRole('admin')">Open administrator space <i
                 class="fa-solid fa-arrow-right"></i></button>
@@ -382,7 +382,7 @@
                 class="fa-solid fa-arrow-right"></i></button>
           </article>
         </div>
-        <p class="landing-prototype-note">This is an academic prototype with sample data. It is not a medical record
+        <p class="landing-prototype-note">Some records shown are sample records for testing. It is not a medical record
           system and does not provide medical advice.</p>
         <div class="care-journey-panel">
           <div class="care-journey-heading">
@@ -418,7 +418,7 @@
           <p class="landing-eyebrow">CONTACT</p>
           <h2 class="contact-heading">We are here to help!</h2>
           <p class="contact-desc">Let us know how we can best support you. Share a general question about using NURTURA
-            or about the maternal health management prototype.</p>
+            or about the maternal health management system.</p>
           <p class="contact-care-note">
             <i class="fa-regular fa-heart"></i>
             For pregnancy concerns, appointment changes, or urgent medical needs, contact your healthcare provider or
@@ -463,7 +463,7 @@
               <textarea id="contactComment" name="comment" placeholder="How can we help?" rows="5" required></textarea>
             </div>
             <button type="submit" class="contact-submit-new">SEND MESSAGE</button>
-            <p class="contact-form-note-new">This prototype form is monitored for general enquiries. Please do not
+            <p class="contact-form-note-new">This form is monitored for general enquiries. Please do not
               include private medical information.</p>
             <p class="contact-form-status" id="contactFormStatus" role="status" aria-live="polite"></p>
           </form>
@@ -481,15 +481,15 @@
               <span class="help-card-icon"><i class="fa-solid fa-user-doctor"></i></span>
               <h3>Medical or pregnancy concerns</h3>
             </div>
-            <p>Contact your healthcare provider or clinic. This prototype is not for diagnosis, treatment, or
+            <p>Contact your healthcare provider or clinic. This system is not for diagnosis, treatment, or
               emergencies.</p>
           </div>
           <div class="help-card">
             <div class="help-card-header">
               <span class="help-card-icon"><i class="fa-solid fa-laptop-medical"></i></span>
-              <h3>Using the prototype</h3>
+              <h3>Using NURTURA</h3>
             </div>
-            <p>Sign in to explore the patient, care-provider, and administrator sample workspaces. Changes are not
+            <p>Sign in to use the patient, care-team and administrator workspaces. Changes are not
               stored permanently.</p>
           </div>
         </div>
@@ -512,7 +512,7 @@
               <span class="ln-footer-brand-tag">Maternal health management</span>
             </div>
           </div>
-          <p class="ln-footer-about">A maternal health management prototype connecting expectant mothers, care teams,
+          <p class="ln-footer-about">A maternal health management system connecting expectant mothers, care teams,
             and clinic administrators through every step of the care journey.</p>
           <div class="ln-footer-icons">
             <span role="img" aria-label="Maternal care"><i class="fa-regular fa-heart" aria-hidden="true"></i></span>
@@ -529,14 +529,14 @@
         </div>
         <div class="ln-footer-col">
           <p class="ln-footer-col-title">Important Note</p>
-          <p class="ln-footer-note">This is an academic prototype using sample data. It is not a medical record system
+          <p class="ln-footer-note">Some records shown are sample records for testing. It is not a medical record system
             and does not provide medical advice. For urgent concerns, contact your clinic.</p>
           <a href="#help" class="ln-footer-note-link" onclick="scrollToSection('help');return false;">Get help <i
               class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="ln-footer-bottom">
-        <span>© 2026 NURTURA · Maternal health management prototype</span>
+        <span>© 2026 NURTURA · Maternal health management</span>
       </div>
     </footer>
 
@@ -564,7 +564,7 @@
       <div class="patient-topbar-actions">
         <span class="patient-space-badge">PATIENT SPACE</span>
         <button class="patient-notification" type="button" aria-label="Notifications"
-          onclick="showToast('Prototype notifications are examples only; no real alerts are sent.', 'patientToast')">
+          onclick="showToast('Notifications here are not connected to live alerts yet.', 'patientToast')">
           <i class="fa-regular fa-bell"></i><span>2</span>
         </button>
         <div class="patient-user-chip">
@@ -588,7 +588,7 @@
           <button class="patient-button patient-button-light" type="button" onclick="showProfileTab('prenatal-info')"><i
               class="fa-solid fa-download"></i> Care summary</button>
           <button class="patient-button patient-button-primary" type="button"
-            onclick="showToast('Demo only: appointment requests are not sent or saved.', 'patientToast')"><i
+            onclick="showToast('Appointment requests can't be sent from this page yet.', 'patientToast')"><i
               class="fa-regular fa-calendar-plus"></i> Book appointment</button>
         </div>
       </section>
@@ -645,7 +645,7 @@
                 <p>Recorded at home and in clinic</p>
               </div>
               <button class="patient-button patient-button-outline" type="button"
-                onclick="showToast('Demo only: health readings are not saved.', 'patientToast')"><i
+                onclick="showToast('Health readings can't be saved from this page yet.', 'patientToast')"><i
                   class="fa-solid fa-plus"></i> Log reading</button>
             </header>
             <div class="vitals-content">
@@ -667,7 +667,7 @@
                 </article>
               </div>
               <div class="weight-trend-heading"><strong>Weight trend</strong><span>+7.3 kg since week 16</span></div>
-              <div class="weight-chart" role="img" aria-label="Illustrative weight trend from week 16 to week 28">
+              <div class="weight-chart" role="img" aria-label="Sample weight trend from week 16 to week 28">
                 <svg viewBox="0 0 600 92" preserveAspectRatio="none" aria-hidden="true">
                   <path class="weight-chart-area"
                     d="M0 72 C45 67 57 63 100 64 S154 56 200 56 S257 48 300 49 S357 39 400 40 S458 32 500 34 S557 22 600 17 L600 92 L0 92 Z">
@@ -763,7 +763,7 @@
       <div class="app-toast" id="patientToast" role="status" aria-live="polite"></div>
     </main>
     <footer class="patient-dashboard-footer">
-      <span>© 2026 NURTURA · Maternal health management prototype</span>
+      <span>© 2026 NURTURA · Maternal health management</span>
     </footer>
   </div><!-- /#page-dashboard -->
 
@@ -788,7 +788,7 @@
       <div class="patient-topbar-actions">
         <span class="patient-space-badge">PATIENT SPACE</span>
         <button class="patient-notification" type="button" aria-label="Notifications"
-          onclick="showToast('Prototype notifications are examples only; no real alerts are sent.', 'profileToast')">
+          onclick="showToast('Notifications here are not connected to live alerts yet.', 'profileToast')">
           <i class="fa-regular fa-bell"></i><span>2</span>
         </button>
         <div class="patient-user-chip">
@@ -810,7 +810,7 @@
             reach you.</p>
         </div>
         <button class="patient-button patient-button-primary" type="button"
-          onclick="showToast('Profile editing is unavailable; this sample information cannot be changed.', 'profileToast')"><i
+          onclick="showToast('Profile editing is not available yet.', 'profileToast')"><i
             class="fa-solid fa-pen-to-square"></i> Edit profile</button>
       </div>
       <div class="patient-profile-layout">
@@ -961,7 +961,7 @@
           <div class="tab-panel" id="medical-info">
             <div class="profile-section-card">
               <h4 class="profile-section-title">Medical history</h4>
-              <p class="profile-section-sub">Example health information entered for care coordination</p>
+              <p class="profile-section-sub">Health information for care coordination</p>
               <div class="profile-fields-grid two-col">
                 <div class="profile-field"><label>Blood type</label>
                   <div class="field-value">O+</div>
@@ -974,13 +974,12 @@
                 </div>
               </div>
             </div>
-            <p class="prototype-inline-note">Information depends on what is entered and has not been clinically verified
-              in this prototype.</p>
+            <p class="prototype-inline-note">Information depends on what is entered and has not been clinically verified.</p>
           </div>
           <div class="tab-panel" id="prenatal-info">
             <div class="profile-section-card">
               <h4 class="profile-section-title">Prenatal records</h4>
-              <p class="profile-section-sub">Sample pregnancy timeline and visit records</p>
+              <p class="profile-section-sub">Pregnancy timeline and visit records</p>
               <div class="patient-table-wrap">
                 <table class="patient-table">
                   <thead>
@@ -1014,24 +1013,24 @@
                 </table>
               </div>
             </div>
-            <p class="prototype-inline-note">Sample entries only. Pregnancy tracking and screening do not replace
+            <p class="prototype-inline-note">Pregnancy tracking and screening do not replace
               professional assessment.</p>
           </div>
           <div class="tab-panel" id="postpartum-info">
             <div class="profile-section-card">
               <h4 class="profile-section-title">Postpartum checklist</h4>
-              <p class="profile-section-sub">Example follow-up items to discuss with your care team</p>
+              <p class="profile-section-sub">Follow-up items to discuss with your care team</p>
               <ul class="postpartum-list">
                 <li><label><input type="checkbox"> Confirm postpartum follow-up appointment</label></li>
                 <li><label><input type="checkbox"> Review recovery questions with a provider</label></li>
                 <li><label><input type="checkbox"> Update care team with new health information</label></li>
               </ul>
             </div>
-            <p class="prototype-inline-note">Checklist selections are temporary and reset when this page reloads.</p>
+            <p class="prototype-inline-note">Checklist selections are not saved yet and reset when this page reloads.</p>
           </div>
           <div class="tab-panel" id="documents-info">
             <div class="tab-placeholder"><i class="fa-regular fa-file"></i>
-              <p>Document upload and storage are not included in this prototype.</p>
+              <p>Document upload and storage are not available yet.</p>
             </div>
           </div>
         </div>
@@ -1040,7 +1039,7 @@
     </main>
 
     <footer class="patient-dashboard-footer">
-      <span>© 2026 NURTURA · Maternal health management prototype</span>
+      <span>© 2026 NURTURA · Maternal health management</span>
     </footer>
   </div>
 
@@ -1064,7 +1063,7 @@
       <div class="patient-topbar-actions">
         <span class="patient-space-badge">PATIENT SPACE</span>
         <button class="patient-notification" type="button" aria-label="Notifications"
-          onclick="showToast('Prototype notifications are examples only; no real alerts are sent.', 'recordsToast')">
+          onclick="showToast('Notifications here are not connected to live alerts yet.', 'recordsToast')">
           <i class="fa-regular fa-bell"></i><span>2</span>
         </button>
         <div class="patient-user-chip">
@@ -1363,7 +1362,7 @@
       <div class="app-toast" id="recordsToast" role="status" aria-live="polite"></div>
     </main>
     <footer class="patient-dashboard-footer">
-      <span>© 2026 NURTURA · Maternal health management prototype</span>
+      <span>© 2026 NURTURA · Maternal health management</span>
     </footer>
   </div>
 
@@ -1386,7 +1385,7 @@
       <div class="patient-topbar-actions">
         <span class="patient-space-badge">PATIENT SPACE</span>
         <button class="patient-notification" type="button" aria-label="Notifications"
-          onclick="showToast('Prototype notifications are examples only; no real alerts are sent.', 'appointmentsToast')">
+          onclick="showToast('Notifications here are not connected to live alerts yet.', 'appointmentsToast')">
           <i class="fa-regular fa-bell"></i><span>2</span>
         </button>
         <div class="patient-user-chip">
@@ -1407,7 +1406,7 @@
           <p>Review upcoming appointments, request a new slot, and check what happened at past visits.</p>
         </div>
         <button class="patient-button patient-button-primary" type="button"
-          onclick="showToast('Demo only: appointment requests are not sent or saved. Please contact your clinic to book.', 'appointmentsToast')">
+          onclick="showToast('Appointment requests can't be sent from this page yet. Please contact your clinic to book.', 'appointmentsToast')">
           <i class="fa-solid fa-plus"></i> Request appointment
         </button>
       </header>
@@ -1433,9 +1432,9 @@
               <span>Dr. Adaeze Okafor · Bayview Women's Health · Room 4</span>
               <div>
                 <button type="button" class="appointment-action appointment-reschedule"
-                  onclick="showToast('Demo only: rescheduling is not sent to your clinic.', 'appointmentsToast')">Reschedule</button>
+                  onclick="showToast('Rescheduling can't be sent from this page yet. Please contact your clinic.', 'appointmentsToast')">Reschedule</button>
                 <button type="button" class="appointment-action appointment-cancel"
-                  onclick="showToast('Demo only: this appointment has not been cancelled. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
+                  onclick="showToast('This appointment can't be cancelled here yet. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
               </div>
             </div>
           </article>
@@ -1451,9 +1450,9 @@
               <span>Midwife Ruth Alvarez · Community Room, Bayview Women's Health</span>
               <div>
                 <button type="button" class="appointment-action appointment-reschedule"
-                  onclick="showToast('Demo only: rescheduling is not sent to your clinic.', 'appointmentsToast')">Reschedule</button>
+                  onclick="showToast('Rescheduling can't be sent from this page yet. Please contact your clinic.', 'appointmentsToast')">Reschedule</button>
                 <button type="button" class="appointment-action appointment-cancel"
-                  onclick="showToast('Demo only: this appointment has not been cancelled. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
+                  onclick="showToast('This appointment can't be cancelled here yet. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
               </div>
             </div>
           </article>
@@ -1469,9 +1468,9 @@
               <span>Dr. Adaeze Okafor · Imaging Suite, Level 2</span>
               <div>
                 <button type="button" class="appointment-action appointment-reschedule"
-                  onclick="showToast('Demo only: rescheduling is not sent to your clinic.', 'appointmentsToast')">Reschedule</button>
+                  onclick="showToast('Rescheduling can't be sent from this page yet. Please contact your clinic.', 'appointmentsToast')">Reschedule</button>
                 <button type="button" class="appointment-action appointment-cancel"
-                  onclick="showToast('Demo only: this appointment has not been cancelled. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
+                  onclick="showToast('This appointment can't be cancelled here yet. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
               </div>
             </div>
           </article>
@@ -1487,9 +1486,9 @@
               <span>Nurse Lena Park · Video call link sent by email</span>
               <div>
                 <button type="button" class="appointment-action appointment-reschedule"
-                  onclick="showToast('Demo only: rescheduling is not sent to your clinic.', 'appointmentsToast')">Reschedule</button>
+                  onclick="showToast('Rescheduling can't be sent from this page yet. Please contact your clinic.', 'appointmentsToast')">Reschedule</button>
                 <button type="button" class="appointment-action appointment-cancel"
-                  onclick="showToast('Demo only: this appointment has not been cancelled. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
+                  onclick="showToast('This appointment can't be cancelled here yet. Contact your clinic for changes.', 'appointmentsToast')">Cancel</button>
               </div>
             </div>
           </article>
@@ -1596,7 +1595,7 @@
       <div class="app-toast" id="appointmentsToast" role="status" aria-live="polite"></div>
     </main>
     <footer class="patient-dashboard-footer">
-      <span>© 2026 NURTURA · Maternal health management prototype</span>
+      <span>© 2026 NURTURA · Maternal health management</span>
     </footer>
   </div>
 
@@ -1820,7 +1819,7 @@
                 <span class="provider-notification-unread-dot" aria-hidden="true"></span>
               </button>
             </div>
-            <footer class="provider-notification-footer">Prototype notifications — messages are sample data and are not
+            <footer class="provider-notification-footer">Notifications here are sample messages and are not
               sent by email.</footer>
           </section>
         </div>
@@ -1977,7 +1976,7 @@
                 <span class="pov-alert-tag pov-alert-tag--routine">ROUTINE</span>
               </div>
               <button class="pov-acknowledge-btn" type="button"
-                onclick="showToast('Demo only: acknowledgements are not saved.', 'providerToast')"><i
+                onclick="showToast('Acknowledgements can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-solid fa-check"></i> Acknowledge all</button>
             </section>
 
@@ -2137,7 +2136,7 @@
             <div class="cl2-card-footer">
               <button class="cl2-open-btn" type="button" onclick="openProviderSummary(this)">Open summary</button>
               <button class="cl2-bookmark-btn" type="button" aria-label="Bookmark Maria Santos"
-                onclick="showToast('Demo only: bookmarks are not saved.', 'providerToast')"><i
+                onclick="showToast('Bookmarks can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-regular fa-bookmark"></i></button>
             </div>
           </article>
@@ -2164,7 +2163,7 @@
             <div class="cl2-card-footer">
               <button class="cl2-open-btn" type="button" onclick="openProviderSummary(this)">Open summary</button>
               <button class="cl2-bookmark-btn" type="button" aria-label="Bookmark Amara Bello"
-                onclick="showToast('Demo only: bookmarks are not saved.', 'providerToast')"><i
+                onclick="showToast('Bookmarks can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-regular fa-bookmark"></i></button>
             </div>
           </article>
@@ -2190,7 +2189,7 @@
             <div class="cl2-card-footer">
               <button class="cl2-open-btn" type="button" onclick="openProviderSummary(this)">Open summary</button>
               <button class="cl2-bookmark-btn" type="button" aria-label="Bookmark Priya Raman"
-                onclick="showToast('Demo only: bookmarks are not saved.', 'providerToast')"><i
+                onclick="showToast('Bookmarks can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-regular fa-bookmark"></i></button>
             </div>
           </article>
@@ -2217,7 +2216,7 @@
             <div class="cl2-card-footer">
               <button class="cl2-open-btn" type="button" onclick="openProviderSummary(this)">Open summary</button>
               <button class="cl2-bookmark-btn" type="button" aria-label="Bookmark Hannah Cole"
-                onclick="showToast('Demo only: bookmarks are not saved.', 'providerToast')"><i
+                onclick="showToast('Bookmarks can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-regular fa-bookmark"></i></button>
             </div>
           </article>
@@ -2243,7 +2242,7 @@
             <div class="cl2-card-footer">
               <button class="cl2-open-btn" type="button" onclick="openProviderSummary(this)">Open summary</button>
               <button class="cl2-bookmark-btn" type="button" aria-label="Bookmark Sofia Marchetti"
-                onclick="showToast('Demo only: bookmarks are not saved.', 'providerToast')"><i
+                onclick="showToast('Bookmarks can't be saved from this page yet.', 'providerToast')"><i
                   class="fa-regular fa-bookmark"></i></button>
             </div>
           </article>
@@ -2292,21 +2291,21 @@
                   <tr data-patient-id="MH-2025-0148">
                     <td><strong>Maria Santos</strong><span>MH-2025-0148</span></td>
                     <td>28 weeks · Third trimester</td>
-                    <td>Sample · 9:00 AM</td>
+                    <td>9:00 AM</td>
                     <td><span class="status-badge status-confirmed">Wellness check</span></td>
                     <td><button class="small-action" onclick="openProviderRecord(this)">View record</button></td>
                   </tr>
                   <tr data-patient-id="MH-2025-0162">
                     <td><strong>Leah Cruz</strong><span>MH-2025-0162</span></td>
                     <td>32 weeks · Third trimester</td>
-                    <td>Sample · 10:30 AM</td>
+                    <td>10:30 AM</td>
                     <td><span class="status-badge status-pending">BP follow-up</span></td>
                     <td><button class="small-action" onclick="openProviderRecord(this)">View record</button></td>
                   </tr>
                   <tr data-patient-id="MH-2025-0109">
                     <td><strong>Janelle Reyes</strong><span>MH-2025-0109</span></td>
                     <td>2 weeks postpartum</td>
-                    <td>Sample · 1:00 PM</td>
+                    <td>1:00 PM</td>
                     <td><span class="status-badge status-confirmed">Questionnaire</span></td>
                     <td><button class="small-action" onclick="openProviderRecord(this)">View record</button></td>
                   </tr>
@@ -2318,7 +2317,7 @@
         <section class="provider-record-detail" id="providerRecordDetail" hidden aria-labelledby="providerRecordName">
           <div class="provider-record-toolbar"><button class="text-action" type="button"
               onclick="closeProviderRecord()"><i class="fa-solid fa-arrow-left"></i> Back to patients</button><span
-              class="status-badge status-pending">Sample record · Not clinically verified</span></div>
+              class="status-badge status-pending">Not clinically verified</span></div>
           <section class="provider-card">
             <div class="provider-card-heading">
               <div>
@@ -2332,10 +2331,10 @@
               <div><span>Latest patient update</span><strong id="providerRecordUpdate"></strong></div>
               <div><span>Reported history</span><strong id="providerRecordHistory"></strong></div>
             </div>
-            <div class="provider-record-note"><label for="providerCareNote">Add a demo follow-up note</label><textarea
+            <div class="provider-record-note"><label for="providerCareNote">Add a follow-up note</label><textarea
                 id="providerCareNote" rows="3" maxlength="500"
-                placeholder="Enter a sample care-coordination note"></textarea>
-              <p class="prototype-inline-note">Do not enter real patient information. Demo notes are temporary.</p>
+                placeholder="Enter a care-coordination note"></textarea>
+              <p class="prototype-inline-note">Notes are saved to the care-team database. Do not enter real patient information until the system is approved for live use.</p>
               <button class="small-action" type="button" onclick="addProviderCareNote()">Add note</button>
               <ul class="provider-note-list" id="providerCareNotes" aria-live="polite"></ul>
             </div>
@@ -2424,7 +2423,7 @@
       <dialog class="provider-summary-dialog" id="providerSummaryDialog" aria-labelledby="providerSummaryName">
         <div class="provider-summary-heading">
           <div>
-            <p>CARE TEAM · SAMPLE SUMMARY</p>
+            <p>CARE TEAM · SUMMARY</p>
             <h2 id="providerSummaryName"></h2><span id="providerSummaryId"></span>
           </div><button type="button" class="account-dialog-close"
             onclick="document.getElementById('providerSummaryDialog').close()" aria-label="Close patient summary"><i
@@ -2442,7 +2441,7 @@
         </div>
         <div class="provider-summary-tags" id="providerSummaryTags" aria-label="Patient care tags"></div>
         <span class="provider-summary-flag" id="providerSummaryFlag"></span>
-        <p class="provider-summary-disclaimer">Illustrative sample only. This is not a verified medical record or
+        <p class="provider-summary-disclaimer">Summary for review only. This is not a verified medical record or
           clinical recommendation.</p>
         <div class="provider-summary-actions"><button type="button" class="text-action"
             onclick="document.getElementById('providerSummaryDialog').close()">Close</button><button type="button"
@@ -2451,7 +2450,7 @@
       <div class="app-toast" id="appToast" role="status" aria-live="polite"></div>
       <div class="app-toast" id="providerToast" role="status" aria-live="polite"></div>
     </div>
-    <footer class="app-footer"><span>© 2026 NURTURA · Maternal health management prototype</span></footer>
+    <footer class="app-footer"><span>© 2026 NURTURA · Maternal health management</span></footer>
   </div>
 
 
@@ -2473,7 +2472,7 @@
       <div class="patient-topbar-actions">
         <span class="patient-space-badge">PATIENT SPACE</span>
         <button class="patient-notification" type="button" aria-label="Notifications"
-          onclick="showToast('Prototype notifications are examples only; no real alerts are sent.', 'postpartumToast')">
+          onclick="showToast('Notifications here are not connected to live alerts yet.', 'postpartumToast')">
           <i class="fa-regular fa-bell"></i><span>2</span>
         </button>
         <div class="patient-user-chip">
@@ -2494,7 +2493,7 @@
           <p>Everything prepared for the first six weeks after birth — checklists, newborn reviews, and support.</p>
         </div>
         <button class="patient-button patient-button-light" type="button"
-          onclick="showToast('Demo only: care information is not shared with your team.', 'postpartumToast')"><i
+          onclick="showToast('Care information can't be shared from this page yet.', 'postpartumToast')"><i
             class="fa-solid fa-share-nodes"></i> Share with care team</button>
       </header>
 
@@ -2577,7 +2576,7 @@
                   href="tel:+14155550100">+1 (415) 555-0100</a>
               </li>
             </ul>
-            <p class="postpartum-emergency-note">For emergencies call your local emergency number. This prototype does
+            <p class="postpartum-emergency-note">For emergencies call your local emergency number. This system does
               not dispatch care.</p>
           </section>
         </aside>
@@ -2585,7 +2584,7 @@
       <div class="app-toast" id="postpartumToast" role="status" aria-live="polite"></div>
     </main>
     <footer class="patient-dashboard-footer">
-      <span>© 2026 NURTURA · Maternal health management prototype</span>
+      <span>© 2026 NURTURA · Maternal health management</span>
     </footer>
   </div>
 
@@ -2610,7 +2609,7 @@
       <div class="app-bar-right">
         <span class="admin-space-badge">ADMIN</span>
         <button class="notif-btn" aria-label="Notifications"
-          onclick="showAdminToast('Prototype notifications are examples only; no real alerts are sent.')"><i
+          onclick="showAdminToast('Notifications here are not connected to live alerts yet.')"><i
             class="fa-regular fa-bell"></i><span class="notif-dot">1</span></button>
         <div class="user-chip">
           <div class="user-avatar admin-avatar">IC</div>
@@ -2633,7 +2632,7 @@
               stays with the care team.</p>
           </div>
           <div class="admin-heading-actions">
-            <button class="admin-button admin-button-light" type="button" onclick="downloadDemoReport()"><i
+            <button class="admin-button admin-button-light" type="button" onclick="downloadCareSummary()"><i
                 class="fa-regular fa-floppy-disk"></i> Export report</button>
             <button class="admin-button admin-button-primary" type="button" onclick="showAdminPanel('accounts')"><i
                 class="fa-solid fa-user-gear"></i> Manage accounts</button>
@@ -2984,18 +2983,182 @@
             </section>
           </aside>
         </div>
-        <p class="audit-disclaimer">Sample data only — this prototype is not connected to a live medical record system.
+        <p class="audit-disclaimer">Some records shown are sample records for testing. This system is not connected to a live medical record system.
         </p>
       </section>
       <div class="app-toast" id="adminToast" role="status" aria-live="polite"></div>
     </div>
-    <footer class="app-footer"><span>© 2026 NURTURA · Maternal health management prototype</span></footer>
+    <footer class="app-footer"><span>© 2026 NURTURA · Maternal health management</span></footer>
   </div>
 
 
 
+  <!-- BHW workspace -->
+  <div id="page-bhw" class="page app-page bhw-page">
+    <header class="app-bar">
+      <a href="#" class="app-brand" onclick="showPage('login');return false;">
+        <div class="app-brand-icon"><i class="fa-solid fa-heart"></i></div>
+        <div class="app-brand-text">
+          <span class="app-brand-name">NURTURA</span>
+        </div>
+      </a>
+      <nav class="app-nav" aria-label="BHW navigation">
+        <button class="app-nav-item active" type="button" data-bhw-section="bhwOverview"
+          onclick="showBhwSection('bhwOverview', this)">
+          <i class="fa-solid fa-gauge-high"></i> Overview</button>
+        <button class="app-nav-item" type="button" data-bhw-section="bhwVisitsCard"
+          onclick="showBhwSection('bhwVisitsCard', this)">
+          <i class="fa-solid fa-house-medical"></i> Visits</button>
+        <button class="app-nav-item" type="button" data-bhw-section="bhwReferralsCard"
+          onclick="showBhwSection('bhwReferralsCard', this)">
+          <i class="fa-solid fa-people-arrows-left-right"></i> Referrals</button>
+      </nav>
+      <div class="app-bar-right">
+        <span class="provider-space-badge">BHW</span>
+        <div class="user-chip">
+          <div class="user-avatar" id="bhwAvatar">BH</div>
+          <div class="user-info">
+            <span class="user-name" id="bhwName">BHW Worker</span>
+            <span class="user-meta">Barangay Health Worker</span>
+          </div>
+        </div>
+        <button class="pov-topbar-icon-btn" type="button" aria-label="Sign out" onclick="signOut()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-body provider-body bhw-body">
+
+      <!-- Sync status bar — always visible (design.md §5, task 8.5) -->
+      <div class="bhw-sync-bar" id="bhwSyncBar" role="status" aria-label="Offline sync status" aria-live="polite">
+        <div class="bhw-sync-left">
+          <span class="bhw-sync-icon" aria-hidden="true"><i class="fa-solid fa-rotate"></i></span>
+          <span class="bhw-sync-status">
+            <span class="bhw-sync-pending" id="bhwSyncPending">All synced</span>
+            <span class="bhw-sync-sep" aria-hidden="true">·</span>
+            <span class="bhw-sync-time" id="bhwSyncTime">Never synced</span>
+            <span class="bhw-sync-sep" aria-hidden="true">·</span>
+            <span class="bhw-sync-online" id="bhwSyncOnline">Online</span>
+          </span>
+          <button class="bhw-sync-failed-toggle" id="bhwSyncFailedToggle"
+            hidden
+            type="button"
+            aria-expanded="false"
+            aria-controls="bhwSyncDetails"
+            onclick="bhwToggleFailedDetails()">
+            <span id="bhwSyncFailed"></span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="bhw-sync-right">
+          <button class="bhw-sync-btn" id="bhwSyncNow" type="button" onclick="bhwSyncNow()">
+            <i class="fa-solid fa-rotate" aria-hidden="true"></i> Sync now
+          </button>
+        </div>
+        <div class="bhw-sync-details" id="bhwSyncDetails" hidden aria-live="polite"></div>
+      </div><!-- /#bhwSyncBar -->
+
+      <div class="pov-greeting-bar">
+        <div>
+          <p class="pov-eyebrow">BHW SPACE</p>
+          <h1 class="pov-greeting">Your home visits &amp; referrals</h1>
+          <p class="pov-greeting-sub">Assigned mothers, upcoming visits, open flags and referrals needing your attention.</p>
+        </div>
+        <div class="pov-greeting-actions">
+          <button class="pov-btn-outline" type="button"
+            onclick="document.getElementById('bhwVisitsCard').scrollIntoView({ behavior: 'smooth' })">
+            <i class="fa-solid fa-house-medical"></i> Visits</button>
+          <button class="pov-btn-primary" type="button"
+            onclick="document.getElementById('bhwReferralsCard').scrollIntoView({ behavior: 'smooth' })">
+            <i class="fa-solid fa-people-arrows-left-right"></i> Referrals</button>
+        </div>
+      </div>
+
+      <!-- Stat row -->
+      <div class="pov-stat-row" id="bhwOverview">
+        <article class="pov-stat-card">
+          <p class="pov-stat-label">ASSIGNED MOTHERS</p>
+          <p class="pov-stat-num" id="bhwMotherCount">—</p>
+          <p class="pov-stat-meta">In your barangay</p>
+        </article>
+        <article class="pov-stat-card pov-stat-card--tint">
+          <p class="pov-stat-label">VISITS DUE TODAY</p>
+          <p class="pov-stat-num" id="bhwVisitsDue">—</p>
+          <p class="pov-stat-meta" id="bhwVisitsDueMeta">Home visits</p>
+        </article>
+        <article class="pov-stat-card">
+          <p class="pov-stat-label">OVERDUE VISITS</p>
+          <p class="pov-stat-num" id="bhwVisitsMissed">—</p>
+          <p class="pov-stat-meta">Need reschedule</p>
+        </article>
+        <article class="pov-stat-card pov-stat-card--pink">
+          <p class="pov-stat-label">OPEN REFERRALS</p>
+          <p class="pov-stat-num" id="bhwReferralCount">—</p>
+          <p class="pov-stat-meta">Awaiting update</p>
+        </article>
+      </div>
+
+      <div class="pov-body-cols">
+        <!-- Visits -->
+        <section class="pov-card pov-clinic-col" id="bhwVisitsCard">
+          <div class="pov-card-head">
+            <div>
+              <h2 class="pov-card-title">Home visits</h2>
+              <p class="pov-card-sub">Due today and overdue</p>
+            </div>
+          </div>
+          <div class="pov-clinic-list" id="bhwVisitsList">
+            <p class="caretaker-empty">No visits recorded yet. Visit data loads from the server.</p>
+          </div>
+        </section>
+
+        <!-- Referrals and pending sync -->
+        <div class="pov-right-col">
+          <section class="pov-card" id="bhwReferralsCard">
+            <div class="pov-card-head">
+              <div>
+                <h2 class="pov-card-title">Open referrals</h2>
+                <p class="pov-card-sub">Awaiting acknowledgement or update</p>
+              </div>
+            </div>
+            <div id="bhwReferralsList">
+              <p class="caretaker-empty">No open referrals. Referral data loads from the server.</p>
+            </div>
+          </section>
+
+          <section class="pov-card bhw-tips-card">
+            <div class="pov-card-head">
+              <div>
+                <h2 class="pov-card-title">Field tips</h2>
+                <p class="pov-card-sub">Working offline</p>
+              </div>
+            </div>
+            <ul class="caretaker-tips">
+              <li><i class="fa-solid fa-rotate"></i>
+                <span>Changes are saved on this device first. Tap <strong>Sync now</strong> when you are back on signal.</span></li>
+              <li><i class="fa-solid fa-triangle-exclamation"></i>
+                <span>All flags need review by a qualified health professional before action is taken.</span></li>
+              <li><i class="fa-solid fa-phone"></i>
+                <span>For urgent concerns, call the RHU directly. This app does not dispatch emergency care.</span></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <p class="caretaker-footnote">BHW access is limited to assigned mothers, home visits, and referrals. Clinical review stays with the RHU.</p>
+    </div><!-- /.app-body -->
+
+    <div class="app-toast" id="bhwToast" role="status" aria-live="polite"></div>
+    <footer class="app-footer"><span>© 2026 NURTURA · Maternal health management</span></footer>
+  </div><!-- /#page-bhw -->
+
   <!-- JS — utility functions (toast) -->
   <script src="js/utils.js"></script>
+  <!-- JS — offline outbox (IndexedDB + Web Crypto, design.md §5) -->
+  <script src="js/offline-store.js"></script>
+  <!-- JS — BHW sync status display (design.md §5, task 8.5) -->
+  <script src="js/sync-ui.js"></script>
   <!-- JS — login form, role detection, identity, password toggle -->
   <script src="js/auth.js"></script>
   <!-- JS — page routing, tab switching, section scrolling -->

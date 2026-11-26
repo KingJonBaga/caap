@@ -10,6 +10,13 @@ import audit
 import visits
 import caretaker
 import notes
+import mothers as mothers_module
+import visit_records as vr
+import checklists as checklists_module
+import risk as risk_module
+import referrals as referrals_module
+import reminders as reminders_module
+import sync as sync_module
 
 HERE = Path(__file__).resolve().parent
 DEFAULT_DB_PATH = HERE.parent / "data" / "caap.db"
@@ -71,6 +78,13 @@ def open_database(file=None, shared_password=None):
     visits.setup_visits(db)
     caretaker.setup_caretaker(db)
     notes.setup_notes(db)
+    mothers_module.setup_mothers(db)
+    vr.setup_visit_records(db)
+    checklists_module.setup_checklists(db)
+    risk_module.setup_risk(db)
+    referrals_module.setup_referrals(db)
+    reminders_module.setup_reminders(db)
+    sync_module.setup_sync(db)
     return db
 
 

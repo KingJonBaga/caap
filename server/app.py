@@ -10,15 +10,23 @@ from urllib.parse import parse_qs, unquote, urlsplit
 
 import audit
 import caretaker
+import checklists as checklists_module
 import db as patient_db
+import mothers as mothers_module
 import notes
+import risk as risk_module
+import referrals as referrals_module
+import reminders as reminders_module
+import sync as sync_module
 import sessions
 import users
+import visit_records as vr
 import visits
 
 ROOT = Path(__file__).resolve().parent.parent
 BLOCKED_DIRS = {"server", "data", "tests", ".git", ".vscode", "node_modules", ".claude"}
-CARE_TEAM = ["provider", "nurse"]
+CARE_TEAM = ["provider", "nurse", "physician", "midwife", "bhw"]
+ADMIN_ROLES = ["admin", "sysadmin", "rhu_admin"]
 
 MIME = {
     ".html": "text/html; charset=utf-8",
@@ -67,6 +75,19 @@ def json_response(status, payload):
     return status, JSON_TYPE, body, {"Cache-Control": "no-store"}
 
 
+def cors_headers(headers):
+    """Lets pages opened from a file, or from localhost, read the response."""
+    origin = headers.get("origin", "")
+    if not origin or not is_allowed_origin(origin):
+        return {}
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+        "Vary": "Origin",
+    }
+
+
 def error_response(status, message):
     return json_response(status, {"error": message})
 
@@ -91,7 +112,7 @@ class App:
             result = users.register_patient(db, ctx["body"])
             if "user" not in result:
                 raise HttpError(result.get("status", 400), result["error"])
-            audit.record_audit(db, {"email": result["user"]["email"], "role": "patient"}, "register")
+            audit.record_audit(db, {"email": result["user"]["email"], "role": result["user"]["role"]}, "register")
             return 201, {"user": result["user"]}
 
         def login(ctx):
@@ -230,6 +251,368 @@ class App:
         def audit_list(ctx):
             return 200, {"events": audit.list_audit(db)}
 
+        # ── Mothers (BHW-RHU Phase 2) ──────────────────────────
+
+        def mothers_list(ctx):
+            vr.mark_overdue_visits(db)
+            result = mothers_module.list_mothers(db, ctx["user"])
+            app.audit(ctx, "mothers_list")
+            return 200, {"mothers": result}
+
+        def mother_create(ctx):
+            result = mothers_module.create_mother(db, ctx["user"], ctx["body"])
+            if "mother" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "mother_created", str(result["mother"]["id"]))
+            return 201, {"mother": result["mother"]}
+
+        def mother_get(ctx):
+            mother_id = to_int(ctx["params"]["id"])
+            mother = mothers_module.get_mother(db, mother_id) if mother_id is not None else None
+            if not mother:
+                raise HttpError(404, "Mother not found.")
+            app.audit(ctx, "mother_view", str(mother_id))
+            return 200, {"mother": mother}
+
+        def mother_history_create(ctx):
+            mother_id = to_int(ctx["params"]["id"])
+            result = mothers_module.add_pregnancy_history(db, ctx["user"], mother_id, ctx["body"])
+            if "history" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "pregnancy_history_added", str(mother_id))
+            return 201, {"history": result["history"]}
+
+        def mother_history_list(ctx):
+            mother_id = to_int(ctx["params"]["id"])
+            if mother_id is None or not mothers_module.get_mother(db, mother_id):
+                raise HttpError(404, "Mother not found.")
+            app.audit(ctx, "mother_view", str(mother_id))
+            return 200, {"history": mothers_module.list_pregnancy_history(db, mother_id)}
+
+        # All roles that may read mother records
+        MOTHERS_ROLES       = [*mothers_module.BHW_ROLES, *mothers_module.CLINICAL_ROLES, *mothers_module.RHU_ROLES]
+        # Only these roles may register (create) a new mother record (physician/nurse can read but not register)
+        MOTHERS_WRITE_ROLES = list(mothers_module.MOTHERS_WRITE_ROLES)
+
+        # ── Visit records (Phase 3) ─────────────────────────────
+
+        def prenatal_list(ctx):
+            mid = to_int(ctx["params"]["id"])
+            vr.mark_overdue_visits(db)
+            return 200, {"visits": vr.list_prenatal(db, mid)}
+
+        def prenatal_create(ctx):
+            mid = to_int(ctx["params"]["id"])
+            result = vr.create_prenatal(db, ctx["user"], mid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "prenatal_scheduled", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def prenatal_update(ctx):
+            vid = to_int(ctx["params"]["vid"])
+            result = vr.update_prenatal(db, ctx["user"], vid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "prenatal_updated", str(vid))
+            return 200, {"visit": result["visit"]}
+
+        def postnatal_list(ctx):
+            mid = to_int(ctx["params"]["id"])
+            vr.mark_overdue_visits(db)
+            return 200, {"visits": vr.list_postnatal(db, mid)}
+
+        def postnatal_create(ctx):
+            mid = to_int(ctx["params"]["id"])
+            result = vr.create_postnatal(db, ctx["user"], mid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "postnatal_scheduled", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def postnatal_update(ctx):
+            vid = to_int(ctx["params"]["vid"])
+            result = vr.update_postnatal(db, ctx["user"], vid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "postnatal_updated", str(vid))
+            return 200, {"visit": result["visit"]}
+
+        def home_visit_list(ctx):
+            mid = to_int(ctx["params"]["id"])
+            vr.mark_overdue_visits(db)
+            return 200, {"visits": vr.list_home_visits(db, mid)}
+
+        def home_visit_create(ctx):
+            mid = to_int(ctx["params"]["id"])
+            result = vr.create_home_visit(db, ctx["user"], mid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "home_visit_planned", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def home_visit_update(ctx):
+            vid = to_int(ctx["params"]["vid"])
+            result = vr.update_home_visit(db, ctx["user"], vid, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "home_visit_updated", str(vid))
+            return 200, {"visit": result["visit"]}
+
+        def bhw_schedule_get(ctx):
+            """Due-today / overdue / missed list for the signed-in BHW.
+            Calling this also runs mark_overdue_visits so the data is fresh."""
+            user = ctx["user"]
+            schedule = vr.bhw_schedule(db, user["id"])
+            return 200, schedule
+
+        # ── Flat scheduling endpoints (task 3.2) ───────────────────────────
+        # POST /api/prenatal-visits  — mother_id in body
+        # PATCH /api/prenatal-visits/:id/status — status-only update by visit id
+
+        def flat_prenatal_create(ctx):
+            mother_id = to_int(ctx["body"].get("motherId") or ctx["body"].get("mother_id"))
+            if mother_id is None:
+                raise HttpError(400, "motherId is required.")
+            result = vr.create_prenatal(db, ctx["user"], mother_id, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "prenatal_scheduled", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def flat_prenatal_status(ctx):
+            vid = to_int(ctx["params"]["id"])
+            new_status = ctx["body"].get("status") if ctx["body"] else None
+            if not new_status:
+                raise HttpError(400, "status is required.")
+            result = vr.update_prenatal(db, ctx["user"], vid, {"status": new_status})
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "prenatal_status_updated", f"{vid} → {new_status}")
+            return 200, {"visit": result["visit"]}
+
+        def flat_postnatal_create(ctx):
+            mother_id = to_int(ctx["body"].get("motherId") or ctx["body"].get("mother_id"))
+            if mother_id is None:
+                raise HttpError(400, "motherId is required.")
+            result = vr.create_postnatal(db, ctx["user"], mother_id, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "postnatal_scheduled", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def flat_postnatal_status(ctx):
+            vid = to_int(ctx["params"]["id"])
+            new_status = ctx["body"].get("status") if ctx["body"] else None
+            if not new_status:
+                raise HttpError(400, "status is required.")
+            result = vr.update_postnatal(db, ctx["user"], vid, {"status": new_status})
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "postnatal_status_updated", f"{vid} → {new_status}")
+            return 200, {"visit": result["visit"]}
+
+        def flat_home_visit_create(ctx):
+            mother_id = to_int(ctx["body"].get("motherId") or ctx["body"].get("mother_id"))
+            if mother_id is None:
+                raise HttpError(400, "motherId is required.")
+            result = vr.create_home_visit(db, ctx["user"], mother_id, ctx["body"])
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "home_visit_planned", str(result["visit"]["id"]))
+            return 201, {"visit": result["visit"]}
+
+        def flat_home_visit_status(ctx):
+            vid = to_int(ctx["params"]["id"])
+            new_status = ctx["body"].get("status") if ctx["body"] else None
+            if not new_status:
+                raise HttpError(400, "status is required.")
+            result = vr.update_home_visit(db, ctx["user"], vid, {"status": new_status})
+            if "visit" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "home_visit_status_updated", f"{vid} → {new_status}")
+            return 200, {"visit": result["visit"]}
+
+        VISIT_ROLES = [*mothers_module.BHW_ROLES, *mothers_module.CLINICAL_ROLES, *mothers_module.RHU_ROLES]
+        BHW_ONLY    = list(mothers_module.BHW_ROLES)
+        BHW_MID_ROLES = list({*mothers_module.BHW_ROLES, "midwife"})
+
+        # ── Checklists (Phase 4) ───────────────────────────────────────────
+
+        def checklist_create(ctx):
+            result = checklists_module.create_checklist(db, ctx["user"], ctx["body"])
+            if "checklist" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "checklist_created", str(result["checklist"]["id"]))
+            return 201, {"checklist": result["checklist"]}
+
+        def checklist_get(ctx):
+            checklist_id = to_int(ctx["params"]["id"])
+            if checklist_id is None:
+                raise HttpError(404, "Checklist not found.")
+            result = checklists_module.get_checklist(db, checklist_id)
+            if "checklist" not in result:
+                raise HttpError(result.get("status", 404), result["error"])
+            return 200, {"checklist": result["checklist"]}
+
+        CHECKLIST_CREATE_ROLES = list(checklists_module.CHECKLIST_CREATE_ROLES)
+        CHECKLIST_READ_ROLES   = list(checklists_module.CHECKLIST_READ_ROLES)
+
+        # ── Risk indicators (Phase 5) ──────────────────────────────────────────
+
+        def indicator_create(ctx):
+            result = risk_module.create_indicator(db, ctx["user"], ctx["body"])
+            if "indicator" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "indicator_created", str(result["indicator"]["id"]))
+            return 201, {"indicator": result["indicator"]}
+
+        def indicators_list(ctx):
+            return 200, {"indicators": risk_module.list_indicators(db)}
+
+        def flags_queue(ctx):
+            """Return every open risk flag for the RHU queue (task 5.4)."""
+            flags = risk_module.list_open_flags(db)
+            app.audit(ctx, "flags_queue_viewed")
+            return 200, {
+                "flags": flags,
+                "review_label": risk_module.QUEUE_REVIEW_LABEL,
+            }
+
+        def referrals_overdue(ctx):
+            """Return pending referrals that were not acknowledged within the protocol limit.
+
+            Uses DEFAULT_OVERDUE_HOURS as the fallback when due_by is not set
+            (task 6.4; task 0.3 tracks the open question on the confirmed protocol limit).
+            """
+            overdue = referrals_module.list_overdue_referrals(db)
+            app.audit(ctx, "overdue_referrals_viewed", f"count={len(overdue)}")
+            return 200, {"referrals": overdue}
+
+        def observation_create(ctx):
+            """POST /api/mothers/:id/observations — BHW or midwife records an observation.
+
+            Matches the text against active indicators and raises a risk_flag with
+            status='open'.  If no indicator matches, a free-text flag is created.
+            A flag is NEVER auto-dismissed here; only an explicit reviewer action
+            may change its status (task 5.3).
+            """
+            mother_id = to_int(ctx["params"]["id"])
+            result = risk_module.record_observation(db, ctx["user"], mother_id, ctx["body"])
+            if "flag" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "observation_recorded", str(result["flag"]["id"]))
+            return 201, {"flag": result["flag"]}
+
+        def mother_flags_list(ctx):
+            """GET /api/mothers/:id/flags — list flags for a mother."""
+            mother_id = to_int(ctx["params"]["id"])
+            status_filter = ctx["query"].get("status")
+            flags = risk_module.list_flags(db, mother_id=mother_id, status_filter=status_filter)
+            return 200, {"flags": flags}
+
+        # ── Follow-up list (Phase 6, task 6.5) ────────────────────────────────
+
+        def follow_up_list(ctx):
+            """GET /api/follow-up — mothers with at least one open (non-closed) referral.
+
+            A mother stays on this list until every referral raised against her
+            is closed (design.md section 6, task 6.5).
+            """
+            mothers_on_list = referrals_module.list_mothers_with_open_referrals(db, user=ctx["user"])
+            return 200, {"followUp": mothers_on_list}
+
+        FOLLOW_UP_ROLES = list(referrals_module.REFERRAL_WRITE_ROLES)
+
+        INDICATOR_ADMIN_ROLES = list(risk_module.INDICATOR_ADMIN_ROLES)
+        FLAG_QUEUE_ROLES      = list(risk_module.FLAG_QUEUE_ROLES)
+        OBSERVATION_ROLES     = list({*mothers_module.BHW_ROLES, "midwife"})
+
+        # ── Referrals (Phase 6) ────────────────────────────────────────────
+
+        REFERRAL_WRITE_ROLES  = list(referrals_module.REFERRAL_WRITE_ROLES)
+        REFERRAL_REVIEW_ROLES = list(referrals_module.REFERRAL_REVIEW_ROLES)
+        REFERRAL_READ_ROLES   = list({*referrals_module.REFERRAL_WRITE_ROLES, *referrals_module.REFERRAL_REVIEW_ROLES})
+        # Overdue referrals are shown on the RHU dashboard (task 6.4);
+        # rhu_admin, physician and midwife may view them.
+        REFERRAL_OVERDUE_ROLES = ["rhu_admin", "physician", "midwife"]
+
+        def referral_create(ctx):
+            result = referrals_module.create_referral(db, ctx["user"], ctx["body"])
+            if "referral" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "referral_created", str(result["referral"]["id"]))
+            return 201, {"referral": result["referral"]}
+
+        def referrals_list(ctx):
+            mother_id = to_int(ctx["query"].get("mother_id") or ctx["query"].get("motherId"))
+            status_filter = ctx["query"].get("status")
+            return 200, {"referrals": referrals_module.list_referrals(db, mother_id=mother_id, status=status_filter)}
+
+        def referral_get(ctx):
+            referral_id = to_int(ctx["params"]["id"])
+            referral = referrals_module.get_referral(db, referral_id) if referral_id is not None else None
+            if not referral:
+                raise HttpError(404, "Referral not found.")
+            events = referrals_module.list_events(db, referral_id)
+            app.audit(ctx, "referral_viewed", str(referral_id))
+            return 200, {"referral": referral, "events": events}
+
+        def referral_status_update(ctx):
+            referral_id = to_int(ctx["params"]["id"])
+            if referral_id is None:
+                raise HttpError(404, "Referral not found.")
+            result = referrals_module.advance_referral_status(db, ctx["user"], referral_id, ctx["body"])
+            if "referral" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "referral_status_updated",
+                      f"{referral_id} → {result['referral']['status']}")
+            return 200, {"referral": result["referral"], "event": result["event"]}
+
+        # ── Reminders (Phase 7, task 7.1) ─────────────────────────────────────
+
+        REMINDER_ROLES = list(reminders_module.REMINDER_ROLES)
+
+        def reminders_list(ctx):
+            """GET /api/reminders — list reminders for the signed-in user."""
+            user = ctx["user"]
+            user_id   = to_int(ctx["query"].get("user_id"))   or user["id"]
+            mother_id = to_int(ctx["query"].get("mother_id"))
+            channel   = ctx["query"].get("channel") or None
+            result = reminders_module.list_reminders(
+                db, user_id=user_id, mother_id=mother_id, channel=channel
+            )
+            return 200, {"reminders": result}
+
+        def reminder_create(ctx):
+            """POST /api/reminders — create a reminder."""
+            result = reminders_module.create_reminder(db, ctx["body"])
+            if "reminder" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "reminder_created", str(result["reminder"]["id"]))
+            return 201, {"reminder": result["reminder"]}
+
+        # ── Offline sync (Phase 8, task 8.3) ──────────────────────────────────
+
+        SYNC_ROLES = list(sync_module.SYNC_ROLES)
+
+        def outbox_sync(ctx):
+            """POST /api/sync — accept an ordered offline outbox from a BHW device.
+
+            Body: {"outbox": [{client_id, entity, payload}, ...]}
+            Returns: {"results": [{client_id, status, ...}]}
+
+            Each item is processed idempotently: a client_id already present in
+            sync_outbox is returned as {"status": "duplicate"} without being
+            re-applied (design.md §5, task 8.3).
+            """
+            outbox = ctx["body"].get("outbox")
+            if not isinstance(outbox, list):
+                raise HttpError(400, '"outbox" must be a list.')
+            results = sync_module.process_outbox(db, ctx["user"], outbox)
+            app.audit(ctx, "sync_uploaded", f"items={len(outbox)}")
+            return 200, {"results": results}
+
         return [
             Route("POST", "/api/register", None, register),
             Route("POST", "/api/login", None, login),
@@ -249,10 +632,64 @@ class App:
             Route("GET", "/api/caretaker", ["caretaker", *CARE_TEAM], caretaker_view),
             Route("PATCH", "/api/caretaker/tasks/:id", ["caretaker"], task_update),
             Route("PATCH", "/api/caretaker/messages/:id", ["caretaker"], care_message_update),
-            Route("GET", "/api/accounts", ["admin"], accounts_list),
-            Route("POST", "/api/accounts", ["admin"], account_invite),
-            Route("PATCH", "/api/accounts/:id", ["admin"], account_status),
-            Route("GET", "/api/audit", ["admin"], audit_list),
+            Route("GET", "/api/accounts", ADMIN_ROLES, accounts_list),
+            Route("POST", "/api/accounts", ADMIN_ROLES, account_invite),
+            Route("PATCH", "/api/accounts/:id", ADMIN_ROLES, account_status),
+            Route("GET", "/api/audit", ADMIN_ROLES, audit_list),
+            # Mothers (Phase 2)
+            # GET: all clinical and admin roles may read mothers (role-scoped in list_mothers)
+            # POST: only bhw/midwife/rhu_admin/sysadmin may register a new mother
+            Route("GET",   "/api/mothers",                    MOTHERS_ROLES,       mothers_list),
+            Route("POST",  "/api/mothers",                    MOTHERS_WRITE_ROLES, mother_create),
+            Route("GET",   "/api/mothers/:id",                MOTHERS_ROLES,       mother_get),
+            Route("POST",  "/api/mothers/:id/history",        MOTHERS_ROLES,       mother_history_create),
+            Route("GET",   "/api/mothers/:id/history",        MOTHERS_ROLES,       mother_history_list),
+            # Visits – prenatal (Phase 3)
+            Route("GET",   "/api/mothers/:id/prenatal",       VISIT_ROLES,   prenatal_list),
+            Route("POST",  "/api/mothers/:id/prenatal",       VISIT_ROLES,   prenatal_create),
+            Route("PATCH", "/api/mothers/:id/prenatal/:vid",  VISIT_ROLES,   prenatal_update),
+            # Visits – postnatal (Phase 3)
+            Route("GET",   "/api/mothers/:id/postnatal",      VISIT_ROLES,   postnatal_list),
+            Route("POST",  "/api/mothers/:id/postnatal",      VISIT_ROLES,   postnatal_create),
+            Route("PATCH", "/api/mothers/:id/postnatal/:vid", VISIT_ROLES,   postnatal_update),
+            # Visits – home (Phase 3)
+            Route("GET",   "/api/mothers/:id/home-visits",        VISIT_ROLES, home_visit_list),
+            Route("POST",  "/api/mothers/:id/home-visits",        VISIT_ROLES, home_visit_create),
+            Route("PATCH", "/api/mothers/:id/home-visits/:vid",   VISIT_ROLES, home_visit_update),
+            # BHW schedule dashboard (Phase 3)
+            Route("GET",   "/api/bhw/schedule",               BHW_ONLY,     bhw_schedule_get),
+            # Flat scheduling endpoints (task 3.2)
+            Route("POST",  "/api/prenatal-visits",             VISIT_ROLES,     flat_prenatal_create),
+            Route("PATCH", "/api/prenatal-visits/:id/status",  VISIT_ROLES,     flat_prenatal_status),
+            Route("POST",  "/api/postnatal-visits",            VISIT_ROLES,     flat_postnatal_create),
+            Route("PATCH", "/api/postnatal-visits/:id/status", VISIT_ROLES,     flat_postnatal_status),
+            Route("POST",  "/api/home-visits",                 BHW_MID_ROLES,   flat_home_visit_create),
+            Route("PATCH", "/api/home-visits/:id/status",      BHW_MID_ROLES,   flat_home_visit_status),
+            # Checklists (Phase 4)
+            Route("POST", "/api/checklists",     CHECKLIST_CREATE_ROLES, checklist_create),
+            Route("GET",  "/api/checklists/:id", CHECKLIST_READ_ROLES,   checklist_get),
+            # Risk indicators (Phase 5)
+            Route("POST", "/api/indicators", INDICATOR_ADMIN_ROLES, indicator_create),
+            Route("GET",  "/api/indicators", INDICATOR_ADMIN_ROLES, indicators_list),
+            # Observations and flags (Phase 5, task 5.3)
+            Route("POST", "/api/mothers/:id/observations", OBSERVATION_ROLES, observation_create),
+            Route("GET",  "/api/mothers/:id/flags",        MOTHERS_ROLES,     mother_flags_list),
+            # RHU open-flags queue (Phase 5, task 5.4)
+            Route("GET",  "/api/flags/queue", FLAG_QUEUE_ROLES, flags_queue),
+            # Referrals (Phase 6, task 6.1–6.2)
+            Route("POST",  "/api/referrals",             REFERRAL_WRITE_ROLES,  referral_create),
+            Route("GET",   "/api/referrals",             REFERRAL_READ_ROLES,   referrals_list),
+            # Overdue referrals for RHU dashboard (Phase 6, task 6.4) — must precede /:id
+            Route("GET",   "/api/referrals/overdue",     REFERRAL_OVERDUE_ROLES, referrals_overdue),
+            Route("GET",   "/api/referrals/:id",         REFERRAL_READ_ROLES,   referral_get),
+            Route("PATCH", "/api/referrals/:id/status",  REFERRAL_REVIEW_ROLES, referral_status_update),
+            # Follow-up list (Phase 6, task 6.5)
+            Route("GET",  "/api/follow-up", FOLLOW_UP_ROLES, follow_up_list),
+            # Reminders (Phase 7, task 7.1)
+            Route("GET",  "/api/reminders", REMINDER_ROLES, reminders_list),
+            Route("POST", "/api/reminders", REMINDER_ROLES, reminder_create),
+            # Offline sync (Phase 8, task 8.3)
+            Route("POST", "/api/sync", SYNC_ROLES, outbox_sync),
         ]
 
     # ── Request handling ───────────────────────────────────
@@ -320,15 +757,7 @@ class App:
             parts = urlsplit(raw_path)
             pathname = parts.path
             query = {key: values[0] for key, values in parse_qs(parts.query).items()}
-            origin = headers.get("origin", "")
-            cors = {}
-            if origin and is_allowed_origin(origin):
-                cors = {
-                    "Access-Control-Allow-Origin": origin,
-                    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
-                    "Vary": "Origin",
-                }
+            cors = cors_headers(headers)
             if method == "OPTIONS":
                 return 204, None, b"", cors
             if pathname.startswith("/api/"):
@@ -339,12 +768,12 @@ class App:
                 return 405, "text/plain; charset=utf-8", b"Method not allowed", cors
             return status, content_type, body, {**cors, **extra}
         except HttpError as error:
-            status, content_type, body, extra = error_response(error.status, error.message)
-            return status, content_type, body, {}
+            status, content_type, body, _ = error_response(error.status, error.message)
+            return status, content_type, body, cors_headers(headers)  # errors need CORS too, or the browser hides them
         except Exception as error:  # keep the server running; report a generic error
             self.log("[server error]", repr(error))
-            status, content_type, body, extra = error_response(500, "Server error")
-            return status, content_type, body, {}
+            status, content_type, body, _ = error_response(500, "Server error")
+            return status, content_type, body, cors_headers(headers)
 
 
 def parse_body(raw_body):

@@ -3,7 +3,7 @@ from common import DATE_RE, TIME_RE, add_days, query_all, query_one, table_colum
 
 BOARD_WEEK_START = "2026-11-30"  # Monday of the week shown on the schedule board
 
-# Sample visits, matching the schedule board and the caretaker's sample data.
+# Starting visits, matching the schedule board and the caretaker's page.
 # day_offset: 0 = Monday ... 4 = Friday of the board week.
 SEED_VISITS = [
     {"day_offset": 0, "time": "08:15", "patient_id": "PT-1052", "patient_name": "Sofia Marchetti", "title": "First trimester screening", "room": "Room 2", "status": "completed"},

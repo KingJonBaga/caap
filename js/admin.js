@@ -275,31 +275,31 @@ function exportAuditLog() {
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'mhms-demo-audit-log.csv';
+  link.download = 'nurtura-audit-log.csv';
   link.click();
   URL.revokeObjectURL(url);
-  showAdminToast('Audit log exported. It contains illustrative sample data only.');
+  showAdminToast('Audit log exported.');
 }
 
-function downloadDemoReport() {
+function downloadCareSummary() {
   const rows = [
-    ['Network overview metric', 'Illustrative value', 'Note'],
-    ['Registered patients', '1284', 'Sample dashboard value'],
-    ['Active care providers', '46', 'Sample dashboard value'],
-    ['Appointments this week', '312', '94% confirmed · sample dashboard value'],
-    ['Records awaiting review', '17', '6 older than 48 hours · sample dashboard value'],
-    ['Antenatal clinic capacity', '148 / 180 · 82%', 'Sample dashboard value'],
-    ['Ultrasound suite capacity', '76 / 90 · 84%', 'Sample dashboard value'],
-    ['Postpartum care capacity', '58 / 80 · 73%', 'Sample dashboard value'],
-    ['Telehealth capacity', '30 / 60 · 50%', 'Sample dashboard value'],
-    ['Data disclaimer', 'Prototype only', 'Not connected to a live healthcare network']
+    ['Network overview metric', 'Value', 'Note'],
+    ['Registered patients', '1284', 'Dashboard value'],
+    ['Active care providers', '46', 'Dashboard value'],
+    ['Appointments this week', '312', '94% confirmed '],
+    ['Records awaiting review', '17', '6 older than 48 hours '],
+    ['Antenatal clinic capacity', '148 / 180 · 82%', 'Dashboard value'],
+    ['Ultrasound suite capacity', '76 / 90 · 84%', 'Dashboard value'],
+    ['Postpartum care capacity', '58 / 80 · 73%', 'Dashboard value'],
+    ['Telehealth capacity', '30 / 60 · 50%', 'Dashboard value'],
+    ['Data disclaimer', 'Not connected to a live healthcare network', '']
   ];
   const csv = rows.map(row => row.map(value => '"' + value.replace(/"/g, '""') + '"').join(',')).join('\r\n');
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'mhms-demo-care-summary.csv';
+  link.download = 'nurtura-care-summary.csv';
   link.click();
   URL.revokeObjectURL(url);
-  showAdminToast('Demo report downloaded. It contains sample data only.');
+  showAdminToast('Care summary downloaded.');
 }

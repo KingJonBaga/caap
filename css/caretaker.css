@@ -211,3 +211,195 @@
     margin: 18px 16px 0;
   }
 }
+
+/* ── BHW Workspace ───────────────────────────────────────────────────────── */
+
+.bhw-body {
+  background: #f0ede8;
+  min-height: 100%;
+  padding-bottom: 32px;
+}
+
+/* Sync status bar — always visible at top of BHW body (design.md §5) */
+.bhw-sync-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e2ddd7;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #374151;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.bhw-sync-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bhw-sync-icon {
+  color: #1a3c34;
+  font-size: 14px;
+  flex: 0 0 auto;
+}
+
+.bhw-sync-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bhw-sync-sep {
+  color: #9ca3af;
+}
+
+.bhw-sync-pending {
+  font-weight: 600;
+  color: #1a3c34;
+}
+
+.bhw-sync-pending.has-pending {
+  color: #d97706; /* amber — there are items waiting */
+}
+
+.bhw-sync-time {
+  color: #6b7280;
+}
+
+.bhw-sync-online {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.bhw-sync-online.is-offline {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.bhw-sync-failed-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b91c1c;
+  background: none;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background .12s;
+}
+
+.bhw-sync-failed-toggle[hidden] {
+  display: none;
+}
+
+.bhw-sync-failed-toggle:hover {
+  background: #fee2e2;
+}
+
+.bhw-sync-failed-toggle[aria-expanded="true"] .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.bhw-sync-right {
+  flex: 0 0 auto;
+}
+
+.bhw-sync-btn {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #1a3c34;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bhw-sync-btn:hover {
+  background: #0f2920;
+}
+
+.bhw-sync-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.bhw-sync-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid #e2ddd7;
+}
+
+.bhw-sync-details[hidden] {
+  display: none;
+}
+
+.bhw-sync-failed-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 6px 10px;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.bhw-sync-failed-item strong {
+  grid-column: 1;
+  color: #b91c1c;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.bhw-sync-failed-item span {
+  grid-column: 2;
+  color: #374151;
+}
+
+.bhw-sync-failed-item small {
+  grid-column: 3;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+/* Responsive: stack the sync bar on small screens */
+@media (max-width: 540px) {
+  .bhw-sync-bar {
+    padding: 10px 12px;
+  }
+  .bhw-sync-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

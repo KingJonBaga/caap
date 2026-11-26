@@ -3,47 +3,62 @@
  * Login form handling, role detection, identity application, and password toggle.
  */
 
-const demoEmailRoles = {
+const knownEmailRoles = {
   'maria.santos@example.com': 'patient',
-  'nina.flores@example.com': 'patient',
-  'a.rahman@mhms.example': 'provider',
-  'e.reyes@mhms.example': 'provider',
-  'l.park@mhms.example': 'nurse',
-  'd.cruz@mhms.example': 'caretaker',
-  'admin@example.com': 'admin'
+  'nina.flores@example.com':  'patient',
+  'a.rahman@mhms.example':    'provider',
+  'e.reyes@mhms.example':     'provider',
+  'l.park@mhms.example':      'nurse',
+  'd.cruz@mhms.example':      'caretaker',
+  'admin@example.com':        'admin',
+  // Starting accounts (Phase 1)
+  'bhw@example.com':          'bhw',
+  'midwife@example.com':      'midwife',
+  'physician@example.com':    'physician',
+  'rhu@example.com':          'rhu_admin',
+  'sysadmin@example.com':     'sysadmin',
+  'mother@example.com':       'mother',
 };
 
 function setLoginRole(role) {
   document.getElementById('loginRole').value = role;
   const badge = document.getElementById('loginRoleBadge');
   const roleDetails = {
-    patient: { icon: 'fa-regular fa-heart', label: 'PATIENT SPACE' },
-    provider: { icon: 'fa-solid fa-user-doctor', label: 'CARE TEAM SPACE' },
-    nurse: { icon: 'fa-solid fa-user-nurse', label: 'NURSE SPACE' },
-    caretaker: { icon: 'fa-solid fa-hand-holding-heart', label: 'CARETAKER SPACE' },
-    admin: { icon: 'fa-solid fa-user-shield', label: 'ADMINISTRATOR SPACE' }
+    // Legacy roles
+    patient:   { icon: 'fa-regular fa-heart',          label: 'PATIENT SPACE' },
+    provider:  { icon: 'fa-solid fa-user-doctor',       label: 'CARE TEAM SPACE' },
+    nurse:     { icon: 'fa-solid fa-user-nurse',        label: 'NURSE SPACE' },
+    caretaker: { icon: 'fa-solid fa-hand-holding-heart',label: 'CARETAKER SPACE' },
+    admin:     { icon: 'fa-solid fa-user-shield',       label: 'ADMINISTRATOR SPACE' },
+    // BHW-RHU roles
+    mother:    { icon: 'fa-regular fa-heart',           label: 'MOTHER SPACE' },
+    bhw:       { icon: 'fa-solid fa-house-medical',     label: 'BHW SPACE' },
+    midwife:   { icon: 'fa-solid fa-user-nurse',        label: 'MIDWIFE SPACE' },
+    physician: { icon: 'fa-solid fa-user-doctor',       label: 'PHYSICIAN SPACE' },
+    rhu_admin: { icon: 'fa-solid fa-hospital',          label: 'RHU ADMIN SPACE' },
+    sysadmin:  { icon: 'fa-solid fa-user-shield',       label: 'SYSTEM ADMIN SPACE' },
   };
-  const selected = roleDetails[role];
+  const selected = roleDetails[role] || roleDetails['patient'];
   badge.innerHTML = '<i class="' + selected.icon + '"></i> ' + selected.label;
   document.querySelectorAll('[data-login-role]').forEach(link => {
     const isSelected = link.dataset.loginRole === role;
     link.classList.toggle('selected', isSelected);
   });
   const patientLoginLink = document.querySelector('.patient-login-link');
-  if (patientLoginLink) patientLoginLink.hidden = role === 'patient';
+  if (patientLoginLink) patientLoginLink.hidden = (role === 'patient' || role === 'mother');
 }
 
 function syncLoginRoleFromEmail() {
-  const role = demoEmailRoles[document.getElementById('email').value.trim().toLowerCase()];
+  const role = knownEmailRoles[document.getElementById('email').value.trim().toLowerCase()];
   if (role) {
     if (role !== 'patient') {
-      clearPatientDemoCredentials();
+      clearPatientCredentials();
     }
     setLoginRole(role);
   }
 }
 
-function clearPatientDemoCredentials() {
+function clearPatientCredentials() {
   const email = document.getElementById('email');
   const password = document.getElementById('password');
   if (email.value.trim().toLowerCase() === 'maria.santos@example.com') {
@@ -105,19 +120,41 @@ function handleLogin(e) {
     // The role comes from the database, not from the role chooser.
     const loginRole = result.user.role;
     setLoginRole(loginRole);
-    const destination = { patient: 'dashboard', provider: 'provider', nurse: 'provider', caretaker: 'caretaker', admin: 'admin' };
+    const destination = {
+      // Legacy roles
+      patient:   'dashboard',
+      provider:  'provider',
+      nurse:     'provider',
+      caretaker: 'caretaker',
+      admin:     'admin',
+      // BHW-RHU roles
+      mother:    'dashboard',
+      bhw:       'bhw',
+      midwife:   'provider',
+      physician: 'provider',
+      rhu_admin: 'admin',
+      sysadmin:  'admin',
+    };
     const page = destination[loginRole];
     if (!page) {
       eErr.textContent = 'No workspace is configured for this account.';
       return;
     }
     applyStaffIdentity(loginRole);
+    // Initialise the offline encryption key from the session token (design.md §5).
+    if (window.nurturaOfflineStore && window.caapSession) {
+      window.nurturaOfflineStore.initKey(window.caapSession.getToken()).catch(() => {});
+    }
     showPage(page);
   });
 }
 
 // Ends the session on the server and returns to the sign-in page.
 async function signOut() {
+  // Clear offline outbox and wipe the in-memory encryption key (design.md §5).
+  if (window.nurturaOfflineStore) {
+    try { await window.nurturaOfflineStore.clearStore(); } catch (_) {}
+  }
   try {
     if (window.caapSession.getToken()) await fetch('/api/session', { method: 'DELETE' });
   } catch (error) {
@@ -264,16 +301,28 @@ async function signInWithDatabase(email, password) {
 
 function applyStaffIdentity(role) {
   const identities = {
-    provider: { initials: 'AO', name: 'Dr. Adaeze Okafor', meta: 'Obstetrician · Care team lead', badge: 'CARE TEAM', crumb: 'Care Provider Workspace', greeting: 'Good morning, Okafor.' },
-    nurse: { initials: 'NL', name: 'Nurse Lena Park', meta: 'Nurse · Care team', badge: 'CARE TEAM', crumb: 'Nurse Workspace', greeting: 'Good morning, Lena.' }
+    // Legacy
+    provider:  { initials: 'AO', name: 'Dr. Adaeze Okafor', meta: 'Obstetrician · Care team lead', badge: 'CARE TEAM', greeting: 'Good morning, Okafor.' },
+    nurse:     { initials: 'NL', name: 'Nurse Lena Park',   meta: 'Nurse · Care team',              badge: 'CARE TEAM', greeting: 'Good morning, Lena.' },
+    // BHW-RHU
+    bhw:       { initials: 'BH', name: 'BHW Worker',        meta: 'Barangay Health Worker',          badge: 'BHW',       greeting: 'Good morning.' },
+    midwife:   { initials: 'MW', name: 'Midwife',           meta: 'Midwife · RHU',                   badge: 'MIDWIFE',   greeting: 'Good morning.' },
+    physician: { initials: 'MD', name: 'Physician',         meta: 'Physician · RHU',                 badge: 'PHYSICIAN', greeting: 'Good morning.' },
+    rhu_admin: { initials: 'RA', name: 'RHU Administrator', meta: 'RHU Admin',                       badge: 'RHU ADMIN', greeting: 'Good morning.' },
+    sysadmin:  { initials: 'SA', name: 'System Admin',      meta: 'System Administrator',            badge: 'SYS ADMIN', greeting: 'Good morning.' },
   };
   const id = identities[role];
   if (!id) return;
-  document.getElementById('providerAvatar').textContent = id.initials;
-  document.getElementById('providerName').textContent = id.name;
-  document.getElementById('providerMeta').textContent = id.meta;
-  document.getElementById('providerSpaceBadge').textContent = id.badge;
-  document.getElementById('providerGreeting').textContent = id.greeting;
+  const avatar  = document.getElementById('providerAvatar');
+  const nameEl  = document.getElementById('providerName');
+  const metaEl  = document.getElementById('providerMeta');
+  const badge   = document.getElementById('providerSpaceBadge');
+  const greeting= document.getElementById('providerGreeting');
+  if (avatar)   avatar.textContent   = id.initials;
+  if (nameEl)   nameEl.textContent   = id.name;
+  if (metaEl)   metaEl.textContent   = id.meta;
+  if (badge)    badge.textContent    = id.badge;
+  if (greeting) greeting.textContent = id.greeting;
 }
 
 function togglePw() {

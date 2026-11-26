@@ -47,7 +47,7 @@ function showLandingPage(name) {
 
 function selectLandingRole(role) {
   if (role !== 'patient') {
-    clearPatientDemoCredentials();
+    clearPatientCredentials();
   }
   setLoginRole(role);
   scrollToSection('home');
@@ -79,6 +79,9 @@ function showPage(name) {
   }
   if (name === 'postpartum') {
     updatePostpartumProgress();
+  }
+  if (name === 'bhw' && typeof updateSyncDisplay === 'function') {
+    updateSyncDisplay();
   }
   window.scrollTo(0, 0);
 }
@@ -141,7 +144,7 @@ function switchTab(btn, panelId) {
 function handleContactMessage(event) {
   event.preventDefault();
   document.getElementById('contactFormStatus').textContent =
-    'Thank you. This demo form does not send or save messages. Please contact your clinic directly for care-related questions.';
+    'Thank you. This form does not send messages yet. Please contact your clinic directly for care-related questions.';
 }
 
 function completeAppointment(button) {
@@ -149,7 +152,7 @@ function completeAppointment(button) {
   button.disabled = true;
   button.classList.add('is-complete');
   button.closest('.provider-appointment').querySelector('.provider-time').textContent += ' · Done';
-  showToast('Sample appointment marked complete temporarily; the change is not saved.');
+  showToast('Appointment marked complete on this page only. The change is not saved.');
 }
 
 // Opens the page named after # in the address, e.g. index.html#caretaker.
@@ -158,3 +161,10 @@ window.addEventListener('load', () => {
   const name = decodeURIComponent(window.location.hash.replace('#', ''));
   if (name && document.getElementById('page-' + name)) showPage(name);
 });
+
+function showBhwSection(sectionId, btn) {
+  document.querySelectorAll('[data-bhw-section]').forEach(item => item.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const target = document.getElementById(sectionId);
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
