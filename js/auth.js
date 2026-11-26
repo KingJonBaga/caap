@@ -293,7 +293,7 @@ async function signInWithDatabase(email, password) {
       window.caapSession.setToken(data.token);
       return { user: data.user };
     }
-    return { message: data.error || 'Sign-in failed. Please try again.' };
+    return { message: data.error || 'Email or password is incorrect.' };
   } catch (error) {
     return { error: true, message: "Can't reach the server. Double-click start.bat, then open http://localhost:3000." };
   }
