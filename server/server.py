@@ -4,8 +4,9 @@ Uses port 3000 if it is free, otherwise the next free port, and opens the browse
 import errno
 import os
 import sys
+import threading
 import webbrowser
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # lets the modules import each other
@@ -18,7 +19,13 @@ TRIES = 10
 HOST = "127.0.0.1"
 
 
+class Server(ThreadingHTTPServer):
+    daemon_threads = True  # one thread per connection, so an idle browser connection can't block the others
+
+
 class Handler(BaseHTTPRequestHandler):
+    timeout = 15  # seconds to wait for a request before closing an idle connection
+
     def _dispatch(self, method):
         length = int(self.headers.get("Content-Length") or 0)
         if length > MAX_BODY_BYTES:
@@ -26,7 +33,8 @@ class Handler(BaseHTTPRequestHandler):
             return
         raw_body = self.rfile.read(length) if length else b""
         headers = {key.lower(): value for key, value in self.headers.items()}
-        status, content_type, body, extra = self.server.app.handle(method, self.path, headers, raw_body)
+        with self.server.lock:  # the database connection is shared, so run one request at a time
+            status, content_type, body, extra = self.server.app.handle(method, self.path, headers, raw_body)
         self._send(status, content_type, body, extra)
 
     def _send(self, status, content_type, body, extra):
@@ -75,7 +83,7 @@ def main():
     for attempt in range(TRIES):
         port = FIRST_PORT + attempt
         try:
-            server = HTTPServer((HOST, port), Handler)
+            server = Server((HOST, port), Handler)
             break
         except OSError as error:
             if not is_port_busy(error):
@@ -86,6 +94,7 @@ def main():
         sys.exit(1)
 
     server.app = app
+    server.lock = threading.Lock()
     url = f"http://localhost:{port}"
     print(f"NURTURA server running at {url}")
     if port != FIRST_PORT:
