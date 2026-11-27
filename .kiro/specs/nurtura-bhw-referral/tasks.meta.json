@@ -336,6 +336,16 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795682054004
+      },
+      {
+        "executionId": "b47b216a-1bb3-459a-a3f4-894155281321",
+        "chatSessionId": "sess_ac4818d4-6b7b-4e9b-9d9a-ff14731fb708",
+        "timestamp": 1795709091257
+      },
+      {
+        "executionId": "b47b216a-1bb3-459a-a3f4-894155281321",
+        "chatSessionId": "sess_ac4818d4-6b7b-4e9b-9d9a-ff14731fb708",
+        "timestamp": 1795709361780
       }
     ],
     "8.2 Store pending BHW changes in IndexedDB with a client-generated UUID (`client_id`).": [
@@ -428,6 +438,21 @@
         "executionId": "8a537639-e83a-4b3c-9169-86d864c558d0",
         "chatSessionId": "sess_299f6ed0-1cc8-401e-9d05-127d485a9bdf",
         "timestamp": 1795685480104
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690530
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709697749
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709890186
       }
     ],
     "9.1 Replace the sample numbers on the BHW and RHU pages with queries from the database.": [
@@ -435,6 +460,21 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475535
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690634
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709895549
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795710830594
       }
     ],
     "9.2 Add the monthly aggregated report. Test that names and contact details are absent.": [
@@ -442,6 +482,16 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475592
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690710
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795710836387
       }
     ],
     "9.3 Apply the minimum group size (default 5): smaller groups show as \"<5\". Test it.": [
@@ -449,6 +499,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475650
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690787
       }
     ],
     "9.4 Log each report export in `audit_log`.": [
@@ -456,6 +511,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475709
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690863
       }
     ],
     "10.1 Create `education_items`. Only items with `approved_by` are visible to mothers.": [
@@ -463,6 +523,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475772
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709690933
       }
     ],
     "10.2 Show the materials for the mother's current stage. Test an unapproved item is hidden.": [
@@ -470,6 +535,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475834
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691009
       }
     ],
     "11.1 Write the consent text, privacy notice and retention rules with the partner, then add": [
@@ -477,6 +547,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475897
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691094
       }
     ],
     "11.2 Confirm the repository contains no real patient data and no real passwords": [
@@ -484,6 +559,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680475952
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691176
       }
     ],
     "11.3 Review every new route for its role check. Test each route with a wrong role (`403`)": [
@@ -491,6 +571,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680476015
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691262
       }
     ],
     "11.4 Update the README and the in-app help for each role.": [
@@ -498,6 +583,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680476068
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691344
       }
     ],
     "12.1 Run a supervised trial with dummy data at the partner site (or an agreed test set).": [
@@ -505,6 +595,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680476132
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691420
       }
     ],
     "12.2 Record problems and fix them before any real patient data is entered.": [
@@ -512,6 +607,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680476190
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691493
       }
     ],
     "12.3 Document results and open issues in this file.": [
@@ -519,6 +619,11 @@
         "executionId": "06e4f528-e1c4-40b5-82f9-858414cda3a1",
         "chatSessionId": "sess_872df68e-27c3-4aef-ab37-78d7b2c4d685",
         "timestamp": 1795680476251
+      },
+      {
+        "executionId": "9c1a4c8e-e9e9-45c0-be54-db9837167be7",
+        "chatSessionId": "sess_b2eb259f-8832-4b6c-9016-fa312886b9a2",
+        "timestamp": 1795709691571
       }
     ]
   }

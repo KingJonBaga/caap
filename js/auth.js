@@ -145,6 +145,17 @@ function handleLogin(e) {
     if (window.nurturaOfflineStore && window.caapSession) {
       window.nurturaOfflineStore.initKey(window.caapSession.getToken()).catch(() => {});
     }
+    // Load live dashboard counts (task 9.1).
+    if (loginRole === 'bhw') {
+      // Defer slightly so the page is painted first.
+      setTimeout(function () {
+        if (typeof loadBhwWorkspace === 'function') loadBhwWorkspace();
+      }, 50);
+    } else if (loginRole === 'rhu_admin') {
+      setTimeout(function () {
+        if (typeof injectRhuStats === 'function') injectRhuStats();
+      }, 50);
+    }
     showPage(page);
   });
 }

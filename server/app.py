@@ -8,9 +8,12 @@ import re
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
 
+import dashboard as dashboard_module
 import audit
 import caretaker
 import checklists as checklists_module
+import education as education_module
+import reports as reports_module
 import db as patient_db
 import mothers as mothers_module
 import notes
@@ -437,6 +440,20 @@ class App:
         BHW_ONLY    = list(mothers_module.BHW_ROLES)
         BHW_MID_ROLES = list({*mothers_module.BHW_ROLES, "midwife"})
 
+        # ── Education materials (Phase 10) ─────────────────────────────────
+
+        def education_create(ctx):
+            result = education_module.create_item(db, ctx["user"], ctx["body"])
+            if "item" not in result:
+                raise HttpError(result.get("status", 400), result["error"])
+            app.audit(ctx, "education_item_created", str(result["item"]["id"]))
+            return 201, {"item": result["item"]}
+
+        def education_list(ctx):
+            stage = ctx["query"].get("stage")
+            items = education_module.list_items(db, ctx["user"]["role"], stage)
+            return 200, {"items": items}
+
         # ── Checklists (Phase 4) ───────────────────────────────────────────
 
         def checklist_create(ctx):
@@ -596,6 +613,61 @@ class App:
 
         SYNC_ROLES = list(sync_module.SYNC_ROLES)
 
+        # ── Dashboards (Phase 9, task 9.1) ────────────────────────────────────────
+
+        def bhw_dashboard_get(ctx):
+            """GET /api/bhw/dashboard — live counts for the signed-in BHW.
+
+            Returns mothers by stage, home-visit counts, open flag count and
+            pending referral count scoped to this BHW's assigned mothers.
+            """
+            bhw_id = ctx["user"]["id"]
+            data = dashboard_module.bhw_dashboard(db, bhw_id)
+            return 200, data
+
+        def rhu_dashboard_get(ctx):
+            """GET /api/rhu/dashboard — network-wide counts for the RHU admin.
+
+            Returns registered mother counts by status, prenatal monitoring
+            count, postpartum follow-up count, open flags, referrals by status,
+            and overdue referral count.
+            """
+            data = dashboard_module.rhu_dashboard(db)
+            app.audit(ctx, "rhu_dashboard_viewed")
+            return 200, data
+
+        RHU_DASHBOARD_ROLES = ["rhu_admin", "physician", "midwife"]
+
+        # ── Monthly aggregated report (Phase 9, task 9.2) ─────────────────────
+
+        REPORT_ROLES = list(reports_module.REPORT_ROLES)
+
+        def monthly_report_get(ctx):
+            """GET /api/reports/monthly?year=YYYY&month=M
+
+            Returns aggregate counts only for the requested calendar month.
+            No names, contact details, addresses, dates of birth, phone
+            numbers, e-mail addresses or any other PII are included.
+            Every call is logged to audit_log with action "report_exported".
+            """
+            year_str  = ctx["query"].get("year")
+            month_str = ctx["query"].get("month")
+
+            try:
+                year  = int(year_str)
+                month = int(month_str)
+            except (TypeError, ValueError):
+                raise HttpError(400, "year and month query parameters are required and must be integers.")
+
+            if not (1 <= month <= 12):
+                raise HttpError(400, "month must be between 1 and 12.")
+            if year < 2000 or year > 2100:
+                raise HttpError(400, "year must be a four-digit year (2000–2100).")
+
+            report = reports_module.monthly_report(db, year, month)
+            app.audit(ctx, "report_exported", f"{year:04d}-{month:02d}")
+            return 200, {"report": report}
+
         def outbox_sync(ctx):
             """POST /api/sync — accept an ordered offline outbox from a BHW device.
 
@@ -666,6 +738,8 @@ class App:
             Route("POST",  "/api/home-visits",                 BHW_MID_ROLES,   flat_home_visit_create),
             Route("PATCH", "/api/home-visits/:id/status",      BHW_MID_ROLES,   flat_home_visit_status),
             # Checklists (Phase 4)
+            Route("POST", "/api/education", education_module.EDUCATION_WRITE_ROLES, education_create),
+            Route("GET",  "/api/education", list(education_module.EDUCATION_STAFF_ROLES) + ["mother"], education_list),
             Route("POST", "/api/checklists",     CHECKLIST_CREATE_ROLES, checklist_create),
             Route("GET",  "/api/checklists/:id", CHECKLIST_READ_ROLES,   checklist_get),
             # Risk indicators (Phase 5)
@@ -690,6 +764,10 @@ class App:
             Route("POST", "/api/reminders", REMINDER_ROLES, reminder_create),
             # Offline sync (Phase 8, task 8.3)
             Route("POST", "/api/sync", SYNC_ROLES, outbox_sync),
+            # Dashboards (Phase 9, task 9.1)
+            Route("GET",  "/api/bhw/dashboard",  BHW_ONLY,            bhw_dashboard_get),
+            Route("GET",  "/api/rhu/dashboard",  RHU_DASHBOARD_ROLES, rhu_dashboard_get),
+            Route("GET",  "/api/reports/monthly", REPORT_ROLES, monthly_report_get),
         ]
 
     # ── Request handling ───────────────────────────────────

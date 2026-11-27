@@ -33,6 +33,9 @@
   <link rel="stylesheet" href="css/auth-polish.css">
   <!-- CSS — whole-app polish: page entrances, card hover, focus rings (loaded last) -->
   <link rel="stylesheet" href="css/polish.css">
+  <link rel="stylesheet" href="css/education.css">
+  <link rel="stylesheet" href="css/admin-overview.css">
+  <link rel="stylesheet" href="css/sidebar.css">
 
   <script src="js/breakpoints.js"></script>
   <script src="js/session.js"></script>
@@ -760,6 +763,19 @@
           </section>
         </aside>
       </div>
+      <section class="pov-card education-card" id="educationCard" aria-labelledby="educationTitle">
+        <div class="education-head">
+          <div>
+            <h2 id="educationTitle">Learn about your care</h2>
+            <p>Information approved by your care team.</p>
+          </div>
+          <div class="education-stage" role="group" aria-label="Choose a stage">
+            <button type="button" class="education-stage-btn active" aria-pressed="true" onclick="loadEducation('prenatal', this)">Pregnancy</button>
+            <button type="button" class="education-stage-btn" aria-pressed="false" onclick="loadEducation('postpartum', this)">After birth</button>
+          </div>
+        </div>
+        <div class="education-list" id="educationList" aria-live="polite"></div>
+      </section>
       <div class="app-toast" id="patientToast" role="status" aria-live="polite"></div>
     </main>
     <footer class="patient-dashboard-footer">
@@ -2624,121 +2640,68 @@
 
     <div class="app-body admin-body">
       <section class="admin-panel active" id="admin-overview">
-        <div class="admin-heading">
-          <div class="dash-header">
-            <p class="dash-date">ADMIN SPACE</p>
-            <h1>Network overview for Bayview Maternal Health Network.</h1>
-            <p class="dash-sub">Account activity, service capacity, and system status across the network. Clinical work
-              stays with the care team.</p>
-          </div>
-          <div class="admin-heading-actions">
-            <button class="admin-button admin-button-light" type="button" onclick="downloadCareSummary()"><i
-                class="fa-regular fa-floppy-disk"></i> Export report</button>
-            <button class="admin-button admin-button-primary" type="button" onclick="showAdminPanel('accounts')"><i
-                class="fa-solid fa-user-gear"></i> Manage accounts</button>
-          </div>
-        </div>
-        <div class="stats-row admin-stats">
-          <article class="admin-metric">
-            <p class="admin-metric-label">REGISTERED PATIENTS</p>
-            <p class="admin-metric-value">1,284</p>
-            <p class="admin-metric-meta">+38 this month</p>
-          </article>
-          <article class="admin-metric">
-            <p class="admin-metric-label">ACTIVE CARE PROVIDERS</p>
-            <p class="admin-metric-value">46</p>
-            <p class="admin-metric-meta">+3 this quarter</p>
-          </article>
-          <article class="admin-metric">
-            <p class="admin-metric-label">APPOINTMENTS THIS WEEK</p>
-            <p class="admin-metric-value">312</p>
-            <p class="admin-metric-meta">94% booked visits confirmed by the care team</p>
-          </article>
-          <article class="admin-metric admin-metric-alert">
-            <p class="admin-metric-label">ACCOUNTS AWAITING ACTIVATION</p>
-            <p class="admin-metric-value">1</p>
-            <p class="admin-metric-meta">1 new sign-up today</p>
-          </article>
-        </div>
-        <div class="admin-overview-grid">
-          <section class="admin-card admin-capacity-card">
-            <header class="admin-card-heading">
-              <div>
-                <h2>Service capacity</h2>
-                <p>Visits booked this week against available slots</p>
-              </div>
-            </header>
-            <div class="capacity-list">
-              <div class="capacity-item">
-                <div><strong>Antenatal clinic</strong><span>148 / 180 visits · 82%</span></div>
-                <div class="capacity-track"><span style="width:82%"></span></div>
-              </div>
-              <div class="capacity-item">
-                <div><strong>Ultrasound suite</strong><span>76 / 90 visits · 84%</span></div>
-                <div class="capacity-track"><span style="width:84%"></span></div>
-              </div>
-              <div class="capacity-item">
-                <div><strong>Postpartum care</strong><span>58 / 80 visits · 73%</span></div>
-                <div class="capacity-track"><span style="width:73%"></span></div>
-              </div>
-              <div class="capacity-item">
-                <div><strong>Telehealth</strong><span>30 / 60 visits · 50%</span></div>
-                <div class="capacity-track"><span style="width:50%"></span></div>
-              </div>
-            </div>
-            <div class="capacity-legend"><span><i></i> Healthy load</span><span><i></i> Above 85% capacity</span></div>
-          </section>
-          <div class="admin-overview-side">
-            <section class="admin-queue-card">
-              <p class="admin-side-eyebrow">ACCOUNT QUEUE</p>
-              <h2>1 account awaiting activation</h2>
-              <p>Sofia Marchetti (PT-1052) signed up today. Activation is an administrative step.</p>
-              <button type="button" onclick="showAdminPanel('accounts')">Open accounts <i
-                  class="fa-solid fa-arrow-right"></i></button>
-            </section>
-            <section class="admin-card admin-system-card">
-              <header class="admin-card-heading">
-                <h2>System status</h2>
-              </header>
-              <div class="system-status-list">
-                <div><span>Record service</span><strong><i></i> Operational</strong></div>
-                <div><span>Appointment engine</span><strong><i></i> Operational</strong></div>
-                <div><span>Notification delivery</span><strong class="status-delayed"><i></i> Delayed · 4 min</strong>
-                </div>
-                <div><span>Nightly backup</span><strong><i></i> Completed 02:00</strong></div>
-              </div>
-            </section>
-          </div>
-        </div>
-        <section class="admin-card admin-audit-preview">
-          <header class="admin-card-heading">
+        <div class="ov-shell">
+          <header class="ov-top">
             <div>
-              <h2>Recent account activity</h2>
-              <p>Audit trail across the network</p>
+              <p class="ov-eyebrow" id="ovDate">ADMIN SPACE</p>
+              <h1 class="ov-greeting" id="ovGreeting">Welcome back.</h1>
+              <p class="ov-sub">Accounts and sign-ins across NURTURA, from the live database.</p>
             </div>
-            <button class="admin-link-button" type="button" onclick="showAdminPanel('audit')">View audit log</button>
+            <div class="ov-actions">
+              <button class="admin-button admin-button-light" type="button" onclick="showAdminPanel('audit')">View audit log</button>
+              <button class="admin-button admin-button-primary" type="button" onclick="showAdminPanel('accounts')"><i class="fa-solid fa-user-gear"></i> Manage accounts</button>
+            </div>
           </header>
-          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
-            <div><strong>New patient account created</strong>
-              <p>Sofia Marchetti · PT-1052</p>
-            </div><time>Today, 09:12</time>
+
+          <div class="ov-grid">
+            <article class="ov-hero">
+              <p class="ov-hero-eyebrow">ACCOUNTS</p>
+              <p class="ov-hero-value" id="ovTotal">–</p>
+              <p class="ov-hero-label">accounts in NURTURA</p>
+              <div class="ov-hero-foot">
+                <span><strong id="ovActive">–</strong> active</span>
+                <span><strong id="ovSuspended">–</strong> suspended</span>
+              </div>
+              <i class="fa-solid fa-heart ov-hero-icon" aria-hidden="true"></i>
+            </article>
+
+            <div class="ov-stats">
+              <article class="ov-stat">
+                <p class="ov-stat-label">Sign-ins today</p>
+                <p class="ov-stat-value" id="ovSignins">–</p>
+                <p class="ov-stat-meta">from the audit log</p>
+              </article>
+              <article class="ov-stat">
+                <p class="ov-stat-label">Accounts invited</p>
+                <p class="ov-stat-value" id="ovInvited">–</p>
+                <p class="ov-stat-meta">all time</p>
+              </article>
+              <article class="ov-stat">
+                <p class="ov-stat-label">Suspensions</p>
+                <p class="ov-stat-value" id="ovSuspendEvents">–</p>
+                <p class="ov-stat-meta">all time</p>
+              </article>
+              <article class="ov-stat">
+                <p class="ov-stat-label">Log entries</p>
+                <p class="ov-stat-value" id="ovEvents">–</p>
+                <p class="ov-stat-meta">latest 200 shown</p>
+              </article>
+            </div>
+
+            <section class="ov-card ov-roles" aria-labelledby="ovRolesTitle">
+              <header class="ov-card-head"><h2 id="ovRolesTitle">Accounts by role</h2></header>
+              <div class="ov-role-list" id="ovRoles"><p class="ov-empty">Loading…</p></div>
+            </section>
+
+            <section class="ov-card ov-activity" aria-labelledby="ovActivityTitle">
+              <header class="ov-card-head">
+                <h2 id="ovActivityTitle">Recent activity</h2>
+                <button class="admin-link-button" type="button" onclick="showAdminPanel('audit')">View all</button>
+              </header>
+              <div class="ov-activity-list" id="ovActivity"><p class="ov-empty">Loading…</p></div>
+            </section>
           </div>
-          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
-            <div><strong>Record access log exported</strong>
-              <p>Iris Chen · audit report</p>
-            </div><time>Today, 08:40</time>
-          </div>
-          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
-            <div><strong>Care provider assigned</strong>
-              <p>Dr. Adaeze Okafor → Priya Raman</p>
-            </div><time>Yesterday, 16:25</time>
-          </div>
-          <div class="audit-row"><span class="audit-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
-            <div><strong>Account status updated</strong>
-              <p>Hannah Cole moved to Active</p>
-            </div><time>Yesterday, 11:05</time>
-          </div>
-        </section>
+        </div>
       </section>
 
       <section class="admin-panel" id="admin-accounts">
@@ -3155,6 +3118,10 @@
 
   <!-- JS — utility functions (toast) -->
   <script src="js/utils.js"></script>
+  <!-- JS — BHW and RHU dashboard live counts (task 9.1) -->
+  <script src="js/dashboard.js"></script>
+  <script src="js/education.js"></script>
+  <script src="js/admin-overview.js"></script>
   <!-- JS — offline outbox (IndexedDB + Web Crypto, design.md §5) -->
   <script src="js/offline-store.js"></script>
   <!-- JS — BHW sync status display (design.md §5, task 8.5) -->

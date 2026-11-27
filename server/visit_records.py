@@ -413,7 +413,13 @@ def bhw_schedule(db, bhw_id, now=None):
     *now* is a datetime for testing; defaults to UTC now.
     """
     mark_overdue_visits(db, now=now)
-    today_str = (now if now is not None else utc_now()).strftime("%Y-%m-%d")
+    if now is not None:
+        today_str = now.strftime("%Y-%m-%d")
+    else:
+        # Use local date (not UTC) so the BHW's day boundaries are correct
+        # regardless of the server's timezone offset.
+        from datetime import date as _date
+        today_str = _date.today().isoformat()
 
     # ── home visits ───────────────────────────────────────────────────────────
 

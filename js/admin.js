@@ -13,6 +13,7 @@ function showAdminPanel(name, btn) {
   if (activeButton) activeButton.classList.add('active');
   window.scrollTo(0, 0);
   if (name === 'accounts') loadAccounts();
+  if (name === 'overview' && typeof loadAdminOverview === 'function') loadAdminOverview();
 }
 
 const ACCOUNT_ROLE_LABELS = {
@@ -281,20 +282,33 @@ function exportAuditLog() {
   showAdminToast('Audit log exported.');
 }
 
-function downloadCareSummary() {
+// Builds the care summary from the live RHU dashboard (task 9.1), not fixed numbers.
+async function downloadCareSummary() {
+  let data;
+  try {
+    const response = await fetch('/api/rhu/dashboard', { cache: 'no-store' });
+    if (!response.ok) throw new Error('Could not load the dashboard.');
+    data = await response.json();
+  } catch (error) {
+    showAdminToast("Couldn't build the care summary. Check that the server is running.");
+    return;
+  }
+  const statuses = data.referralsByStatus || {};
   const rows = [
-    ['Network overview metric', 'Value', 'Note'],
-    ['Registered patients', '1284', 'Dashboard value'],
-    ['Active care providers', '46', 'Dashboard value'],
-    ['Appointments this week', '312', '94% confirmed '],
-    ['Records awaiting review', '17', '6 older than 48 hours '],
-    ['Antenatal clinic capacity', '148 / 180 · 82%', 'Dashboard value'],
-    ['Ultrasound suite capacity', '76 / 90 · 84%', 'Dashboard value'],
-    ['Postpartum care capacity', '58 / 80 · 73%', 'Dashboard value'],
-    ['Telehealth capacity', '30 / 60 · 50%', 'Dashboard value'],
-    ['Data disclaimer', 'Not connected to a live healthcare network', '']
+    ['Measure', 'Value', 'Source'],
+    ['Registered prenatal mothers', data.registeredPrenatal, 'Database'],
+    ['Registered postpartum mothers', data.registeredPostpartum, 'Database'],
+    ['Under prenatal monitoring', data.underPrenatalMonitoring, 'Database'],
+    ['Postpartum follow-up', data.postpartumFollowUp, 'Database'],
+    ['Open flags for review', data.openFlags, 'Database'],
+    ['Referrals pending', statuses.pending || 0, 'Database'],
+    ['Referrals acknowledged', statuses.acknowledged || 0, 'Database'],
+    ['Referrals attended', statuses.attended || 0, 'Database'],
+    ['Referrals closed', statuses.closed || 0, 'Database'],
+    ['Overdue referrals', data.overdueReferrals, 'Database'],
+    ['Data note', 'Counts are live from the database; small groups are not broken down further.', '']
   ];
-  const csv = rows.map(row => row.map(value => '"' + value.replace(/"/g, '""') + '"').join(',')).join('\r\n');
+  const csv = rows.map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join(String.fromCharCode(13, 10));
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;

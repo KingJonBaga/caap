@@ -80,6 +80,12 @@ function showPage(name) {
   if (name === 'postpartum') {
     updatePostpartumProgress();
   }
+  if (name === 'dashboard' && typeof loadEducation === 'function') {
+    loadEducation('prenatal');
+  }
+  if (name === 'admin' && typeof loadAdminOverview === 'function') {
+    loadAdminOverview();
+  }
   if (name === 'bhw' && typeof updateSyncDisplay === 'function') {
     updateSyncDisplay();
   }

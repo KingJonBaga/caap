@@ -100,7 +100,7 @@ that answer is recorded here.
 
 ## Phase 8: Offline-first field use
 
-- [ ] 8.1 Add a service worker that caches the app shell and opens offline.
+- [x] 8.1 Add a service worker that caches the app shell and opens offline.
 - [x] 8.2 Store pending BHW changes in IndexedDB with a client-generated UUID (`client_id`).
 - [x] 8.3 Add a `sync` endpoint that accepts an outbox in order. Use `sync_outbox` to make
       uploads idempotent. Test that sending the same `client_id` twice saves it once.
@@ -108,32 +108,32 @@ that answer is recorded here.
       the same visit are both kept.
 - [x] 8.5 Show pending count, last sync time and failed items with reasons in the BHW screen.
 - [x] 8.6 Clear the local store on sign-out. Test by signing out and checking the store is empty.
-- [ ] 8.7 Test offline editing on a phone-sized screen with network disabled, then reconnect.
+- [x] 8.7 Test offline editing on a phone-sized screen with network disabled, then reconnect.
 
 ## Phase 9: Dashboards and reports
 
-- [ ] 9.1 Replace the sample numbers on the BHW and RHU pages with queries from the database.
-- [ ] 9.2 Add the monthly aggregated report. Test that names and contact details are absent.
-- [ ] 9.3 Apply the minimum group size (default 5): smaller groups show as "<5". Test it.
-- [ ] 9.4 Log each report export in `audit_log`.
+- [x] 9.1 Replace the sample numbers on the BHW and RHU pages with queries from the database.
+- [x] 9.2 Add the monthly aggregated report. Test that names and contact details are absent.
+- [x] 9.3 Apply the minimum group size (default 5): smaller groups show as "<5". Test it.
+- [x] 9.4 Log each report export in `audit_log`.
 
 ## Phase 10: Education materials
 
-- [ ] 10.1 Create `education_items`. Only items with `approved_by` are visible to mothers.
-- [ ] 10.2 Show the materials for the mother's current stage. Test an unapproved item is hidden.
+- [x] 10.1 Create `education_items`. Only items with `approved_by` are visible to mothers.
+- [x] 10.2 Show the materials for the mother's current stage. Test an unapproved item is hidden.
 
 ## Phase 11: Privacy, security and documentation
 
-- [ ] 11.1 Write the consent text, privacy notice and retention rules with the partner, then add
+- [~] 11.1 Write the consent text, privacy notice and retention rules with the partner, then add
       them to the app. Record their version in the database.
-- [ ] 11.2 Confirm the repository contains no real patient data and no real passwords
+- [x] 11.2 Confirm the repository contains no real patient data and no real passwords
       (`grep` for password literals before each push).
-- [ ] 11.3 Review every new route for its role check. Test each route with a wrong role (`403`)
+- [x] 11.3 Review every new route for its role check. Test each route with a wrong role (`403`)
       and no session (`401`).
-- [ ] 11.4 Update the README and the in-app help for each role.
+- [~] 11.4 Update the README and the in-app help for each role. README done; in-app help not yet written.
 
 ## Phase 12: Field testing
 
-- [ ] 12.1 Run a supervised trial with dummy data at the partner site (or an agreed test set).
-- [ ] 12.2 Record problems and fix them before any real patient data is entered.
-- [ ] 12.3 Document results and open issues in this file.
+- [~] 12.1 Run a supervised trial with dummy data at the partner site (or an agreed test set).
+- [~] 12.2 Record problems and fix them before any real patient data is entered.
+- [~] 12.3 Document results and open issues in this file.

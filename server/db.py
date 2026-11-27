@@ -10,6 +10,7 @@ import audit
 import visits
 import caretaker
 import notes
+import education
 import mothers as mothers_module
 import visit_records as vr
 import checklists as checklists_module
@@ -81,6 +82,7 @@ def open_database(file=None, shared_password=None):
     mothers_module.setup_mothers(db)
     vr.setup_visit_records(db)
     checklists_module.setup_checklists(db)
+    education.setup_education(db)
     risk_module.setup_risk(db)
     referrals_module.setup_referrals(db)
     reminders_module.setup_reminders(db)

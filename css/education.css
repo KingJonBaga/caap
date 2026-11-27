@@ -1,0 +1,85 @@
+/* Education materials on the mother's dashboard (task 10.2). */
+
+.education-card {
+  margin: 0 0 16px;
+}
+
+.education-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.education-head h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.education-head p {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.education-stage {
+  display: inline-flex;
+  gap: 6px;
+  background: #f3f1ee;
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.education-stage-btn {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.education-stage-btn.active {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .12);
+}
+
+.education-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.education-item {
+  border: 1px solid #e6e1da;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.education-item h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.education-item p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.education-item small {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.education-empty {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 8px 0;
+}

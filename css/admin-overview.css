@@ -1,0 +1,274 @@
+/* Administrator overview: layout and styling for the new dashboard (live data only). */
+
+#admin-overview .ov-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 28px 40px;
+  box-sizing: border-box;
+}
+
+#admin-overview .ov-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+#admin-overview .ov-eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #6b7280;
+}
+
+#admin-overview .ov-greeting {
+  margin: 0 0 6px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: #0f1a14;
+}
+
+#admin-overview .ov-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+#admin-overview .ov-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#admin-overview .ov-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(0, 1.6fr);
+  gap: 18px;
+  align-items: start;
+}
+
+#admin-overview .ov-card,
+#admin-overview .ov-hero,
+#admin-overview .ov-stat {
+  background: #fff;
+  border: 1px solid #e6e1da;
+  border-radius: 18px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .05);
+  box-sizing: border-box;
+}
+
+/* Hero: the account total, in the NURTURA green */
+#admin-overview .ov-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 26px 24px;
+  color: #fff;
+  background: linear-gradient(135deg, #1f4d3f 0%, #2f6b57 100%);
+  border-color: transparent;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#admin-overview .ov-hero-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  opacity: .8;
+}
+
+#admin-overview .ov-hero-value {
+  margin: 10px 0 0;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#admin-overview .ov-hero-label {
+  margin: 6px 0 0;
+  font-size: 13px;
+  opacity: .85;
+}
+
+#admin-overview .ov-hero-foot {
+  display: flex;
+  gap: 18px;
+  margin-top: 18px;
+  font-size: 13px;
+}
+
+#admin-overview .ov-hero-foot strong {
+  font-size: 16px;
+}
+
+#admin-overview .ov-hero-icon {
+  position: absolute;
+  right: -10px;
+  bottom: -14px;
+  font-size: 120px;
+  opacity: .12;
+}
+
+/* Stat cards in a 2 by 2 grid beside the hero */
+#admin-overview .ov-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#admin-overview .ov-stat {
+  padding: 18px 20px;
+  transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s;
+}
+
+@media (hover: hover) {
+  #admin-overview .ov-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, .10);
+  }
+}
+
+#admin-overview .ov-stat-label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+#admin-overview .ov-stat-value {
+  margin: 8px 0 4px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #0f1a14;
+}
+
+#admin-overview .ov-stat-meta {
+  margin: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Cards under the hero */
+#admin-overview .ov-roles,
+#admin-overview .ov-activity {
+  padding: 20px 22px;
+}
+
+#admin-overview .ov-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+#admin-overview .ov-card-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f1a14;
+}
+
+#admin-overview .ov-role-list {
+  display: grid;
+  gap: 14px;
+}
+
+#admin-overview .ov-role-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+#admin-overview .ov-role-label strong {
+  color: #0f1a14;
+}
+
+#admin-overview .ov-role-track {
+  height: 8px;
+  background: #f1ede8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#admin-overview .ov-role-track span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2f6b57, #5aa187);
+  transition: width .8s cubic-bezier(.2, .7, .2, 1);
+}
+
+#admin-overview .ov-activity-list {
+  display: grid;
+  gap: 4px;
+}
+
+#admin-overview .ov-activity-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 4px;
+  border-bottom: 1px solid #f1ede8;
+}
+
+#admin-overview .ov-activity-row:last-child {
+  border-bottom: 0;
+}
+
+#admin-overview .ov-activity-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: #2f6b57;
+  flex-shrink: 0;
+}
+
+#admin-overview .ov-activity-action {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f1a14;
+}
+
+#admin-overview .ov-activity-meta {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #6b7280;
+  word-break: break-word;
+}
+
+#admin-overview .ov-empty {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Narrow screens: stack everything */
+@media (max-width: 900px) {
+  #admin-overview .ov-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  #admin-overview .ov-shell {
+    padding: 18px 16px 32px;
+  }
+
+  #admin-overview .ov-greeting {
+    font-size: 24px;
+  }
+
+  #admin-overview .ov-stats {
+    grid-template-columns: 1fr;
+  }
+}
